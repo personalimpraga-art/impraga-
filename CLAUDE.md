@@ -141,6 +141,7 @@ El mapa técnico detallado (bloques, persistencia, los 10 invariantes) vive en
 | — | 2026-07-18 | Se creó el equipo de 5 skills (sin cambios al HTML de TORI) | Herramientas de taller |
 | v5_69 | (sin documentar) | ⚠️ Cambio no documentado en esta wiki — pendiente que Andrés complete el detalle. | ✅ En producción |
 | v5_70 | 2026-07-21 | ⚠️ Cambio no documentado en esta wiki — pendiente que Andrés complete el detalle. Versión vigente al montar el repositorio PRAGAOS. | ✅ En producción |
+| — | 2026-07-21 | Envoltorio de escritorio (`desktop/`, Electron → TORI.exe): datos permanentes en el PC, offline, HTML de TORI sin tocar. Falta generar el .exe (requiere red a github). | Herramienta de taller |
 
 ---
 

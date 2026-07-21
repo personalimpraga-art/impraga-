@@ -1,0 +1,19 @@
+{
+  "name": "tori-praga-desktop",
+  "productName": "TORI",
+  "version": "5.70.0",
+  "description": "TORI · Praga como aplicacion de escritorio (.exe) con almacenamiento permanente en el PC.",
+  "main": "main.js",
+  "author": "Praga",
+  "license": "UNLICENSED",
+  "private": true,
+  "scripts": {
+    "start": "electron .",
+    "package:win": "electron-packager . TORI --platform=win32 --arch=x64 --out=dist --overwrite --icon=build/icon.ico --app-copyright=\"Praga\" --win32metadata.ProductName=\"TORI\" --win32metadata.CompanyName=\"Praga\" --win32metadata.FileDescription=\"TORI - Praga\"",
+    "package:win:portable": "npm run package:win"
+  },
+  "devDependencies": {
+    "@electron/packager": "^18.3.6",
+    "electron": "^33.3.0"
+  }
+}
