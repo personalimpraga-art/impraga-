@@ -5,7 +5,7 @@
 > o se entrega una versión. Si algo aquí contradice el código de TORI, el código
 > manda — y este archivo se corrige.
 >
-> **Última actualización:** 2026-07-18 · **Versión vigente de TORI: v5_68**
+> **Última actualización:** 2026-07-21 · **Versión vigente de TORI: v5_70**
 
 ---
 
@@ -139,6 +139,8 @@ El mapa técnico detallado (bloques, persistencia, los 10 invariantes) vive en
 |---|---|---|---|
 | v5_68 | (previa a esta wiki) | Versión vigente al crear la wiki. Proveedor real en supplierMix del Distribuidor. | ✅ En producción |
 | — | 2026-07-18 | Se creó el equipo de 5 skills (sin cambios al HTML de TORI) | Herramientas de taller |
+| v5_69 | (sin documentar) | ⚠️ Cambio no documentado en esta wiki — pendiente que Andrés complete el detalle. | ✅ En producción |
+| v5_70 | 2026-07-21 | ⚠️ Cambio no documentado en esta wiki — pendiente que Andrés complete el detalle. Versión vigente al montar el repositorio PRAGAOS. | ✅ En producción |
 
 ---
 
