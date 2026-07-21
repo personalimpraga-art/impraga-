@@ -1,0 +1,160 @@
+# CLAUDE.md — Wiki maestra del proyecto TORI · Praga
+
+> **Qué es este archivo:** la fuente única de verdad del proyecto. Claude lo lee al
+> empezar cualquier sesión; Andrés lo actualiza cuando cambia una regla de negocio
+> o se entrega una versión. Si algo aquí contradice el código de TORI, el código
+> manda — y este archivo se corrige.
+>
+> **Última actualización:** 2026-07-18 · **Versión vigente de TORI: v5_68**
+
+---
+
+## 1. Qué es TORI y para quién trabaja
+
+TORI (Torre Integración · Praga) es la herramienta de gestión de **Praga**, importadora
+colombiana de Andrés: 12 años de operación, compra en China, vende a crédito en
+Colombia, capital propio sin deuda.
+
+Es **un solo archivo HTML** (~750KB) que corre offline en Chrome desde
+`C:/Users/Usuario/Desktop/PRAGAOS/`. No tiene servidor ni conexión con Claude:
+Claude trabaja sobre copias del archivo y devuelve versiones nuevas.
+
+**Está CALIENTE EN PRODUCCIÓN** con datos valiosos: facturas con fotos, base de
+proveedores China, macro de inventario, costos. Todo cambio se trata como cirugía
+en un sistema crítico.
+
+### La cadena de suministro (el modelo mental de todo)
+
+```
+Fábrica China  →  🚢 En camino  →  🏬 Bodega San Benito  →  Tienda
+(Producción      (contenedor       (bodega                 (stock del
+ China)           navegando)        intermedia)             macro)
+```
+
+Las facturas del Liquidador SON los contenedores: un Excel con fotos por contenedor.
+
+### Módulos
+
+Hub Unificado · **Liquidador** (facturas/contenedores, costos, precios) ·
+**Motor Praga Reorden** (Dashboard, Orden de Compra, Stock y Liquidación,
+Tendencias, Costos, China, Distribuidor, Faltantes, Parámetros) ·
+**PI2 Catálogo** · Verificar Igualdad · Importar Archivos.
+
+---
+
+## 2. Reglas de oro (innegociables — resumen)
+
+1. **Nueva versión en cada cambio.** Nunca se edita el original: v5_68 → v5_69,
+   actualizando el número interno. El script `nueva_version.py` lo hace y verifica.
+2. **No dañar a TORI.** Cambios quirúrgicos con verificación exacta; no se toca
+   lógica numérica ni clasificaciones sin pedido explícito.
+3. **Revisar antes de entregar.** Se prueba con datos reales y se demuestra.
+   Si una prueba falla: corregir y volver a correr TODO.
+4. **Regresión obligatoria**: los 5 bloques validan + prueba maestra del backup +
+   flujos vivos (`validar_todo.sh`). Todo verde o no se entrega.
+5. **Todo cambio de persistencia viaja en el backup.** TORI_PRAGA_backup.json
+   debe seguir siendo la copia COMPLETA de TORI.
+6. **Entrega**: archivo en outputs + resumen en español (qué se cambió, qué se
+   probó, qué dio cada prueba) + recordar reemplazar la versión en el proyecto.
+
+---
+
+## 3. Reglas de negocio vigentes (LA SECCIÓN QUE ANDRÉS EDITA)
+
+> Cuando la junta o la operación cambie una regla, se edita AQUÍ y se avisa a
+> Claude en la siguiente sesión para actualizar TORI si aplica.
+
+### Decisiones de la junta directiva
+- **Límites por contenedor**: BOLSO / BILLETERA / CORREA / RIÑONERA = **12** por
+  contenedor · CORTINA DE BAÑO = **20** por contenedor.
+- Contenedores de ~**67–80 m³** efectivos.
+- Mercancía **nueva dosificada** (no concentrada en un solo contenedor).
+- Tier **A/B/C por velocidad de venta**: lo rápido tiene prioridad.
+
+### Reglas de la cadena
+- Una referencia **NO debe estar en 2+ eslabones a la vez** (Stock / San Benito /
+  En camino / Fábrica). La vista 🔁 Repetidos es la oficial para detectarlo, con
+  nombres de doc/factura visibles y orden de columnas Stock → SB → En camino → Fábrica.
+- **Traslados San Benito** (semáforo): TRAER (sin stock en tienda, verde) ·
+  EVALUAR (stock ≤10, amarillo) · NO TRAER (hay stock, rojo). Refs que solo están
+  en SB salen como TRAER "(no está en el macro)".
+
+### Reglas de datos de proveedores
+- Referencias formato `210-102` o `PG0001`. Categorías por palabras clave del nombre.
+- Los proveedores mandan archivos **imperfectos**: el caso YUGIN (solo descripciones
+  chinas y tiendas, sin precios) es normal. Regla: una fila vale con AL MENOS UN
+  dato útil, y **un archivo sin precios JAMÁS borra precios ya guardados**.
+- La base de proveedores China es dato CRÍTICO para Andrés.
+- El backup que Andrés usa es el **automático a disco** (TORI_PRAGA_backup.json),
+  no el botón manual.
+
+### Preferencias de construcción
+- UI y mensajes en español · números formato Colombia ($16.885).
+- Estética Apple/iOS: cards blancas, segmented controls, focus morado,
+  botones btn-brand / btn-green / btn-rust.
+- Medidor de almacenamiento + guardado failsafe + panel de diagnóstico flotante.
+
+---
+
+## 4. El equipo de skills (quién hace qué)
+
+| Skill | En cristiano | Cuándo actúa |
+|---|---|---|
+| **tori-engineering** | El jefe de taller: reglas de la casa, mapa técnico, y la regresión que protege el backup completo | SIEMPRE que se toque TORI |
+| **tori-excel-auditor** | Inspector de calidad de los Excel: relee cada archivo generado y verifica títulos ES/CN, números, fotos y formato | Cambios a exports de Excel |
+| **tori-parsers** | Probador de archivos de proveedores: muestra qué leerá TORI de un Excel ANTES de que entre a la base | Archivos de proveedores / cambios a parsers |
+| **tori-motor-distribuidor** | Auditor de reglas con plata: repetidos en la cadena, límites de la junta, tiers | Cambios a bloques 1 o 4 |
+| **tori-entrega** | El acta de entrega: changelog automático, checklist final, resumen en el formato de Andrés | Cierre de cada sesión |
+
+El mapa técnico detallado (bloques, persistencia, los 10 invariantes) vive en
+`references/mapa_tecnico.md` dentro de tori-engineering.
+
+---
+
+## 5. Cómo se trabaja una sesión (para Andrés)
+
+1. **Un chat por tarea.** Pedidos concretos rinden más que chats eternos.
+2. **Reportar bugs con el escenario completo**: qué archivo subiste (adjúntalo),
+   qué botón tocaste, qué esperabas, qué salió.
+3. Claude parte SIEMPRE de la última versión (la del chat manda sobre la del proyecto).
+4. Al recibir la versión nueva: descargarla, ponerla en PRAGAOS, probarla, y
+   **reemplazarla en el conocimiento del proyecto** (una sola versión, la última).
+5. Si la conversación se pone pesada, Claude entrega lo probado y se sigue en
+   chat nuevo.
+
+### Qué mantener actualizado en el proyecto
+- [ ] La última versión de TORI (reemplazar, no acumular)
+- [ ] Este CLAUDE.md (regla nueva de la junta → editar §3; entrega → añadir a §6)
+- [ ] Idealmente: carpeta de archivos de muestra reales (Excel YUGIN real, factura
+      de contenedor, macro, un backup viejo) para que Claude pruebe contra la realidad
+
+---
+
+## 6. Historial de versiones (bitácora)
+
+> Formato: versión · fecha · qué cambió (1 línea) · estado.
+> Claude añade una línea en cada entrega; Andrés confirma cuando la pone en producción.
+
+| Versión | Fecha | Qué cambió | Estado |
+|---|---|---|---|
+| v5_68 | (previa a esta wiki) | Versión vigente al crear la wiki. Proveedor real en supplierMix del Distribuidor. | ✅ En producción |
+| — | 2026-07-18 | Se creó el equipo de 5 skills (sin cambios al HTML de TORI) | Herramientas de taller |
+
+---
+
+## 7. Incidentes y lecciones (no repetir)
+
+Los 10 invariantes del mapa técnico nacieron de bugs reales ya pagados. Los más
+importantes en cristiano:
+- El arranque llegó a **borrar los contenedores "En camino"** por depurar antes de
+  tiempo → hoy hay un guard que lo impide.
+- El backup llegó a **perder el campo meta** de las facturas y claves del
+  Distribuidor por usar listas fijas de campos → hoy todo se copia genéricamente
+  y la prueba maestra verifica completitud.
+- Un archivo parcial de proveedor llegó a **pisar precios existentes** → hoy la
+  regla de parciales lo prohíbe y tori-parsers lo verifica.
+- Excel generados "bien" que salían **sin fotos o con filas vacías** (problema
+  invisible hasta que el proveedor los abría) → hoy todo export se relee y audita.
+
+Cuando aparezca un incidente nuevo: se documenta aquí, se convierte en invariante
+en el mapa técnico, y se le crea prueba que lo atrape para siempre.

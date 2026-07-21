@@ -1,0 +1,43 @@
+CÓMO USAR ESTA CARPETA
+=======================
+
+1. Instala Claude Code (una sola vez):
+   - Abre PowerShell en Windows y pega:
+     irm https://claude.ai/install.ps1 | iex
+   - Cierra y abre PowerShell de nuevo, y escribe:
+     claude --version
+   (si ves un número de versión, quedó instalado)
+
+2. Copia el CONTENIDO de esta carpeta (CLAUDE.md + la carpeta .claude)
+   directo dentro de tu carpeta:
+   C:/Users/Usuario/Desktop/PRAGAOS/
+
+   Al final PRAGAOS debe verse así:
+   PRAGAOS/
+     TORI_Praga_v5_70.html      <- tu archivo de siempre
+     CLAUDE.md                   <- la wiki (ya la tenías, esta es la misma)
+     .claude/
+       skills/
+         tori-engineering/
+         tori-entrega/
+         tori-excel-auditor/
+         tori-motor-distribuidor/
+         tori-parsers/
+         revisar/
+
+3. Abre PowerShell DENTRO de esa carpeta (botón derecho > "Abrir en Terminal"
+   estando parado en PRAGAOS, o cd C:/Users/Usuario/Desktop/PRAGAOS) y escribe:
+     claude
+
+4. La primera vez te va a pedir iniciar sesión con tu cuenta de Claude (se abre
+   el navegador, apruebas, y listo).
+
+5. Ya adentro, simplemente pídele lo que necesites, por ejemplo:
+     "el macro me está marcando una referencia como repetida y no debería,
+      aquí está el archivo real que subí"
+   Claude Code va a leer TORI_Praga_v5_70.html directo del disco, usar las
+   skills de tori-engineering automáticamente, correr los scripts reales, y
+   dejarte la nueva versión (v5_71, etc.) en la misma carpeta.
+
+NOTA: no necesitas mover ni subir el archivo HTML a ningún lado — Claude Code
+lo lee y lo escribe directo ahí donde está.
