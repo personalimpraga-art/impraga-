@@ -18,6 +18,27 @@ REM
 REM  B) Solo reempaquetar:     haz doble clic normal en este archivo.
 REM ---------------------------------------------------------------
 
+REM 0) Ubicar la carpeta principal de TORI (donde esta package.json).
+REM    Asi funciona aunque el .bat quede dentro de "app" por error.
+if not exist "package.json" (
+  if exist "..\package.json" cd ..
+)
+if not exist "package.json" (
+  if exist "app\package.json" cd app
+)
+if not exist "package.json" (
+  echo [ERROR] No encuentro el proyecto de TORI.
+  echo.
+  echo   Este archivo debe estar DENTRO de la carpeta principal de TORI:
+  echo   la que contiene la carpeta "app", la carpeta "vendor" y el
+  echo   archivo "package.json".
+  echo.
+  echo   Muevelo a esa carpeta y vuelve a intentar.
+  echo.
+  pause
+  exit /b 1
+)
+
 REM 1) Si arrastraste un archivo .html, lo instala como el nuevo TORI
 if not "%~1"=="" (
   if /I "%~x1"==".html" (
