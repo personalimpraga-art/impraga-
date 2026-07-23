@@ -5,7 +5,7 @@
 > o se entrega una versión. Si algo aquí contradice el código de TORI, el código
 > manda — y este archivo se corrige.
 >
-> **Última actualización:** 2026-07-21 · **Versión vigente de TORI: v5_70**
+> **Última actualización:** 2026-07-23 · **Versión vigente de TORI: v5_71**
 
 ---
 
@@ -89,6 +89,9 @@ Tendencias, Costos, China, Distribuidor, Faltantes, Parámetros) ·
   no el botón manual.
 
 ### Preferencias de construcción
+- **Número de versión SIEMPRE visible** en la barra lateral (pill morado junto a
+  "TORI"), en formato `v5.XX` para que `nueva_version.py` lo suba solo. Así Andrés
+  distingue qué versión corre sin miedo a equivocarse al actualizar.
 - UI y mensajes en español · números formato Colombia ($16.885).
 - Estética Apple/iOS: cards blancas, segmented controls, focus morado,
   botones btn-brand / btn-green / btn-rust.
@@ -142,6 +145,7 @@ El mapa técnico detallado (bloques, persistencia, los 10 invariantes) vive en
 | v5_69 | (sin documentar) | ⚠️ Cambio no documentado en esta wiki — pendiente que Andrés complete el detalle. | ✅ En producción |
 | v5_70 | 2026-07-21 | ⚠️ Cambio no documentado en esta wiki — pendiente que Andrés complete el detalle. Versión vigente al montar el repositorio PRAGAOS. | ✅ En producción |
 | — | 2026-07-21 | Envoltorio de escritorio (`desktop/`, Electron → TORI.exe): datos permanentes en el PC, offline, HTML de TORI sin tocar. Falta generar el .exe (requiere red a github). | Herramienta de taller |
+| v5_71 | 2026-07-23 | Número de versión visible en la barra lateral (pill morado junto a "TORI"); se auto-actualiza en cada versión. Cambio cosmético, regresión completa en verde. | 🆕 Entregada |
 
 ---
 
