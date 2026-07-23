@@ -12,7 +12,7 @@
  * ni pixel de TORI cambia.
  */
 
-const { app, BrowserWindow, protocol, session, shell, dialog } = require('electron');
+const { app, BrowserWindow, protocol, session, shell, dialog, Notification } = require('electron');
 const path = require('path');
 const fs = require('fs');
 
@@ -51,9 +51,22 @@ let mainWindow = null;
 
 function serveHtml() {
   let html = fs.readFileSync(HTML_PATH, 'utf8');
-  // Redirigir las 2 librerías del CDN a las copias locales (misma versión).
-  html = html.split(CDN_XLSX).join(LOCAL_XLSX)
-             .split(CDN_EXCEL).join(LOCAL_EXCEL);
+  // Único cambio al servir: cargar las copias locales de vendor/ ANTES de los
+  // tags de CDN que trae TORI. Así la app funciona 100% offline (xlsx queda
+  // definida al arrancar, y ExcelJS ya presente hace que _loadExcelJS ni
+  // intente ir al CDN). Los tags de CDN originales quedan intactos: si estos
+  // src tori:// fallan (ej. en un archivo generado por TORI y abierto en el PC
+  // de un cliente), el CDN sigue siendo el respaldo — igual que en Chrome.
+  // OJO: nada de incrustar código inline aquí — el código de xlsx contiene el
+  // texto '</head>', y generarHTMLCliente de TORI inserta su catálogo en el
+  // PRIMER '</head>' del documento serializado: un inline lo rompería.
+  const xlsxTag = '<script src="' + CDN_XLSX + '"></script>';
+  const localTags =
+    '<script src="' + LOCAL_XLSX + '"></script>' +
+    '<script src="' + LOCAL_EXCEL + '"></script>';
+  if (html.includes(xlsxTag)) {
+    html = html.split(xlsxTag).join(localTags + xlsxTag);
+  }
   return html;
 }
 
@@ -166,12 +179,39 @@ app.whenReady().then(() => {
     return new Response('No encontrado', { status: 404 });
   });
 
-  // Red de seguridad: si algo intenta el CDN directo, redirigir a local.
-  // (Normalmente no ocurre porque ya reescribimos el HTML servido.)
+  // Offline: peticiones al CDN se sirven desde las copias locales de vendor/.
+  // (exceljs se carga perezosamente con su URL de CDN — aquí se vuelve local.)
   session.defaultSession.webRequest.onBeforeRequest((details, cb) => {
     if (details.url === CDN_XLSX)  return cb({ redirectURL: LOCAL_XLSX });
     if (details.url === CDN_EXCEL) return cb({ redirectURL: LOCAL_EXCEL });
     cb({});
+  });
+
+  // Descargas: guardar SIEMPRE en la carpeta Descargas del PC, sin depender del
+  // diálogo del sistema (frágil bajo un esquema propio), y avisar con una
+  // notificación. Cubre todos los archivos que TORI genera: apps para cliente,
+  // Excel, backups manuales, etc.
+  session.defaultSession.on('will-download', (event, item) => {
+    try {
+      const dir = app.getPath('downloads');
+      const base = item.getFilename() || 'descarga';
+      const ext = path.extname(base);
+      const stem = base.slice(0, base.length - ext.length);
+      let dest = path.join(dir, base);
+      for (let n = 1; fs.existsSync(dest); n++) dest = path.join(dir, stem + ' (' + n + ')' + ext);
+      item.setSavePath(dest);
+      item.once('done', (_e, state) => {
+        const ok = (state === 'completed');
+        if (Notification.isSupported()) {
+          const noti = new Notification({
+            title: ok ? 'TORI — archivo guardado en Descargas' : 'TORI — descarga fallida',
+            body: ok ? path.basename(dest) + '  (clic para verlo)' : base
+          });
+          if (ok) noti.on('click', () => shell.showItemInFolder(dest));
+          noti.show();
+        }
+      });
+    } catch (e) { console.warn('[descargas]', e && e.message); }
   });
 
   createWindow();
