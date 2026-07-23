@@ -15,9 +15,30 @@ TORI (Torre Integración · Praga) es la herramienta de gestión de **Praga**, i
 colombiana de Andrés: 12 años de operación, compra en China, vende a crédito en
 Colombia, capital propio sin deuda.
 
-Es **un solo archivo HTML** (~750KB) que corre offline en Chrome desde
-`C:/Users/Usuario/Desktop/PRAGAOS/`. No tiene servidor ni conexión con Claude:
+Es **un solo archivo HTML** (~750KB). No tiene servidor ni conexión con Claude:
 Claude trabaja sobre copias del archivo y devuelve versiones nuevas.
+
+### TORI corre como app de escritorio (.exe) — desde 2026-07-23
+
+TORI ya **no corre en Chrome**: corre como aplicación de escritorio (**TORI.exe**,
+Electron) construida desde la carpeta `desktop/` de este repo. Los datos viven en
+la bóveda del PC (`AppData\TORI`), aparte del navegador y sin límites; hay respaldo
+automático en `Documentos\Backups TORI`. El HTML de TORI va DENTRO del paquete como
+copia byte-idéntica (`desktop/app/tori.html`) — el envoltorio no toca ni una función.
+
+**Cómo instala Andrés cada versión nueva (recordárselo en CADA entrega):**
+1. Claude entrega el `TORI_Praga_v5_XX.html` nuevo.
+2. Andrés lo **arrastra encima de `ACTUALIZAR_FACIL.bat`** (carpeta TORI de su PC).
+   Ese .bat copia el HTML a `app/` y a la copia interna del `.exe`
+   (`dist/TORI-win32-x64/resources/app/app/tori.html`) — sin npm, sin internet, 1 segundo.
+3. Cierra y reabre TORI.exe → el pill morado de la barra lateral muestra la versión nueva.
+4. Sus datos nunca se tocan; la versión anterior queda como `app/tori_anterior.html`.
+
+**`RECONSTRUIR_COMPLETO.bat`** (npm install + empaquetar, necesita internet) solo se
+usa la primera vez o cuando Claude cambie la cáscara (`desktop/main.js`, `vendor/`,
+ícono) — en ese caso Claude debe avisarlo EXPLÍCITAMENTE en la entrega. Ambos .bat
+dejan registro (`registro_actualizar.txt` / `registro_reconstruir.txt`): si algo
+falla, Andrés manda ese archivo al chat.
 
 **Está CALIENTE EN PRODUCCIÓN** con datos valiosos: facturas con fotos, base de
 proveedores China, macro de inventario, costos. Todo cambio se trata como cirugía
@@ -120,8 +141,10 @@ El mapa técnico detallado (bloques, persistencia, los 10 invariantes) vive en
 2. **Reportar bugs con el escenario completo**: qué archivo subiste (adjúntalo),
    qué botón tocaste, qué esperabas, qué salió.
 3. Claude parte SIEMPRE de la última versión (la del chat manda sobre la del proyecto).
-4. Al recibir la versión nueva: descargarla, ponerla en PRAGAOS, probarla, y
-   **reemplazarla en el conocimiento del proyecto** (una sola versión, la última).
+4. Al recibir la versión nueva: descargarla, **arrastrarla encima de
+   `ACTUALIZAR_FACIL.bat`**, cerrar y reabrir TORI.exe (verificar el pill de
+   versión), y **reemplazarla en el conocimiento del proyecto** (una sola
+   versión, la última).
 5. Si la conversación se pone pesada, Claude entrega lo probado y se sigue en
    chat nuevo.
 

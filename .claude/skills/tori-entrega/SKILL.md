@@ -25,6 +25,11 @@ Compara bloque a bloque: líneas +/−, **funciones tocadas por nombre**, y camb
 3. Si el cambio creó una clave de persistencia nueva → está en `_buildSnapshotData`, en `poblarTodo()` de la prueba del backup, y el round-trip pasó.
 4. El changelog no muestra funciones tocadas inesperadas.
 5. El archivo se copió a `/mnt/user-data/outputs/` y se presentó con present_files.
+6. El resumen le recuerda a Andrés el ritual de instalación: **arrastrar el HTML
+   nuevo encima de `ACTUALIZAR_FACIL.bat`**, cerrar y reabrir TORI.exe, y verificar
+   el pill de versión (TORI corre como app de escritorio; ver §1 del CLAUDE.md).
+   Si el cambio tocó la cáscara (`desktop/main.js`, `vendor/`), avisar EXPLÍCITAMENTE
+   que esta vez toca `RECONSTRUIR_COMPLETO.bat`.
 
 ## 3. Resumen para Andrés (formato exacto)
 
