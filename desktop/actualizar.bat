@@ -8,16 +8,6 @@ echo     ACTUALIZADOR DE TORI  -  Praga
 echo ============================================
 echo.
 
-REM ---------------------------------------------------------------
-REM  FORMA DE USO (dos maneras, la que prefieras):
-REM
-REM  A) Tienes un TORI nuevo:  arrastra el archivo tori.html NUEVO
-REM     y sueltalo ENCIMA de este actualizar.bat. El solo lo instala
-REM     y reempaqueta.
-REM
-REM  B) Solo reempaquetar:     haz doble clic normal en este archivo.
-REM ---------------------------------------------------------------
-
 REM 0) Ubicar la carpeta principal de TORI (donde esta package.json).
 REM    Asi funciona aunque el .bat quede dentro de "app" por error.
 if not exist "package.json" (
@@ -35,9 +25,12 @@ if not exist "package.json" (
   echo.
   echo   Muevelo a esa carpeta y vuelve a intentar.
   echo.
-  pause
+  echo Presiona una tecla para cerrar...
+  pause >nul
   exit /b 1
 )
+
+set "LOG=%CD%\_registro_actualizacion.txt"
 
 REM 1) Si arrastraste un archivo .html, lo instala como el nuevo TORI
 if not "%~1"=="" (
@@ -51,71 +44,87 @@ if not "%~1"=="" (
       echo [ERROR] No pude reemplazar el archivo.
       echo         Cierra TORI si esta abierto y vuelve a intentar.
       echo.
-      pause
+      echo Presiona una tecla para cerrar...
+      pause >nul
       exit /b 1
     )
     echo OK: TORI nuevo instalado.
-    echo     (Por si acaso, el anterior quedo guardado como app\tori_anterior.html)
     echo.
   ) else (
-    echo [AVISO] Lo que arrastraste no es un archivo .html - lo ignoro.
-    echo         Voy a reempaquetar el TORI que ya esta instalado.
+    echo [AVISO] Lo que arrastraste no es .html - lo ignoro y solo reempaqueto.
     echo.
   )
 )
 
-REM 2) Verificar que Node.js este instalado
+REM 2) Verificar Node.js
 where node >nul 2>nul
 if errorlevel 1 (
   echo [ERROR] No encuentro Node.js en tu PC.
+  echo         Instalalo una vez desde https://nodejs.org  (boton "LTS").
   echo.
-  echo         Instalalo UNA sola vez desde:  https://nodejs.org
-  echo         (el boton grande que dice "LTS"), y vuelve a intentar.
-  echo.
-  pause
+  echo Presiona una tecla para cerrar...
+  pause >nul
   exit /b 1
 )
 
-REM 3) Instalar lo necesario solo la PRIMERA vez
+REM 3) Instalar lo necesario solo la primera vez (a un registro)
 if not exist "node_modules\@electron\packager" (
-  echo Primera vez en esta carpeta: descargando lo necesario...
-  echo Necesita internet, son unos ~200 MB, puede tardar unos minutos.
-  echo Ten paciencia y no cierres esta ventana.
+  echo Primera vez: descargando lo necesario ^(~200 MB, necesita internet^)...
+  echo Esto puede tardar varios minutos. NO cierres esta ventana.
+  echo   [el detalle se guarda en: _registro_actualizacion.txt]
   echo.
-  call npm.cmd install
+  call npm.cmd install > "%LOG%" 2>&1
   if errorlevel 1 (
+    echo [ERROR] Fallo la descarga. Revisa tu internet.
+    echo         El detalle quedo en: _registro_actualizacion.txt
+    echo         Si quieres, enviame ese archivo por el chat.
     echo.
-    echo [ERROR] Fallo la descarga. Revisa tu conexion a internet y reintenta.
-    echo.
-    pause
+    echo Presiona una tecla para cerrar...
+    pause >nul
     exit /b 1
   )
-  echo.
 )
 
-REM 4) Generar el .exe
-echo Generando la aplicacion TORI.exe ... un momento por favor.
+REM 4) Generar el .exe  (la parte lenta; el texto va al registro)
 echo.
-call npm.cmd run package:win
+echo Generando la aplicacion TORI.exe ...
+echo   Esto tarda entre 15 segundos y 1 minuto. NO cierres la ventana.
+echo   [el detalle se guarda en: _registro_actualizacion.txt]
+echo.
+call npm.cmd run package:win > "%LOG%" 2>&1
 if errorlevel 1 (
-  echo.
   echo [ERROR] Algo fallo al generar el .exe.
-  echo         Copia el texto de arriba y enviamelo al chat para ayudarte.
+  echo         El detalle quedo en: _registro_actualizacion.txt
+  echo         Enviame ese archivo por el chat y lo resolvemos.
   echo.
-  pause
+  echo Presiona una tecla para cerrar...
+  pause >nul
   exit /b 1
 )
 
-echo.
+REM 5) Confirmar que el .exe existe
+if not exist "dist\TORI-win32-x64\TORI.exe" (
+  echo [ERROR] Termino sin errores pero no encuentro el TORI.exe.
+  echo         Revisa _registro_actualizacion.txt y enviamelo.
+  echo.
+  echo Presiona una tecla para cerrar...
+  pause >nul
+  exit /b 1
+)
+
 echo ============================================
 echo     LISTO !  TORI quedo actualizado.
 echo ============================================
 echo.
-echo Tu app esta en:   dist\TORI-win32-x64\TORI.exe
-echo Tus datos NO se tocaron (siguen guardados en tu PC).
+echo   Tu app nueva esta AQUI (abre este):
+echo   %CD%\dist\TORI-win32-x64\TORI.exe
 echo.
-echo Voy a abrir la carpeta de la app...
-if exist "dist\TORI-win32-x64" start "" explorer "dist\TORI-win32-x64"
+echo   Tus datos NO se tocaron.
+echo   Voy a abrir esa carpeta ahora...
 echo.
-echo Ya puedes cerrar esta ventana.
-pause
+start "" explorer "%CD%\dist\TORI-win32-x64"
+
+echo Cuando abras TORI.exe, en la barra lateral debe decir la version nueva.
+echo.
+echo Presiona una tecla para cerrar esta ventana...
+pause >nul
