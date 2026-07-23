@@ -32,6 +32,14 @@ se abre con doble clic en `TORI.exe`.
 
 ## Actualizar a una versión nueva de TORI
 
+### Forma fácil (recomendada, sin terminal): `actualizar.bat`
+
+- **Tienes un TORI nuevo:** arrastra el `tori.html` nuevo y suéltalo **encima** de
+  `actualizar.bat`. Él solo lo instala y regenera el `.exe`.
+- **Solo reempaquetar:** doble clic en `actualizar.bat`.
+
+### Forma manual
+
 1. Reemplaza `desktop/app/tori.html` por el HTML nuevo de TORI (mismo nombre).
 2. Vuelve a correr `npm run package:win`.
 
