@@ -32,16 +32,28 @@ se abre con doble clic en `TORI.exe`.
 
 ## Actualizar a una versión nueva de TORI
 
-### Forma fácil (recomendada, sin terminal): `actualizar.bat`
+### El dato clave
 
-- **Tienes un TORI nuevo:** arrastra el `tori.html` nuevo y suéltalo **encima** de
-  `actualizar.bat`. Él solo lo instala y regenera el `.exe`.
-- **Solo reempaquetar:** doble clic en `actualizar.bat`.
+El `.exe` lleva su **propia copia interna** del HTML en
+`dist/TORI-win32-x64/resources/app/app/tori.html`. Cambiar `app/tori.html` NO
+actualiza el `.exe` por sí solo. Pero como el paquete es carpeta plana (sin
+asar), actualizar = **copiar el HTML nuevo a esa ruta interna**. Sin npm, sin
+internet, sin reconstruir.
+
+### Día a día: `ACTUALIZAR_FACIL.bat`
+
+- Arrastra el `tori.html` nuevo **encima** de `ACTUALIZAR_FACIL.bat` (o doble
+  clic para re-sincronizar el que ya está en `app/`). Copia el HTML a `app/` y
+  a la copia interna del `.exe`. Un segundo, sin dependencias.
+- Deja registro en `registro_actualizar.txt`.
+
+### Primera vez o cambios a la cáscara (main.js/vendor): `RECONSTRUIR_COMPLETO.bat`
+
+- Doble clic. Hace `npm install` (si hace falta) + `npm run package:win`.
+- Deja registro en `registro_reconstruir.txt`. Si TORI.exe está abierto,
+  cerrarlo antes (el --overwrite falla con el exe en uso).
 
 ### Forma manual
-
-1. Reemplaza `desktop/app/tori.html` por el HTML nuevo de TORI (mismo nombre).
-2. Vuelve a correr `npm run package:win`.
 
 Los datos NO se pierden al actualizar: viven en la bóveda del PC, aparte del .exe
 (ver `GUIA_TORI_APP.md`).
