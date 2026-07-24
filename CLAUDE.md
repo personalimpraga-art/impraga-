@@ -129,6 +129,7 @@ Tendencias, Costos, China, Distribuidor, Faltantes, Parámetros) ·
 | **tori-parsers** | Probador de archivos de proveedores: muestra qué leerá TORI de un Excel ANTES de que entre a la base | Archivos de proveedores / cambios a parsers |
 | **tori-motor-distribuidor** | Auditor de reglas con plata: repetidos en la cadena, límites de la junta, tiers | Cambios a bloques 1 o 4 |
 | **tori-entrega** | El acta de entrega: changelog automático, checklist final, resumen en el formato de Andrés | Cierre de cada sesión |
+| **tori-app-escritorio** | El mecánico del .exe: cómo se instala cada versión (los 2 .bat), la cáscara Electron, sus invariantes y cómo probarla sin Electron | TORI.exe, .bat, main.js, descargas, o CUALQUIER entrega |
 
 El mapa técnico detallado (bloques, persistencia, los 10 invariantes) vive en
 `references/mapa_tecnico.md` dentro de tori-engineering.
