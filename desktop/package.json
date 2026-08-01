@@ -1,7 +1,7 @@
 {
   "name": "tori-praga-desktop",
   "productName": "TORI",
-  "version": "5.74.0",
+  "version": "5.75.0",
   "description": "TORI · Praga como aplicacion de escritorio (.exe) con almacenamiento permanente en el PC.",
   "main": "main.js",
   "author": "Praga",
