@@ -61,6 +61,8 @@ OJO: `items` es un MAPA ref→unidades, NO un contador. Si `items` suma 0 y hay 
 10. Los exports con foto usan `_fotoThumbForExport(foto, 480, 0.78)` y anclaje EMU (`_aOff=18000`, `_aImg=609600`, `editAs:'twoCell'`, row height 52).
 11. **Los guardados de IndexedDB son ATÓMICOS**: `saveFacturasToStorage` y `saveMacroToStorage` hacen clear+puts dentro de UNA sola transacción. NUNCA volver al patrón clear-en-una-tx / puts-en-otras: un cierre a mitad del guardado dejaba el store vacío (incidente 2026-08-01: se perdieron todas las facturas al cerrar tras cambiar params). El escrito FSA del arranque solo corre si `TORI.facturas.length > 0` (no pisar el backup de disco con un estado vacío). Prueba que lo atrapa: `scripts/prueba_cierre_fatal.js` (Chromium real: mata la página a 300ms del guardado; v5_72 perdía 39/40 facturas, v5_73 conserva 40/40).
 
+12. **Los campos de dinero entero (TRM `pDolarPeso`, flete `pEnvio`) se leen con `_liqParseEntero`** (todo punto/coma = separador de miles). NUNCA volver a `parseFloat` desnudo ahí: "1.540.000" tecleado a la colombiana se convertía en 1,54 y los costos quedaban absurdos (incidente PRAGA-139, 2026-08-01).
+
 ## §6. Notas para los arneses de prueba (los scripts ya implementan esto)
 
 - Los scripts de la skill (`entorno_tori.js`, `prueba_backup.js`, `prueba_flujos.js`) implementan el entorno completo: IndexedDB en memoria (requests via queueMicrotask, tx.oncomplete diferido), DOM permisivo con caché, localStorage en objeto, `location.hostname='localhost'` (el FSA lo exige), `showSaveFilePicker` presente.

@@ -5,7 +5,7 @@
 > o se entrega una versión. Si algo aquí contradice el código de TORI, el código
 > manda — y este archivo se corrige.
 >
-> **Última actualización:** 2026-08-01 · **Versión vigente de TORI: v5_73**
+> **Última actualización:** 2026-08-01 · **Versión vigente de TORI: v5_74**
 
 ---
 
@@ -185,7 +185,8 @@ regresión completa. Los 10 invariantes y la persistencia jamás se "simplifican
 | v5_71 | 2026-07-23 | Número de versión visible en la barra lateral (pill morado junto a "TORI"); se auto-actualiza en cada versión. Cambio cosmético, regresión completa en verde. | ✅ En producción |
 | v5_72 | 2026-07-23 | "Generar app para cliente" (PI2): el archivo generado abre DIRECTO en el catálogo del cliente, ocultando la cáscara TORI (bloque 3, +7 líneas). Regresión completa en verde. | ✅ En producción |
 | — | 2026-07-23 | Cáscara del .exe: manejador de descargas (guarda en Descargas + notificación) y librerías xlsx/exceljs precargadas offline sin tocar el HTML. Requiere RECONSTRUIR_COMPLETO.bat. | Herramienta de taller |
-| v5_73 | 2026-08-01 | 🚨 Corrección crítica de pérdida de datos: guardado de facturas/macro ATÓMICO (una sola transacción) + guard del escrito FSA al arrancar. Kill-test: v5_72 perdía 39/40 facturas, v5_73 conserva todo. Regresión completa en verde. | 🆕 Entregada |
+| v5_73 | 2026-08-01 | 🚨 Corrección crítica de pérdida de datos: guardado de facturas/macro ATÓMICO (una sola transacción) + guard del escrito FSA al arrancar. Kill-test: v5_72 perdía 39/40 facturas, v5_73 conserva todo. Regresión completa en verde. | ✅ En producción |
+| v5_74 | 2026-08-01 | Flete/TRM ya no "se comen los ceros": puntos y comas se tratan como miles al teclear (incidente PRAGA-139, flete $154). Verificado tecleando en es-CO + ciclo completo con factura real. Regresión en verde. | 🆕 Entregada |
 
 ---
 
@@ -209,6 +210,12 @@ importantes en cristiano:
   mitad dejaba el cajón vacío. Desde v5_73 el guardado es ATÓMICO (todo-o-nada,
   invariante 11) y el arranque no pisa el backup de disco si no hay facturas.
   Prueba permanente: `prueba_cierre_fatal.js` (tori-engineering).
+
+- **2026-08-01 — El flete "se comía los ceros"** (PRAGA-139 quedó con flete $154 en
+  vez de $1.540.000). Causa: al teclear con puntos de miles a la colombiana
+  ("1.540.000"), el input numérico lo pasaba como decimal (parseFloat → 1,54) y los
+  costos quedaban absurdos. Desde v5_74, en TRM y flete todo punto/coma es separador
+  de miles (`_liqParseEntero`) — verificado tecleando en Chromium es-CO.
 
 Cuando aparezca un incidente nuevo: se documenta aquí, se convierte en invariante
 en el mapa técnico, y se le crea prueba que lo atrape para siempre.
