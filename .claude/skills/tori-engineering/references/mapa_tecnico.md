@@ -59,6 +59,7 @@ OJO: `items` es un MAPA ref→unidades, NO un contador. Si `items` suma 0 y hay 
 8. `DIST.lsSet` dispara `triggerAutosave('distribuidor')`; `DIST.reloadStored()` existe y se llama tras restaurar.
 9. Toda clave nueva de persistencia entra al snapshot Y a la prueba de round-trip antes de entregar.
 10. Los exports con foto usan `_fotoThumbForExport(foto, 480, 0.78)` y anclaje EMU (`_aOff=18000`, `_aImg=609600`, `editAs:'twoCell'`, row height 52).
+11. **Los guardados de IndexedDB son ATÓMICOS**: `saveFacturasToStorage` y `saveMacroToStorage` hacen clear+puts dentro de UNA sola transacción. NUNCA volver al patrón clear-en-una-tx / puts-en-otras: un cierre a mitad del guardado dejaba el store vacío (incidente 2026-08-01: se perdieron todas las facturas al cerrar tras cambiar params). El escrito FSA del arranque solo corre si `TORI.facturas.length > 0` (no pisar el backup de disco con un estado vacío). Prueba que lo atrapa: `scripts/prueba_cierre_fatal.js` (Chromium real: mata la página a 300ms del guardado; v5_72 perdía 39/40 facturas, v5_73 conserva 40/40).
 
 ## §6. Notas para los arneses de prueba (los scripts ya implementan esto)
 

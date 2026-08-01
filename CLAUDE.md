@@ -5,7 +5,7 @@
 > o se entrega una versión. Si algo aquí contradice el código de TORI, el código
 > manda — y este archivo se corrige.
 >
-> **Última actualización:** 2026-07-23 · **Versión vigente de TORI: v5_72**
+> **Última actualización:** 2026-08-01 · **Versión vigente de TORI: v5_73**
 
 ---
 
@@ -185,6 +185,7 @@ regresión completa. Los 10 invariantes y la persistencia jamás se "simplifican
 | v5_71 | 2026-07-23 | Número de versión visible en la barra lateral (pill morado junto a "TORI"); se auto-actualiza en cada versión. Cambio cosmético, regresión completa en verde. | ✅ En producción |
 | v5_72 | 2026-07-23 | "Generar app para cliente" (PI2): el archivo generado abre DIRECTO en el catálogo del cliente, ocultando la cáscara TORI (bloque 3, +7 líneas). Regresión completa en verde. | ✅ En producción |
 | — | 2026-07-23 | Cáscara del .exe: manejador de descargas (guarda en Descargas + notificación) y librerías xlsx/exceljs precargadas offline sin tocar el HTML. Requiere RECONSTRUIR_COMPLETO.bat. | Herramienta de taller |
+| v5_73 | 2026-08-01 | 🚨 Corrección crítica de pérdida de datos: guardado de facturas/macro ATÓMICO (una sola transacción) + guard del escrito FSA al arrancar. Kill-test: v5_72 perdía 39/40 facturas, v5_73 conserva todo. Regresión completa en verde. | 🆕 Entregada |
 
 ---
 
@@ -201,6 +202,13 @@ importantes en cristiano:
   regla de parciales lo prohíbe y tori-parsers lo verifica.
 - Excel generados "bien" que salían **sin fotos o con filas vacías** (problema
   invisible hasta que el proveedor los abría) → hoy todo export se relee y audita.
+
+- **2026-08-01 — Se perdieron TODAS las facturas del Liquidador** al cerrar TORI
+  justo después de subir un contenedor y cambiar dólar/cubicaje. Causa: el guardado
+  hacía "borrar todo" y "volver a meter" en transacciones SEPARADAS — un cierre a
+  mitad dejaba el cajón vacío. Desde v5_73 el guardado es ATÓMICO (todo-o-nada,
+  invariante 11) y el arranque no pisa el backup de disco si no hay facturas.
+  Prueba permanente: `prueba_cierre_fatal.js` (tori-engineering).
 
 Cuando aparezca un incidente nuevo: se documenta aquí, se convierte en invariante
 en el mapa técnico, y se le crea prueba que lo atrape para siempre.
