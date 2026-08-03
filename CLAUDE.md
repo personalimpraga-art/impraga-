@@ -5,7 +5,7 @@
 > o se entrega una versión. Si algo aquí contradice el código de TORI, el código
 > manda — y este archivo se corrige.
 >
-> **Última actualización:** 2026-08-03 · **Versión vigente de TORI: v5_88**
+> **Última actualización:** 2026-08-03 · **Versión vigente de TORI: v5_89**
 
 ---
 
@@ -91,6 +91,11 @@ Tendencias, Costos, China, Distribuidor, Faltantes, Parámetros) ·
 - Contenedores de ~**67–80 m³** efectivos.
 - Mercancía **nueva dosificada** (no concentrada en un solo contenedor).
 - Tier **A/B/C por velocidad de venta**: lo rápido tiene prioridad.
+- **Marroquinería** (definición de Andrés, 2026-08-03, para filtros y análisis):
+  BOLSO, BILLETERA, RIÑONERA, MORRAL, MONEDERO, COSMETIQUERA, CARTUCHERA, CORREA,
+  LONCHERA — por palabra del nombre (BOLSO CON MONEDERO / BOLSO CON CARTUCHERA
+  caen por BOLSO). Las referencias que empiezan por **PG** son de un proveedor
+  aparte y se filtran como grupo propio.
 
 ### Reglas de la cadena
 - Una referencia **NO debe estar en 2+ eslabones a la vez** (Stock / San Benito /
@@ -205,6 +210,7 @@ El mapa técnico detallado (bloques, persistencia, los 10 invariantes) vive en
 | v5_86 | 2026-08-03 | Chip "⌀ X días venta" en CADA tarjeta de la lista de pedidos (pestaña 🏭): días de venta promedio del pedido ponderado por unidades, con el macro vigente (mismo número que el detalle); pedidos sin datos muestran "⌀ — días". Revisión en navegador real (10/10, diagnóstico en 0) + 5 pruebas del promedio calculado a mano + las 13 baterías + regresión en verde. | ✅ En producción (Andrés mostró el pill v5.86) |
 | v5_87 | 2026-08-03 | 🚨 Corrección (caso 313-147): el cubicaje/und-caja de Producción China vivía AISLADO — solo miraba el macro, y refs con el dato completo en el Liquidador salían "—" y quedaban fuera de los m³ del pedido y del Excel. Cascada de fuentes: fila guardada → macro vigente → base de cubicaje del Motor → FACTURAS del Liquidador (QTY_CTN, TOTAL_CBM/CTNS). Aplica a la vista, totales, desglose, orden por columnas y al 📗 Excel (refresco sin pisar datos del proveedor). 12 pruebas del caso real (Excel releído: 72 und/caja, 4 cajas, 0,46 m³) + revisión browser 13/13 + las 14 baterías + regresión en verde. | ✅ En producción (Andrés mostró el pill v5.87 con cajas/m³ completos) |
 | v5_88 | 2026-08-03 | El 📗 Excel de Producción China lleva el CONTENEDOR DE ORIGEN por referencia en "Numero de contenedor" (igual que el Excel de la pestaña China): macro → factura del Liquidador; sin dato queda el rótulo del pedido; el Distribuidor no cambia (sus contenedores nuevos siguen con su número). Filas ya guardadas se rellenan en el refresco del Excel. 8 pruebas del caso (Excel releído: 0165 / PRAGA-132 / rótulo) + auditoría addChinaSheet + browser 13/13 + las 15 baterías + regresión en verde. | 🆕 Entregada |
+| v5_89 | 2026-08-03 | Armar pedidos de Producción China MASIVO desde la Orden de Compra: (1) filtros nuevos combinables — 👜 Solo/Sin **marroquinería** (lista de la junta, por palabra del nombre) y **PG** Solo/Sin (proveedor aparte, por prefijo de la referencia) — junto al buscador y la categoría, con el contador de cubicaje reflejando lo filtrado; (2) botón **🏭 "Mandar estas N refs a un pedido…"**: TODO lo filtrado entra de un golpe a un pedido existente o nuevo (unidades sugeridas del Motor; sin sugerencia entran en 0 para editar), sale de la Orden Sugerida (FABRICÁNDOSE) y guarda en UNA transacción. 27 pruebas de lógica + revisión browser real 29/29 con el macro de muestras (1759 refs: 581 marroquinería, 182 PG; envío de 105 refs, cerrar/reabrir OK, diagnóstico en 0, modo .exe) + Motor/Distribuidor + regresión completa en verde. | 🆕 Entregada |
 
 ---
 
