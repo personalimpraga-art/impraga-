@@ -5,7 +5,7 @@
 > o se entrega una versión. Si algo aquí contradice el código de TORI, el código
 > manda — y este archivo se corrige.
 >
-> **Última actualización:** 2026-08-03 · **Versión vigente de TORI: v5_76**
+> **Última actualización:** 2026-08-03 · **Versión vigente de TORI: v5_77**
 
 ---
 
@@ -176,7 +176,8 @@ El mapa técnico detallado (bloques, persistencia, los 10 invariantes) vive en
 | v5_73 | 2026-08-01 | 🚨 Corrección crítica de pérdida de datos: guardado de facturas/macro ATÓMICO (una sola transacción) + guard del escrito FSA al arrancar. Kill-test: v5_72 perdía 39/40 facturas, v5_73 conserva todo. Regresión completa en verde. | ✅ En producción |
 | v5_74 | 2026-08-01 | Flete/TRM ya no "se comen los ceros": puntos y comas se tratan como miles al teclear (incidente PRAGA-139, flete $154). Verificado tecleando en es-CO + ciclo completo con factura real. Regresión en verde. | ✅ En producción |
 | v5_75 | 2026-08-01 | El guardado de parámetros espera a que termines de teclear (no confirma valores a medias) + aviso ROJO si el flete/TRM queda absurdo. Escenarios de tecleo interrumpido verificados. Regresión en verde. | 🆕 Entregada (Andrés confirma cuando esté en producción) |
-| v5_76 | 2026-08-03 | Editor de pedidos de Producción China: los pedidos dejan de ser estáticos — ✏️ renombrar (cuando asignan contenedor), cambiar unidades, ↩ devolver refs a la Orden Sugerida, 🚫 vetarlas (NO TRAER), ➕ agregar refs con buscador, 📗 Excel chino con fotos para pedidos subidos como archivo, y botón 🏭 en la Orden de Compra para mandar refs a un pedido específico o crear uno nuevo. Regresión completa + 23 pruebas del editor + auditoría del Excel en verde. | 🆕 Entregada |
+| v5_76 | 2026-08-03 | Editor de pedidos de Producción China: los pedidos dejan de ser estáticos — ✏️ renombrar (cuando asignan contenedor), cambiar unidades, ↩ devolver refs a la Orden Sugerida, 🚫 vetarlas (NO TRAER), ➕ agregar refs con buscador, 📗 Excel chino con fotos para pedidos subidos como archivo, y botón 🏭 en la Orden de Compra para mandar refs a un pedido específico o crear uno nuevo. Regresión completa + 23 pruebas del editor + auditoría del Excel en verde. | ✅ En producción (Andrés confirmó el pill v5.76) |
+| v5_77 | 2026-08-03 | Pestaña 🏭 Producción China en el Motor (al lado de Parámetros), vista tipo Liquidador: lista de pedidos como tarjetas → detalle con tabla completa (foto, desc ES/CN, und/caja, cajas, unidades editables, ¥, proveedor), buscador ➕, renombrar, Excel FOTOS y despachar. Coherencia probada con el Motor real: agregar → sale de la Orden Sugerida (PROD_CHINA); quitar → vuelve sola (ORDENAR); vetar → NO_TRAER con motivo; quitar veto → vuelve. Regresión completa + 29 pruebas de coherencia/pestaña + 23 del editor + auditoría Excel en verde. | 🆕 Entregada |
 
 ---
 
