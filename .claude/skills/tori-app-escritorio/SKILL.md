@@ -97,6 +97,13 @@ NO cambia lo que muestra el .exe. Por eso:
    `pause` garantizado en TODA salida, y log a archivo (npm vuela la ventana).
 6. El manejador de descargas cubre TODOS los exports de TORI (Excel, backups, apps
    de cliente). Si se toca, probar al menos uno de cada tipo.
+7. **`window.prompt()` NO existe en Electron** — lanza "Uncaught Error: prompt() is
+   not supported" (incidente 2026-08-03: vetar productos reventaba en el .exe pero
+   funcionaba en Chrome). TODA ventana de "escribe un valor" usa `toriPrompt`
+   (bloque 0, devuelve Promise; Enter = aceptar, Escape/Cancelar = null). Prohibido
+   `prompt()` nativo; los flujos interactivos se prueban con prompt() LANZANDO el
+   error de Electron, no solo con un prompt que funciona (`alert`/`confirm` sí
+   existen en Electron).
 
 ## 6. Probar sin Electron (github está bloqueado en el entorno de Claude)
 

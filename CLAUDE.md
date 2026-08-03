@@ -5,7 +5,7 @@
 > o se entrega una versión. Si algo aquí contradice el código de TORI, el código
 > manda — y este archivo se corrige.
 >
-> **Última actualización:** 2026-08-03 · **Versión vigente de TORI: v5_78**
+> **Última actualización:** 2026-08-03 · **Versión vigente de TORI: v5_79**
 
 ---
 
@@ -178,7 +178,8 @@ El mapa técnico detallado (bloques, persistencia, los 10 invariantes) vive en
 | v5_75 | 2026-08-01 | El guardado de parámetros espera a que termines de teclear (no confirma valores a medias) + aviso ROJO si el flete/TRM queda absurdo. Escenarios de tecleo interrumpido verificados. Regresión en verde. | 🆕 Entregada (Andrés confirma cuando esté en producción) |
 | v5_76 | 2026-08-03 | Editor de pedidos de Producción China: los pedidos dejan de ser estáticos — ✏️ renombrar (cuando asignan contenedor), cambiar unidades, ↩ devolver refs a la Orden Sugerida, 🚫 vetarlas (NO TRAER), ➕ agregar refs con buscador, 📗 Excel chino con fotos para pedidos subidos como archivo, y botón 🏭 en la Orden de Compra para mandar refs a un pedido específico o crear uno nuevo. Regresión completa + 23 pruebas del editor + auditoría del Excel en verde. | ✅ En producción (Andrés confirmó el pill v5.76) |
 | v5_77 | 2026-08-03 | Pestaña 🏭 Producción China en el Motor (al lado de Parámetros), vista tipo Liquidador: lista de pedidos como tarjetas → detalle con tabla completa (foto, desc ES/CN, und/caja, cajas, unidades editables, ¥, proveedor), buscador ➕, renombrar, Excel FOTOS y despachar. Coherencia probada con el Motor real: agregar → sale de la Orden Sugerida (PROD_CHINA); quitar → vuelve sola (ORDENAR); vetar → NO_TRAER con motivo; quitar veto → vuelve. Regresión completa + 29 pruebas de coherencia/pestaña + 23 del editor + auditoría Excel en verde. | ✅ En producción (Andrés confirmó el pill v5.77) |
-| v5_78 | 2026-08-03 | Columna Foto en la Orden de Compra del Motor (todas las vistas): placeholder de cero peso, la imagen solo carga cuando la fila entra en pantalla (mecanismo de la pestaña China) y clic = ampliar en el lightbox. El pintado inicial no lleva ni un base64 — no se tilda ni tecleando en el buscador. Regresión completa + 12 pruebas de la columna + todas las baterías anteriores (29+23+17+7+Excel+Motor/Dist) re-corridas en verde. | 🆕 Entregada |
+| v5_78 | 2026-08-03 | Columna Foto en la Orden de Compra del Motor (todas las vistas): placeholder de cero peso, la imagen solo carga cuando la fila entra en pantalla (mecanismo de la pestaña China) y clic = ampliar en el lightbox. El pintado inicial no lleva ni un base64 — no se tilda ni tecleando en el buscador. Regresión completa + 12 pruebas de la columna + todas las baterías anteriores (29+23+17+7+Excel+Motor/Dist) re-corridas en verde. | ✅ En producción (Andrés mostró el pill v5.78) |
+| v5_79 | 2026-08-03 | 🚨 Corrección: TORI.exe (Electron) no soporta `prompt()` — vetar desde la Orden de Compra reventaba con "prompt() is not supported". Ventana propia `toriPrompt` (Enter/Escape, Aceptar/Cancelar, estilo TORI) y reemplazo de LOS 9 usos: veto de la Orden, renombrar/vetar/agregar/crear de Producción China, renombrar contenedor del Distribuidor y 3 de PI2. Probado simulando el .exe (prompt roto) + cerrar y reabrir TORI: pedidos, vetos y devoluciones quedan guardados y el Motor recalcula igual (19 verificaciones). Regresión + todas las baterías (29+23+17+12+7+Excel+Motor/Dist) en verde. | 🆕 Entregada |
 
 ---
 
@@ -213,6 +214,16 @@ importantes en cristiano:
   ("1.540.000"), el input numérico lo pasaba como decimal (parseFloat → 1,54) y los
   costos quedaban absurdos. Desde v5_74, en TRM y flete todo punto/coma es separador
   de miles (`_liqParseEntero`) — verificado tecleando en Chromium es-CO.
+
+- **2026-08-03 — "prompt() is not supported": vetar productos reventaba en TORI.exe.**
+  Andrés intentó mandar productos a NO TRAER desde la Orden de Compra y salió el
+  error en el panel de diagnóstico. Causa: `window.prompt()` NO existe en Electron
+  (en Chrome sí funcionaba — por eso ninguna prueba lo atrapó). Desde v5_79 TODA
+  ventana de "escribe un valor" usa `toriPrompt` (ventana propia de TORI, Enter =
+  aceptar, Escape = cancelar) y quedó PROHIBIDO usar `prompt()` nativo — el parche
+  de cada versión lo verifica (0 usos en toda la app). Regla nueva de pruebas:
+  los flujos interactivos se prueban también con `prompt()` LANZANDO el error de
+  Electron (`prueba_electron_reabrir.js`), no solo con un prompt que funciona.
 
 Cuando aparezca un incidente nuevo: se documenta aquí, se convierte en invariante
 en el mapa técnico, y se le crea prueba que lo atrape para siempre.
