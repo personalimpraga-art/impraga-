@@ -157,6 +157,13 @@ El mapa técnico detallado (bloques, persistencia, los 10 invariantes) vive en
    Así CUALQUIER chat nuevo arranca siempre con la última versión, sin que Andrés
    tenga que fijarse en el selector de ramas. Si el push de avance rápido falla
    (ramas divergieron), avisar a Andrés en vez de forzar.
+   **Limpieza**: al cerrar la sesión, Claude intenta borrar la rama del chat
+   (`git push origin --delete <rama-del-chat>`); el sistema suele bloquearlo (403)
+   mientras el chat está vivo — en ese caso, decirle a Andrés el paso de 2 clics:
+   github.com → impraga- → Branches → 🗑 junto a la rama sobrante. Andrés solo
+   conserva la principal; las ramas de chat son copias temporales y borrarlas
+   NUNCA pierde nada si la principal ya quedó al día (verificar con
+   `git ls-remote` que ambas apunten al mismo commit ANTES de borrar).
 
 ### Qué mantener actualizado en el proyecto
 - [ ] La última versión de TORI (reemplazar, no acumular)
