@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>TORI · Praga v5.75</title>
+<title>TORI · Praga v5.76</title>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
 <style>
 :root {
@@ -491,7 +491,7 @@ td.bold { font-weight: 700; }
 .motor-tabs-wrap { overflow-x:auto; scrollbar-width:none; }
 .motor-tabs-wrap::-webkit-scrollbar { display:none; }
 
-/* ===== v5.75 Distribuidor de Contenedores ===== */
+/* ===== v5.76 Distribuidor de Contenedores ===== */
 .dp-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:10px;}
 .dp-card{background:var(--faint);border:1px solid var(--border);border-radius:10px;padding:10px 12px;}
 .dp-card label{display:block;font-size:10px;text-transform:uppercase;letter-spacing:.5px;color:var(--muted);margin-bottom:5px;font-weight:700;}
@@ -1086,7 +1086,7 @@ body[data-theme="dark"].pi2-shell .favbtn{background:rgba(40,40,42,.85)}
     <div class="brand">
       <div class="brand-logo">T</div>
       <div class="brand-text">
-        <div class="brand-name">TORI <span class="brand-ver" style="font-size:11px;font-weight:700;color:#6C5CE7;background:#efeaff;padding:1px 8px;border-radius:999px;vertical-align:middle;margin-left:6px;letter-spacing:.2px;">v5.75</span></div>
+        <div class="brand-name">TORI <span class="brand-ver" style="font-size:11px;font-weight:700;color:#6C5CE7;background:#efeaff;padding:1px 8px;border-radius:999px;vertical-align:middle;margin-left:6px;letter-spacing:.2px;">v5.76</span></div>
         <div class="brand-sub">Torre Integración · Praga</div>
       </div>
     </div>
@@ -1354,7 +1354,7 @@ body[data-theme="dark"].pi2-shell .favbtn{background:rgba(40,40,42,.85)}
           <input type="file" id="fileProdChina" accept=".xlsx,.xls" onchange="handleProdChina(this.files[0]);this.value=''">
           <div style="font-size:30px;margin-bottom:10px">🏭</div>
           <div class="drop-title">Producción China (.xlsx)</div>
-          <div class="drop-sub">Sube la misma orden de compra china (con o sin fotos): columna B = referencia, columna G = unidades. También acepta formato simple (A: código, B: cantidad). Lo que está FABRICÁNDOSE sale de la Orden Sugerida. Puedes subir varios pedidos y BORRAR cada uno cuando la fábrica despache — ahí el liquidador lo pasa a EN CAMINO.</div>
+          <div class="drop-sub">Sube la misma orden de compra china (con o sin fotos): columna B = referencia, columna G = unidades. También acepta formato simple (A: código, B: cantidad). Lo que está FABRICÁNDOSE sale de la Orden Sugerida. Puedes subir varios pedidos y BORRAR cada uno cuando la fábrica despache — ahí el liquidador lo pasa a EN CAMINO. Y cada pedido se EDITA aquí mismo: ✏️ renombrar (cuando asignen contenedor), cambiar unidades, ↩ devolver una referencia a la orden, 🚫 vetarla para siempre, ➕ agregar referencias y 📗 regenerar su Excel chino.</div>
         </div>
         <div id="prodChinaStatus" style="margin-top:10px"></div>
       </div>
@@ -1806,11 +1806,11 @@ body[data-theme="dark"].pi2-shell .favbtn{background:rgba(40,40,42,.85)}
       <div class="footnote" id="chinaCount"></div>
     </div>
 
-    <!-- DISTRIBUIDOR DE CONTENEDORES TAB (v5.75: herramienta completa integrada) -->
+    <!-- DISTRIBUIDOR DE CONTENEDORES TAB (v5.76: herramienta completa integrada) -->
     <div id="tabDistribuidor" class="section">
       <div class="section-title" style="margin-top:0;">🚢 Distribuidor Inteligente de Contenedores</div>
       <div class="section-sub" style="margin-bottom:12px;">
-        Toma la <b>orden lista para China</b> directamente de TORI (con fotos), la reparte con límites inteligentes por descripción, y descarga el Excel de proveedores por contenedor. Cualquier cambio en Parámetros, Inteligencia o Mercancía Nueva <b>recalcula al instante</b>. <b>v5.75:</b> cruza en vivo cada referencia con <b>toda la cadena</b> (Stock tienda · San Benito · En camino · Fábrica) y con las <b>ventas históricas del macro</b>: lo 🚨 agotado en toda la cadena y lo más vendido va con máxima prioridad; lo 🟡 con cobertura parcial cede su cupo primero.
+        Toma la <b>orden lista para China</b> directamente de TORI (con fotos), la reparte con límites inteligentes por descripción, y descarga el Excel de proveedores por contenedor. Cualquier cambio en Parámetros, Inteligencia o Mercancía Nueva <b>recalcula al instante</b>. <b>v5.76:</b> cruza en vivo cada referencia con <b>toda la cadena</b> (Stock tienda · San Benito · En camino · Fábrica) y con las <b>ventas históricas del macro</b>: lo 🚨 agotado en toda la cadena y lo más vendido va con máxima prioridad; lo 🟡 con cobertura parcial cede su cupo primero.
       </div>
 
       <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-bottom:12px;">
@@ -2452,13 +2452,13 @@ function loadParamsSaved() {
    por eso el tipo de cambio NUNCA se guardaba. */
 function saveToriParams() {
   const p = getParams();
-  TORI.params = p; // v5.75: la memoria y el disco quedan iguales — antes el backup
+  TORI.params = p; // v5.76: la memoria y el disco quedan iguales — antes el backup
                    // llevaba parámetros viejos en la sección liquidador y nuevos en motor
   try { localStorage.setItem('tori_params', JSON.stringify(p)); } catch(e) {}
   if(typeof triggerAutosave==='function') triggerAutosave('liq-params');
   return p;
 }
-/* v5.75: TRM y flete son pesos ENTEROS. El usuario teclea con puntos de miles
+/* v5.76: TRM y flete son pesos ENTEROS. El usuario teclea con puntos de miles
    ("1.540.000") y el input numérico lo dejaba pasar como decimal (parseFloat
    → 1.54): se "comían" los ceros y los costos quedaban absurdos (incidente
    PRAGA-139, flete guardado como $154). En estos campos TODO punto o coma es
@@ -2518,7 +2518,7 @@ window.addEventListener('beforeunload', _liqFlushPendingSaves);
 document.addEventListener('visibilitychange', () => { if (document.visibilityState === 'hidden') _liqFlushPendingSaves(); });
 
 /* Programa guardado de la factura activa + resincroniza catálogo/KPIs (debounced) */
-/* v5.75: aviso FUERTE si un parámetro quedó a medias (incidente flete $154:
+/* v5.76: aviso FUERTE si un parámetro quedó a medias (incidente flete $154:
    teclear "154...", cambiar de factura sin terminar, y el valor parcial se
    confirmaba en silencio). No cambia ningún valor — solo avisa en rojo. */
 function _liqAvisarParamsSospechosos(fac) {
@@ -2534,7 +2534,7 @@ function _liqAvisarParamsSospechosos(fac) {
 function _liqScheduleFacSave(fac, motivo) {
   clearTimeout(_liqFacSaveTimer);
   _liqFacSaveTimer = setTimeout(() => {
-    // v5.75: si el usuario SIGUE escribiendo en un parámetro, esperar al blur —
+    // v5.76: si el usuario SIGUE escribiendo en un parámetro, esperar al blur —
     // no persistir valores a medias mientras teclea (incidente flete $154)
     const ae = document.activeElement;
     if (ae && ae.classList && ae.classList.contains('param-input')) {
@@ -2932,7 +2932,7 @@ function renderSanBenitoStatus() {
   </div>`;
 }
 
-/* ═══ v5.75: EXCEL DE TRASLADOS SAN BENITO → TIENDA ═══
+/* ═══ v5.76: EXCEL DE TRASLADOS SAN BENITO → TIENDA ═══
    Cruza lo que hay en Bodega San Benito contra el stock principal del macro.
    La decisión de negocio: traer lo que NO hay en stock, no arriesgarse a llevar
    lo que sí hay. Con foto, precio sugerido y contenedor para decidir con todo. */
@@ -2963,7 +2963,7 @@ async function exportTrasladoSanBenito() {
       if (saldo <= 0) { decision = 'TRAER — SIN STOCK EN TIENDA'; prioridad = 0; }
       else if (saldo <= 10) { decision = 'EVALUAR — STOCK BAJO (' + saldo + ' unds)'; prioridad = 1; }
       else { decision = 'NO TRAER — HAY ' + saldo.toLocaleString('es-CO') + ' UNDS EN STOCK'; prioridad = 2; }
-      // v5.75: unidades por caja (del macro) y cuántas cajas hay en San Benito
+      // v5.76: unidades por caja (del macro) y cuántas cajas hay en San Benito
       var uEmp = r && r.unidEmpaque ? Number(r.unidEmpaque) : null;
       var cajasSB = (uEmp && uEmp > 0) ? Math.round((unds / uEmp) * 10) / 10 : null;
       filas.push({
@@ -3047,7 +3047,7 @@ let _pcMapCache = null;
 function _pcInvalidate() { _pcMapCache = null; }
 
 function _pcSelfHeal() {
-  // v5.75: documentos del Distribuidor con items en 0 (bug de columna fija) se
+  // v5.76: documentos del Distribuidor con items en 0 (bug de columna fija) se
   // reconstruyen solos desde sus filas completas. Los subidos como archivo con
   // 0 unidades se marcan para re-subir (no se puede inventar la cantidad).
   let healed = 0;
@@ -3070,7 +3070,7 @@ function _pcSelfHeal() {
   if (healed > 0) {
     _pcMapCache = null;
     saveProdChina();
-    console.log('[TORI v5.75] Producción China: ' + healed + ' documento(s) reparados (unidades reconstruidas desde sus filas)');
+    console.log('[TORI v5.76] Producción China: ' + healed + ' documento(s) reparados (unidades reconstruidas desde sus filas)');
   }
 }
 
@@ -3105,7 +3105,7 @@ async function parseProdChinaFile(file) {
       try {
         const wb = XLSX.read(e.target.result, { type: 'array' });
         const raw = XLSX.utils.sheet_to_json(wb.Sheets[wb.SheetNames[0]], { header: 1, defval: '' });
-        // v5.75: las columnas se detectan por ENCABEZADO, no por posición fija.
+        // v5.76: las columnas se detectan por ENCABEZADO, no por posición fija.
         // Antes, si el archivo tenía una columna de más o de menos, las unidades
         // se leían de una celda vacía y quedaban en 0 — refs sin cantidades.
         let chinaFmt = false, colRef = 0, colCant = 1, headerRowIdx = -1;
@@ -3193,58 +3193,368 @@ async function borrarProdChinaDoc(id) {
   updateAfterLoad();
   if (typeof window.__motorRefresh === 'function') { try { window.__motorRefresh(); } catch(e) {} }
   renderProdChinaStatus();
-  // v5.75: sinergia con el Distribuidor — si la factura venía de allá, el contenedor
+  // v5.76: sinergia con el Distribuidor — si la factura venía de allá, el contenedor
   // vuelve a mostrar el botón "Enviar a Producción China" al instante.
   if (window.DIST && typeof DIST.refreshSent === 'function') { try { DIST.refreshSent(); } catch(e) {} }
   toast('🗑 "' + doc.fileName + '" borrado de Producción China — sus referencias vuelven a la orden' + (doc.origen === 'DISTRIBUIDOR' ? ' y el contenedor se puede reenviar desde el Distribuidor' : ''), 'green');
 }
 window.borrarProdChinaDoc = borrarProdChinaDoc;
 
+/* ═══ v5.76: EDITOR DE PEDIDOS DE PRODUCCIÓN CHINA ═══
+   La vida real cambia los pedidos: la fábrica avisa que no puede entregar todo,
+   llega el número de contenedor, hay que sacar o meter referencias. Todo eso se
+   hace AQUÍ, sin tocar el Excel a mano:
+   - ✏️ Renombrar (el pedido nace sin contenedor y se renombra cuando lo asignan)
+   - Cambiar unidades · ↩ devolver una ref a la Orden Sugerida · 🚫 no pedirla más (NO TRAER)
+   - ➕ Agregar referencias buscando en la Orden Sugerida, el macro o la base China
+   - 📗 Excel formato China (ES/CN, con fotos) para CUALQUIER pedido, también los subidos como archivo
+   - 🏭 Desde la Orden de Compra del Motor: mandar una referencia a un pedido específico */
+
+function _pcChinaDB() {
+  try { const s = localStorage.getItem('praga_china_db_v1'); return s ? JSON.parse(s) || {} : {}; }
+  catch(e) { return {}; }
+}
+
+function _pcMacroMap() {
+  const m = new Map();
+  const fuentes = [TORI.classified || [], (window.STATE && window.STATE.rows) || []];
+  for (const rows of fuentes) for (const r of rows) {
+    if (!r || !r.codigo) continue;
+    const k = norm(r.codigo);
+    if (k && !m.has(k)) m.set(k, r);
+  }
+  return m;
+}
+
+/* Construye una fila completa (formato del Distribuidor) para una ref, enriquecida
+   desde el macro (nombre, unid/caja, cubicaje) y la base China (desc CN, precio RMB, proveedor). */
+function _pcBuildRow(k, unidades, macro, china) {
+  const mr = macro ? macro.get(k) : null;
+  const ch = china ? china[k] : null;
+  const unidCaja = (mr && mr.unidEmpaque != null && mr.unidEmpaque !== '') ? mr.unidEmpaque : '';
+  const cubCaja = (mr && mr.cubicaje != null && mr.cubicaje !== '') ? mr.cubicaje : null;
+  const u = parseFloat(unidades) || 0;
+  const cajas = unidCaja ? Math.round(u / unidCaja * 10) / 10 : '';
+  const precio = (ch && ch.precioRMB != null) ? ch.precioRMB : '';
+  return {
+    ref: (ch && ch.codigo) || (mr && mr.codigo) || String(k).toUpperCase(),
+    desc: (mr && mr.nombre) || '',
+    descCn: (ch && ch.descripcionChina) || '',
+    unidCaja: unidCaja,
+    cajas: cajas,
+    unidades: u,
+    cubCaja: cubCaja,
+    cubTotal: (cajas !== '' && cubCaja != null) ? Math.round(cajas * cubCaja * 100) / 100 : null,
+    precio: precio,
+    valor: (precio !== '' && precio != null) ? u * Number(precio) : 0,
+    proveedor: (ch && ch.proveedor) || '',
+    tier: (mr && mr.tier) || '',
+    dias: (mr && mr.dias != null) ? mr.dias : '',
+    tipo: (mr && mr.categoria) || '',
+    isNew: false
+  };
+}
+
+/* Filas para PINTAR un pedido: si ya tiene rows[] (Distribuidor o ya editado) se usan tal
+   cual; si se subió como archivo (solo items) se construyen al vuelo SIN guardarlas. */
+function _pcRowsView(doc, macro, china) {
+  if (doc.rows && doc.rows.length) return doc.rows;
+  return Object.keys(doc.items || {}).map(k => _pcBuildRow(k, doc.items[k] || 0, macro, china));
+}
+
+/* Antes de EDITAR o EXPORTAR un pedido subido como archivo, sus filas se materializan
+   una sola vez (con lo que haya en macro/base China en ese momento) y quedan en el doc. */
+function _pcEnsureRows(doc) {
+  if (doc.rows && doc.rows.length) return doc;
+  const macro = _pcMacroMap(), china = _pcChinaDB();
+  doc.rows = Object.keys(doc.items || {}).map(k => _pcBuildRow(k, doc.items[k] || 0, macro, china));
+  return doc;
+}
+
+/* items/nRefs/nUnids SIEMPRE se recalculan desde rows tras editar (misma regla que _pcSelfHeal). */
+function _pcRecalcDoc(doc) {
+  const items = {};
+  let unids = 0;
+  for (const r of (doc.rows || [])) {
+    const k = norm(r.ref);
+    if (!k) continue;
+    const u = parseFloat(r.unidades) || 0;
+    items[k] = (items[k] || 0) + u;
+    unids += u;
+  }
+  doc.items = items;
+  doc.nRefs = Object.keys(items).length;
+  doc.nUnids = unids;
+}
+
+function _pcDoc(id) { return (TORI.prodChina || []).find(d => d && d.id === id); }
+
+async function _pcCommit() {
+  _pcInvalidate();
+  await saveProdChina();
+  updateAfterLoad();
+  if (typeof window.__motorRefresh === 'function') { try { window.__motorRefresh(); } catch(e) {} }
+  if (window.DIST && typeof DIST.refreshSent === 'function') { try { DIST.refreshSent(); } catch(e) {} }
+  renderProdChinaStatus();
+}
+
+window.__pcRenombrar = async function(id) {
+  const doc = _pcDoc(id);
+  if (!doc) return;
+  const nuevo = (window.prompt('Nuevo nombre para este pedido (ej. al asignarle número de contenedor):', doc.fileName || '') || '').trim();
+  if (!nuevo || nuevo === doc.fileName) return;
+  if ((TORI.prodChina || []).some(d => d && d.id !== id && d.fileName === nuevo)) {
+    toast('⚠ Ya hay otro pedido con ese nombre — usa uno distinto', 'red');
+    return;
+  }
+  const viejo = doc.fileName;
+  doc.fileName = nuevo;
+  await _pcCommit();
+  toast('✏️ "' + viejo + '" ahora se llama "' + nuevo + '"', 'green');
+};
+
+window.__pcQuitarRef = async function(docId, refKey) {
+  const doc = _pcDoc(docId);
+  if (!doc) return;
+  _pcEnsureRows(doc);
+  const row = (doc.rows || []).find(r => norm(r.ref) === refKey);
+  if (!row) return;
+  if (!window.confirm('↩ Devolver ' + row.ref + ' a la Orden Sugerida\n\nSale de "' + (doc.fileName || '') + '" (la fábrica no la va a producir en este pedido) y vuelve a aparecer para ordenar.\n\n¿Confirmas?')) return;
+  doc.rows = doc.rows.filter(r => norm(r.ref) !== refKey);
+  _pcRecalcDoc(doc);
+  await _pcCommit();
+  toast('↩ ' + row.ref + ' devuelta a la Orden Sugerida — salió de "' + (doc.fileName || '') + '"', 'green');
+};
+
+window.__pcVetarRef = async function(docId, refKey) {
+  const doc = _pcDoc(docId);
+  if (!doc) return;
+  _pcEnsureRows(doc);
+  const row = (doc.rows || []).find(r => norm(r.ref) === refKey);
+  if (!row) return;
+  const motivo = window.prompt('🚫 NO PEDIR MÁS ' + row.ref + '\n\nSale de "' + (doc.fileName || '') + '" y entra a la lista NO TRAER: no se vuelve a sugerir nunca. (El veto se quita en la pastilla 🚫 No traer del Motor.)\n\nMotivo (defectos, mala calidad, no rota…):', 'Defectos');
+  if (motivo === null) return;
+  doc.rows = doc.rows.filter(r => norm(r.ref) !== refKey);
+  _pcRecalcDoc(doc);
+  // Misma forma y clave que ntAgregar del Motor (praga_no_traer_v1 ya viaja en el backup)
+  let ntdb = {};
+  try { const s = localStorage.getItem('praga_no_traer_v1'); if (s) ntdb = JSON.parse(s) || {}; } catch(e) {}
+  ntdb[refKey] = { codigo: row.ref, nombre: row.desc || '', motivo: String(motivo).trim(), fecha: new Date().toISOString().slice(0, 10) };
+  try { localStorage.setItem('praga_no_traer_v1', JSON.stringify(ntdb)); }
+  catch(e) { window.diag && window.diag('NO TRAER: no se pudo guardar', e); }
+  if (typeof triggerAutosave === 'function') triggerAutosave('no-traer');
+  await _pcCommit();
+  toast('🚫 ' + row.ref + ' vetada — salió del pedido y NO se vuelve a sugerir', 'green');
+};
+
+window.__pcSetUnidades = async function(docId, refKey, val) {
+  const doc = _pcDoc(docId);
+  if (!doc) return;
+  _pcEnsureRows(doc);
+  const row = (doc.rows || []).find(r => norm(r.ref) === refKey);
+  if (!row) return;
+  // Puntos y comas se tratan como miles al teclear (misma regla que flete/TRM, incidente PRAGA-139)
+  const u = (typeof _liqParseEntero === 'function') ? _liqParseEntero(String(val), 0) : Math.round(parseFloat(val) || 0);
+  if (!(u > 0)) {
+    toast('⚠ Cantidad inválida — para sacar la referencia del pedido usa ↩ o 🚫', 'red');
+    renderProdChinaStatus();
+    return;
+  }
+  if (u === (parseFloat(row.unidades) || 0)) { renderProdChinaStatus(); return; }
+  row.unidades = u;
+  if (row.unidCaja) {
+    row.cajas = Math.round(u / row.unidCaja * 10) / 10;
+    if (row.cubCaja != null) row.cubTotal = Math.round(row.cajas * row.cubCaja * 100) / 100;
+  }
+  if (row.precio !== '' && row.precio != null && !isNaN(Number(row.precio))) row.valor = u * Number(row.precio);
+  _pcRecalcDoc(doc);
+  await _pcCommit();
+  toast('✓ ' + row.ref + ': ' + u.toLocaleString('es-CO') + ' unidades en "' + (doc.fileName || '') + '"', 'green');
+};
+
+window.__pcBuscarRef = function(docId) {
+  const inp = document.getElementById('pcAddInp_' + docId);
+  const res = document.getElementById('pcAddRes_' + docId);
+  if (!inp || !res) return;
+  const q = norm(inp.value);
+  if (q.length < 2) { res.innerHTML = ''; return; }
+  const doc = _pcDoc(docId);
+  const ya = new Set(Object.keys((doc && doc.items) || {}));
+  const vistos = new Set();
+  const out = [];
+  const push = (codigo, nombre, unids, tag, color) => {
+    const k = norm(codigo);
+    if (!k || vistos.has(k) || ya.has(k)) return;
+    vistos.add(k);
+    out.push({ codigo: codigo, nombre: nombre || '', unids: unids, tag: tag, color: color });
+  };
+  // 1º la Orden Sugerida (lo natural para mandar a fábrica), 2º el resto del macro, 3º la base China
+  for (const r of ((window.STATE && window.STATE.ordenar) || [])) {
+    if (out.length >= 8) break;
+    if (norm(r.codigo).includes(q) || norm(r.nombre).includes(q)) push(r.codigo, r.nombre, r.unidPedir, 'Orden sugerida', '#1e8e3e');
+  }
+  if (out.length < 8) for (const r of (TORI.classified || [])) {
+    if (out.length >= 8) break;
+    if (norm(r.codigo).includes(q) || norm(r.nombre).includes(q)) push(r.codigo, r.nombre, r.unidPedir, 'Macro', '#8E8E93');
+  }
+  if (out.length < 8) {
+    const ch = _pcChinaDB();
+    for (const k of Object.keys(ch)) {
+      if (out.length >= 8) break;
+      const c = ch[k] || {};
+      if (k.includes(q) || (c.descripcionChina && norm(c.descripcionChina).includes(q))) push(c.codigo || k, c.descripcionChina || '', null, 'Base China', '#C05621');
+    }
+  }
+  res.innerHTML = out.length ? out.map(o => {
+    const cJs = esc(o.codigo).replace(/'/g, "\\'");
+    return `<button onclick="__pcAddPick('${esc(docId)}','${cJs}',${o.unids != null ? o.unids : 'null'})" style="display:flex;align-items:center;gap:7px;width:100%;text-align:left;background:#fff;border:1px solid var(--border);border-radius:8px;padding:4px 9px;margin:2px 0;font-size:11.5px;cursor:pointer;font-family:inherit">
+      <b style="color:var(--brand)">${esc(o.codigo)}</b>
+      <span style="flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${esc(o.nombre)}</span>
+      ${o.unids != null ? '<span style="color:var(--muted)">' + Number(o.unids).toLocaleString('es-CO') + ' unds sugeridas</span>' : ''}
+      <span style="font-size:10px;font-weight:800;color:${o.color}">${o.tag}</span>
+    </button>`;
+  }).join('') : '<div style="padding:4px 2px;color:var(--muted);font-size:11.5px">Sin resultados — revisa el código, o primero súbelo al macro o a la base China.</div>';
+};
+
+window.__pcAddPick = async function(docId, codigo, unidsSug) {
+  const doc = _pcDoc(docId);
+  if (!doc) return;
+  const def = (unidsSug != null && unidsSug !== '' && !isNaN(Number(unidsSug))) ? String(Math.round(Number(unidsSug))) : '';
+  const val = window.prompt('➕ ' + codigo + ' → "' + (doc.fileName || '') + '"\n\n¿Cuántas unidades pide la fábrica?' + (def ? '\n(Sugerido por el Motor: ' + Number(def).toLocaleString('es-CO') + ')' : ''), def);
+  if (val === null) return;
+  const u = (typeof _liqParseEntero === 'function') ? _liqParseEntero(String(val), 0) : Math.round(parseFloat(val) || 0);
+  if (!(u > 0)) { toast('⚠ Cantidad inválida — no se agregó', 'red'); return; }
+  _pcEnsureRows(doc);
+  const k = norm(codigo);
+  const exist = (doc.rows || []).find(r => norm(r.ref) === k);
+  if (exist) {
+    exist.unidades = (parseFloat(exist.unidades) || 0) + u;
+    if (exist.unidCaja) {
+      exist.cajas = Math.round(exist.unidades / exist.unidCaja * 10) / 10;
+      if (exist.cubCaja != null) exist.cubTotal = Math.round(exist.cajas * exist.cubCaja * 100) / 100;
+    }
+    if (exist.precio !== '' && exist.precio != null && !isNaN(Number(exist.precio))) exist.valor = exist.unidades * Number(exist.precio);
+  } else {
+    doc.rows.push(_pcBuildRow(k, u, _pcMacroMap(), _pcChinaDB()));
+  }
+  _pcRecalcDoc(doc);
+  window._pcOpen = window._pcOpen || {};
+  window._pcOpen[doc.id] = true;
+  await _pcCommit();
+  toast('➕ ' + codigo + ': ' + u.toLocaleString('es-CO') + ' unds → "' + (doc.fileName || '') + '"' + (exist ? ' (sumadas: ya estaba en el pedido)' : ' — sale de la Orden Sugerida'), 'green');
+};
+
+/* 🏭 Desde la Orden de Compra del Motor: elegir a qué pedido mandar una referencia */
+window.__pcElegirDoc = function(codigo, unidsSug) {
+  const prev = document.getElementById('pcElegirOverlay');
+  if (prev) prev.remove();
+  const docs = TORI.prodChina || [];
+  const cJs = esc(codigo).replace(/'/g, "\\'");
+  const uArg = (unidsSug != null && unidsSug !== '' && !isNaN(Number(unidsSug))) ? Number(unidsSug) : 'null';
+  const ov = document.createElement('div');
+  ov.id = 'pcElegirOverlay';
+  ov.style.cssText = 'position:fixed;inset:0;background:rgba(0,0,0,.35);z-index:9999;display:flex;align-items:center;justify-content:center;padding:20px';
+  ov.onclick = function(e) { if (e.target === ov) ov.remove(); };
+  const lista = docs.map(d =>
+    `<button onclick="__pcElegirPick('${esc(d.id)}','${cJs}',${uArg})" style="display:flex;align-items:center;gap:8px;width:100%;text-align:left;background:rgba(192,86,33,.07);border:1px solid rgba(192,86,33,.3);border-radius:10px;padding:8px 12px;margin:3px 0;font-size:12.5px;cursor:pointer;font-family:inherit">
+      <span>${d.origen === 'DISTRIBUIDOR' ? '🚢' : (d.origen === 'MANUAL' ? '📝' : '🏭')}</span>
+      <b style="flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${esc(d.fileName || '')}</b>
+      <span style="color:var(--muted);white-space:nowrap">${(d.nRefs || 0).toLocaleString('es-CO')} refs · ${Math.round(d.nUnids || 0).toLocaleString('es-CO')} unds</span>
+    </button>`).join('');
+  ov.innerHTML = `<div style="background:#fff;border-radius:16px;max-width:440px;width:100%;max-height:72vh;overflow-y:auto;padding:18px;box-shadow:0 18px 50px rgba(0,0,0,.28)" onclick="event.stopPropagation()">
+    <div style="font-weight:800;font-size:15px;margin-bottom:4px">🏭 Mandar ${esc(codigo)} a un pedido de Producción China</div>
+    <div style="font-size:12px;color:var(--muted);margin-bottom:10px">La referencia sale de la Orden Sugerida y queda FABRICÁNDOSE en el pedido que elijas.</div>
+    ${lista || '<div style="font-size:12.5px;color:var(--muted);padding:6px 0">No hay pedidos abiertos todavía — crea uno aquí mismo:</div>'}
+    <button onclick="__pcElegirNuevo('${cJs}',${uArg})" style="display:block;width:100%;background:rgba(52,199,89,.1);color:#1e8e3e;border:1px solid rgba(52,199,89,.4);border-radius:10px;padding:8px 12px;margin:8px 0 3px;font-size:12.5px;font-weight:700;cursor:pointer;font-family:inherit">➕ Crear pedido nuevo…</button>
+    <button onclick="document.getElementById('pcElegirOverlay').remove()" style="display:block;width:100%;background:var(--faint);color:var(--text);border:1px solid var(--border);border-radius:10px;padding:8px 12px;margin:3px 0;font-size:12.5px;font-weight:700;cursor:pointer;font-family:inherit">Cancelar</button>
+  </div>`;
+  document.body.appendChild(ov);
+};
+
+window.__pcElegirPick = function(docId, codigo, unids) {
+  const ov = document.getElementById('pcElegirOverlay');
+  if (ov) ov.remove();
+  window.__pcAddPick(docId, codigo, unids);
+};
+
+window.__pcElegirNuevo = async function(codigo, unids) {
+  const nombre = (window.prompt('Nombre del pedido nuevo (sin número de contenedor está bien — lo renombras con ✏️ cuando lo asignen):', 'orden de compra ' + new Date().toISOString().slice(0, 10)) || '').trim();
+  if (!nombre) return;
+  if ((TORI.prodChina || []).some(d => d && d.fileName === nombre)) { toast('⚠ Ya hay un pedido con ese nombre', 'red'); return; }
+  const doc = {
+    id: Date.now() + '_' + Math.random().toString(36).slice(2, 7),
+    fileName: nombre,
+    origen: 'MANUAL',
+    fecha: new Date().toLocaleString('es-CO'),
+    items: {},
+    nRefs: 0,
+    nUnids: 0,
+    rows: []
+  };
+  TORI.prodChina = TORI.prodChina || [];
+  TORI.prodChina.push(doc);
+  const ov = document.getElementById('pcElegirOverlay');
+  if (ov) ov.remove();
+  await _pcCommit();
+  if (codigo) window.__pcAddPick(doc.id, codigo, unids);
+};
+
+/* 📗 Excel formato proveedores China para CUALQUIER pedido (también los subidos como archivo) */
+window.__pcExcel = async function(id) {
+  const doc = _pcDoc(id);
+  if (!doc) return;
+  _pcEnsureRows(doc);
+  if (!doc.rows.length) { toast('⚠ Este pedido está vacío — agrégale referencias primero', 'red'); return; }
+  if (window.DIST && typeof DIST.exportDoc === 'function') await DIST.exportDoc(id);
+  else toast('⚠ No encuentro el módulo del Distribuidor para generar el Excel', 'red');
+};
+
 function renderProdChinaStatus() {
   const el = document.getElementById('prodChinaStatus');
   if (!el) return;
   const docs = TORI.prodChina || [];
   if (!docs.length) { el.innerHTML = ''; return; }
-  // v5.75: cada factura/contenedor es expandible (clic = ver sus referencias con foto),
-  // y los que vienen del Distribuidor tienen su Excel de FOTOS listo para el proveedor.
+  window._pcOpen = window._pcOpen || {};
+  const necesitaMapas = docs.some(d => !(d && d.rows && d.rows.length));
+  const macroM = necesitaMapas ? _pcMacroMap() : null;
+  const chinaM = necesitaMapas ? _pcChinaDB() : null;
   el.innerHTML = docs.map(d => {
     const esDist = d.origen === 'DISTRIBUIDOR';
-    const icono = esDist ? '🚢' : '🏭';
-    const extra = esDist ? ` · ${(d.cbm!=null?d.cbm.toLocaleString('es-CO'):'')} m³ · ¥${(d.valorRMB||0).toLocaleString('es-CO')}` : '';
-    const btnExcel = (d.rows && d.rows.length)
-      ? `<button onclick="window.DIST && DIST.exportDoc('${esc(d.id)}')" title="Excel con fotos incrustadas — formato proveedores China" style="background:rgba(52,199,89,.1);color:#1e8e3e;border:1px solid rgba(52,199,89,.4);border-radius:8px;padding:4px 10px;font-size:12px;font-weight:700;cursor:pointer;white-space:nowrap">📗 Excel FOTOS</button>`
-      : '';
-    let bodyRows = '';
-    if (d.rows && d.rows.length) {
-      bodyRows = d.rows.map(r => {
-        const f = (typeof window.getFotoByCodigo === 'function') ? window.getFotoByCodigo(r.ref) : null;
-        const foto = f ? `<img src="${f}" style="width:28px;height:28px;object-fit:cover;border-radius:5px;cursor:zoom-in;flex:none" onclick="toriZoomFotoCod('${esc(r.ref).replace(/'/g, "\\'")}')" loading="lazy">` : `<span style="width:28px;height:28px;flex:none;display:inline-flex;align-items:center;justify-content:center;background:var(--faint);border-radius:5px;font-size:11px;color:var(--muted)">${r.isNew ? '🆕' : '—'}</span>`;
-        return `<div style="display:flex;align-items:center;gap:8px;padding:3px 0;border-bottom:1px solid var(--border);font-size:11.5px">
-          ${foto}
-          <b style="min-width:66px;color:var(--brand)">${esc(r.ref)}</b>
-          <span style="flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap" title="${esc(r.desc)}">${esc(r.desc)}${r.descCn ? ' <span style="color:var(--muted)">· '+esc(r.descCn)+'</span>' : ''}</span>
-          <span style="color:var(--muted);min-width:56px;text-align:right">${(parseFloat(r.unidades)||0).toLocaleString('es-CO')} und</span>
-        </div>`;
-      }).join('');
-    } else {
-      bodyRows = Object.keys(d.items || {}).map(k => {
-        const f = (typeof window.getFotoByCodigo === 'function') ? window.getFotoByCodigo(k) : null;
-        const foto = f ? `<img src="${f}" style="width:28px;height:28px;object-fit:cover;border-radius:5px;flex:none" loading="lazy">` : `<span style="width:28px;height:28px;flex:none;display:inline-flex;align-items:center;justify-content:center;background:var(--faint);border-radius:5px;font-size:11px;color:var(--muted)">—</span>`;
-        return `<div style="display:flex;align-items:center;gap:8px;padding:3px 0;border-bottom:1px solid var(--border);font-size:11.5px">
-          ${foto}<b style="flex:1;color:var(--brand)">${esc(k)}</b>
-          <span style="color:var(--muted)">${Math.round(d.items[k]).toLocaleString('es-CO')} und</span>
-        </div>`;
-      }).join('');
-    }
+    const icono = esDist ? '🚢' : (d.origen === 'MANUAL' ? '📝' : '🏭');
+    const extra = esDist ? ` · ${(d.cbm != null ? d.cbm.toLocaleString('es-CO') : '')} m³ · ¥${(d.valorRMB || 0).toLocaleString('es-CO')}` : '';
+    const idEsc = esc(d.id);
+    const abierto = !!window._pcOpen[d.id];
+    const rows = _pcRowsView(d, macroM, chinaM);
+    const bodyRows = rows.map(r => {
+      const rk = norm(r.ref);
+      const rkJs = esc(rk).replace(/'/g, "\\'");
+      const u = parseFloat(r.unidades) || 0;
+      const f = (typeof window.getFotoByCodigo === 'function') ? window.getFotoByCodigo(r.ref) : null;
+      const foto = f ? `<img src="${f}" style="width:28px;height:28px;object-fit:cover;border-radius:5px;cursor:zoom-in;flex:none" onclick="toriZoomFotoCod('${esc(r.ref).replace(/'/g, "\\'")}')" loading="lazy">` : `<span style="width:28px;height:28px;flex:none;display:inline-flex;align-items:center;justify-content:center;background:var(--faint);border-radius:5px;font-size:11px;color:var(--muted)">${r.isNew ? '🆕' : '—'}</span>`;
+      return `<div style="display:flex;align-items:center;gap:8px;padding:3px 0;border-bottom:1px solid var(--border);font-size:11.5px">
+        ${foto}
+        <b style="min-width:66px;color:var(--brand)">${esc(r.ref)}</b>
+        <span style="flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap" title="${esc(r.desc)}">${esc(r.desc)}${r.descCn ? ' <span style="color:var(--muted)">· ' + esc(r.descCn) + '</span>' : ''}</span>
+        <input type="text" inputmode="numeric" value="${u.toLocaleString('es-CO')}" onchange="__pcSetUnidades('${idEsc}','${rkJs}',this.value)" title="Cambiar las unidades de ${esc(r.ref)} en este pedido (Enter o clic afuera para confirmar)" style="width:70px;text-align:right;border:1px solid var(--border);border-radius:7px;padding:2px 6px;font-size:11.5px;font-family:inherit">
+        <span style="color:var(--muted)">und</span>
+        <button onclick="__pcQuitarRef('${idEsc}','${rkJs}')" title="Devolver ${esc(r.ref)} a la Orden Sugerida — la fábrica no la produce en este pedido" style="background:var(--faint);color:var(--text);border:1px solid var(--border);border-radius:7px;padding:2px 7px;font-size:12px;cursor:pointer;flex:none">↩</button>
+        <button onclick="__pcVetarRef('${idEsc}','${rkJs}')" title="No pedir más ${esc(r.ref)}: sale del pedido y entra a la lista NO TRAER (no se vuelve a sugerir)" style="background:rgba(215,0,21,.06);color:#D70015;border:1px solid rgba(215,0,21,.3);border-radius:7px;padding:2px 7px;font-size:12px;cursor:pointer;flex:none">🚫</button>
+      </div>`;
+    }).join('');
+    const addBox = `<div style="display:flex;gap:6px;align-items:center;margin-bottom:6px">
+        <input id="pcAddInp_${idEsc}" placeholder="➕ Agregar referencia a este pedido: busca por código o nombre…" oninput="__pcBuscarRef('${idEsc}')" style="flex:1;border:1px solid var(--border);border-radius:8px;padding:5px 9px;font-size:12px;font-family:inherit">
+      </div>
+      <div id="pcAddRes_${idEsc}" style="margin-bottom:4px"></div>`;
     return `<div style="background:rgba(192,86,33,.08);border:1px solid rgba(192,86,33,.35);border-radius:10px;padding:8px 12px;font-size:12px;margin-bottom:6px">
     <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap">
       <span>${icono}</span>
-      <span style="flex:1;min-width:180px;cursor:pointer" onclick="toggleProdChinaDoc('${esc(d.id)}')" title="Clic para ver las referencias"><b>${esc(d.fileName||'')}</b> · <b>${(d.nRefs||0).toLocaleString('es-CO')}</b> refs · <b>${Math.round(d.nUnids||0).toLocaleString('es-CO')}</b> unds en fábrica${extra} · ${esc(d.fecha||'')}</span>
-      <button onclick="toggleProdChinaDoc('${esc(d.id)}')" style="background:var(--faint);color:var(--text);border:1px solid var(--border);border-radius:8px;padding:4px 10px;font-size:12px;font-weight:700;cursor:pointer;white-space:nowrap" id="pcTgl_${esc(d.id)}">👁 Ver referencias</button>
-      ${btnExcel}
-      <button onclick="borrarProdChinaDoc('${esc(d.id)}')" title="Borrar: la fábrica ya despachó (pasa a EN CAMINO en el Liquidador)" style="background:rgba(255,59,48,.1);color:#FF3B30;border:1px solid rgba(255,59,48,.35);border-radius:8px;padding:4px 10px;font-size:12px;font-weight:700;cursor:pointer;white-space:nowrap">🗑 Despachado — borrar</button>
+      <span style="flex:1;min-width:180px;cursor:pointer" onclick="toggleProdChinaDoc('${idEsc}')" title="Clic para ver y EDITAR las referencias"><b>${esc(d.fileName || '')}</b> · <b>${(d.nRefs || 0).toLocaleString('es-CO')}</b> refs · <b>${Math.round(d.nUnids || 0).toLocaleString('es-CO')}</b> unds en fábrica${extra} · ${esc(d.fecha || '')}</span>
+      <button onclick="__pcRenombrar('${idEsc}')" title="Renombrar este pedido (ej. cuando le asignen número de contenedor)" style="background:var(--faint);color:var(--text);border:1px solid var(--border);border-radius:8px;padding:4px 9px;font-size:12px;font-weight:700;cursor:pointer;white-space:nowrap">✏️</button>
+      <button onclick="toggleProdChinaDoc('${idEsc}')" style="background:var(--faint);color:var(--text);border:1px solid var(--border);border-radius:8px;padding:4px 10px;font-size:12px;font-weight:700;cursor:pointer;white-space:nowrap" id="pcTgl_${idEsc}">${abierto ? '🙈 Ocultar' : '👁 Ver / editar'}</button>
+      <button onclick="__pcExcel('${idEsc}')" title="Excel formato proveedores China (español/chino, con fotos) — también para pedidos subidos como archivo" style="background:rgba(52,199,89,.1);color:#1e8e3e;border:1px solid rgba(52,199,89,.4);border-radius:8px;padding:4px 10px;font-size:12px;font-weight:700;cursor:pointer;white-space:nowrap">📗 Excel FOTOS</button>
+      <button onclick="borrarProdChinaDoc('${idEsc}')" title="Borrar: la fábrica ya despachó (pasa a EN CAMINO en el Liquidador)" style="background:rgba(255,59,48,.1);color:#FF3B30;border:1px solid rgba(255,59,48,.35);border-radius:8px;padding:4px 10px;font-size:12px;font-weight:700;cursor:pointer;white-space:nowrap">🗑 Despachado — borrar</button>
     </div>
-    <div id="pcBody_${esc(d.id)}" style="display:none;max-height:320px;overflow-y:auto;margin-top:8px;padding-top:6px;border-top:1px dashed rgba(192,86,33,.35)">${bodyRows}</div>
+    <div id="pcBody_${idEsc}" style="display:${abierto ? 'block' : 'none'};max-height:340px;overflow-y:auto;margin-top:8px;padding-top:6px;border-top:1px dashed rgba(192,86,33,.35)">${addBox}${bodyRows || '<div style="padding:6px 0;color:var(--muted)">Pedido vacío — busca arriba para agregarle referencias.</div>'}</div>
   </div>`;
   }).join('');
 }
@@ -3253,8 +3563,10 @@ window.toggleProdChinaDoc = function(id){
   const tgl = document.getElementById('pcTgl_' + id);
   if (!body) return;
   const open = body.style.display !== 'none';
+  window._pcOpen = window._pcOpen || {};
+  window._pcOpen[id] = !open;
   body.style.display = open ? 'none' : 'block';
-  if (tgl) tgl.textContent = open ? '👁 Ver referencias' : '🙈 Ocultar';
+  if (tgl) tgl.textContent = open ? '👁 Ver / editar' : '🙈 Ocultar';
 };
 
 function getEnCaminoFacturas() {
@@ -3313,7 +3625,7 @@ function getEnCaminoTotals() {
 function renderEnCaminoPanel() {
   const el = document.getElementById('enCaminoPanel');
   if (!el) return;
-  // v5.75: depurar SOLO cuando las facturas ya cargaron del disco.
+  // v5.76: depurar SOLO cuando las facturas ya cargaron del disco.
   // Antes, este render corría durante el arranque (facturas aún vacías) y
   // borraba —y guardaba vacía— la lista de contenedores EN CAMINO.
   if (window._toriDatosListos && TORI.facturas.length > 0) {
@@ -4095,7 +4407,7 @@ function hideProgress() {
 /* ─── STORAGE SAVE/LOAD ─── */
 async function saveFacturasToStorage() {
   try {
-    // v5.75: TODO en UNA transacción (clear + puts juntos). Si la app se cierra a
+    // v5.76: TODO en UNA transacción (clear + puts juntos). Si la app se cierra a
     // mitad del guardado, la transacción se aborta COMPLETA y las facturas viejas
     // quedan intactas. (Antes: clear y puts en transacciones separadas — un cierre
     // a mitad dejaba el store vacío: incidente de pérdida de facturas 2026-08-01.)
@@ -4128,7 +4440,7 @@ async function saveFacturasToStorage() {
 }
 async function saveMacroToStorage() {
   try {
-    // v5.75: una sola transacción atómica (mismo blindaje que saveFacturasToStorage)
+    // v5.76: una sola transacción atómica (mismo blindaje que saveFacturasToStorage)
     const db = await _toriIDBOpen();
     await new Promise((res, rej) => {
       const tx = db.transaction('macro', 'readwrite');
@@ -5316,7 +5628,7 @@ updateYuanRate();
     chinaSort: {field:null, dir:1},
     stockSort: {field:null, dir:1}
   };
-  window.STATE = STATE; // v5.75: puente para el Distribuidor de Contenedores (misma referencia, solo lectura desde DIST)
+  window.STATE = STATE; // v5.76: puente para el Distribuidor de Contenedores (misma referencia, solo lectura desde DIST)
 
   var CATS = [
     // Accesorios personales
@@ -5376,7 +5688,7 @@ updateYuanRate();
     GRUPO_EXCLUIDO: {label:'Grupo excluido', color:'#8E8E93'},
     ROTACION_LENTA: {label:'Rotación > límite', color:'#FF9500'},
     DATO_INCOMPLETO: {label:'Fechas incompletas', color:'#FF3B30'},
-    NO_TRAER: {label:'\ud83d\udeab No traer', color:'#D70015'}   // v5.75: vetados (defectos u otra razón) — nunca se vuelven a sugerir
+    NO_TRAER: {label:'\ud83d\udeab No traer', color:'#D70015'}   // v5.76: vetados (defectos u otra razón) — nunca se vuelven a sugerir
   };
 
   function loadParams(){
@@ -5392,7 +5704,7 @@ updateYuanRate();
     if(typeof triggerAutosave==='function') triggerAutosave('motor-params');
   }
 
-  /* ═══ v5.75: LISTA NO TRAER — productos vetados (defectos u otra razón).
+  /* ═══ v5.76: LISTA NO TRAER — productos vetados (defectos u otra razón).
      Se guardan en praga_no_traer_v1, viajan en el backup, y el Motor los saca
      de la orden sugerida AUTOMÁTICAMENTE en cada recálculo: no hay que
      recordarlos ni sacarlos a ojo nunca más. ═══ */
@@ -5638,7 +5950,7 @@ updateYuanRate();
         else { r.prodChina = null; if (r.status === 'PROD_CHINA') r.status = 'ORDENAR'; }
       });
     } catch(e) {}
-    // v5.75: lo VETADO en la lista NO TRAER (defectos u otra razón) NUNCA se sugiere
+    // v5.76: lo VETADO en la lista NO TRAER (defectos u otra razón) NUNCA se sugiere
     // (mismo mecanismo, lógica aparte). Se aplica de último para que un veto quitado
     // devuelva la referencia a ORDENAR en el mismo recálculo.
     try {
@@ -5964,7 +6276,7 @@ updateYuanRate();
     renderOrdenTable();
   }
 
-  /* ═══ v5.75: REPETIDOS EN TODA LA CADENA DE SUMINISTRO ═══
+  /* ═══ v5.76: REPETIDOS EN TODA LA CADENA DE SUMINISTRO ═══
      Una referencia no debería estar en dos eslabones a la vez. TORI clasifica
      cada referencia en UN solo estado (por prioridad), así que estas repeticiones
      quedaban invisibles. Aquí se cruzan los 4 eslabones de forma independiente:
@@ -6020,14 +6332,14 @@ updateYuanRate();
   }
 
   function renderRepetidosCadena(){
-    // v5.75: el recuadro rojo se retiró — la pastilla 🔁 Repetidos tiene toda la
+    // v5.76: el recuadro rojo se retiró — la pastilla 🔁 Repetidos tiene toda la
     // información con foto, buscador, filtros y descarga. Aquí solo se calcula.
     try { STATE.repetidosCadena = computeRepetidosCadena(); } catch(e){ STATE.repetidosCadena = []; }
     var box = document.getElementById('repetidosCadenaBox');
     if (box) box.innerHTML = '';
   }
 
-  /* ═══ v5.75: VISTA 🔁 REPETIDOS (reemplaza la pastilla "Orden de compra abierta") ═══
+  /* ═══ v5.76: VISTA 🔁 REPETIDOS (reemplaza la pastilla "Orden de compra abierta") ═══
      Tabla con FOTO, buscador (el mismo de arriba), filtro de categoría, y chips para
      seleccionar UNA combinación específica (STOCK + EN CAMINO, etc.). Descarga con fotos. */
   function renderRepetidosTable(search, grupo){
@@ -6099,7 +6411,7 @@ updateYuanRate();
         ? '<img src="'+foto+'" style="width:32px;height:32px;object-fit:cover;border-radius:7px;cursor:zoom-in;" onclick="toriZoomFotoCod(\''+esc(r.codigo).replace(/'/g,"\\'")+'\')" loading="lazy">'
         : '<span style="color:#C7C7CC;">—</span>';
       function celda(v, color, docs){
-        // v5.75: el documento/contenedor va VISIBLE debajo de las unidades, para ir
+        // v5.76: el documento/contenedor va VISIBLE debajo de las unidades, para ir
         // directo a la factura u orden y solucionar el repetido.
         var unds = v ? fmtNum(v) : (docs ? '<span style="color:#FF9500;" title="Este documento quedó con 0 unidades — re-súbelo o revísalo">0 ⚠</span>' : '—');
         var docsHtml = docs ? '<div style="font-size:10px;font-weight:600;color:'+color+';opacity:.75;white-space:normal;max-width:150px;">'+esc(docs)+'</div>' : '';
@@ -6287,12 +6599,12 @@ updateYuanRate();
     data.forEach(function(r){ if(r.status!=='ORDENAR') counts[r.status] = (counts[r.status]||0)+1; });
     var html = '<button class="pill '+(STATE.ordenView==='ORDEN'?'active':'')+'" data-view="ORDEN">Orden sugerida · '+data.filter(function(r){return r.status==='ORDENAR';}).length+'</button>';
     Object.keys(STATUS_META).forEach(function(k){
-      // v5.75: "Orden de compra abierta" solo aparece si de verdad hay referencias
+      // v5.76: "Orden de compra abierta" solo aparece si de verdad hay referencias
       // en ese estado (la pastilla en 0 no aportaba; si algún día hay OC, reaparece)
       if (k === 'OC_PENDIENTE' && counts[k] === 0) return;
       html += '<button class="pill '+(STATE.ordenView===k?'active':'')+'" data-view="'+k+'">'+STATUS_META[k].label+' · '+counts[k]+'</button>';
     });
-    // v5.75: pastilla 🔁 Repetidos — vista completa con foto, buscador y filtro por combinación
+    // v5.76: pastilla 🔁 Repetidos — vista completa con foto, buscador y filtro por combinación
     var nRep = (STATE.repetidosCadena || []).length;
     html += '<button class="pill '+(STATE.ordenView==='REPETIDOS'?'active':'')+'" data-view="REPETIDOS" style="'+(nRep>0 && STATE.ordenView!=='REPETIDOS'?'border-color:#FF3B30;color:#D70015;':'')+'">🔁 Repetidos · '+nRep+'</button>';
     // v5.23: el conteo "\ud83d\udea2 En camino · N" ya sale del loop de estados (clic = ver esas referencias).
@@ -6341,7 +6653,7 @@ updateYuanRate();
       return '<th data-sort="'+field+'">'+label+arrow+'</th>';
     }
 
-    // v5.75: en la vista Bodega San Benito, el Excel de traslados aparece AQUÍ
+    // v5.76: en la vista Bodega San Benito, el Excel de traslados aparece AQUÍ
     // (donde se trabaja), no solo en la pantalla de Importar Archivos.
     var sbBar = document.getElementById('sbTrasladoBar');
     if (STATE.ordenView === 'BODEGA_SB') {
@@ -6361,7 +6673,7 @@ updateYuanRate();
       sbBar.innerHTML = '';
     }
 
-    // v5.75: barra de gestión de la lista NO TRAER (agregar por código + ver vetados sin fila en el macro)
+    // v5.76: barra de gestión de la lista NO TRAER (agregar por código + ver vetados sin fila en el macro)
     var ntBar = document.getElementById('ntGestionBar');
     if (STATE.ordenView === 'NO_TRAER') {
       if (!ntBar) {
@@ -6402,7 +6714,7 @@ updateYuanRate();
 
     var head = showExcl ?
       '<tr>'+th('Código','codigo')+th('Nombre','nombre')+th('Categoría','categoria')+'<th>Motivo</th>'+th('Días','dias')+'</tr>' :
-      '<tr>'+th('Código','codigo')+th('Nombre','nombre')+th('Categoría','categoria')+th('Tier','tier')+th('Días','dias')+th('Última entrada (unds)','cantEntrada')+th('Unid./caja','unidEmpaque')+th('Cajas a pedir','cajas')+th('Unid. a pedir','unidPedir')+th('Cubicaje m³','cubPedir')+th('Costo unit.','costoUnitario')+th('Costo envío/u','costoEnvioUnit')+th('Precio sugerido','precioSugerido')+th('Valor línea','valorLinea')+th('Contenedor','contenedor')+'<th title="Vetar: pasa a la lista NO TRAER y no se vuelve a sugerir">\ud83d\udeab</th></tr>';
+      '<tr>'+th('Código','codigo')+th('Nombre','nombre')+th('Categoría','categoria')+th('Tier','tier')+th('Días','dias')+th('Última entrada (unds)','cantEntrada')+th('Unid./caja','unidEmpaque')+th('Cajas a pedir','cajas')+th('Unid. a pedir','unidPedir')+th('Cubicaje m³','cubPedir')+th('Costo unit.','costoUnitario')+th('Costo envío/u','costoEnvioUnit')+th('Precio sugerido','precioSugerido')+th('Valor línea','valorLinea')+th('Contenedor','contenedor')+'<th title="Mandar a un pedido de Producci\u00f3n China espec\u00edfico">\ud83c\udfed</th>'+'<th title="Vetar: pasa a la lista NO TRAER y no se vuelve a sugerir">\ud83d\udeab</th></tr>';
     document.getElementById('ordenTableHead').innerHTML = head;
 
     var rowsHtml = filtered.map(function(r){
@@ -6444,9 +6756,10 @@ updateYuanRate();
         '<td class="right mono">'+(r.precioSugerido!=null?('$'+r.precioSugerido.toLocaleString('es-CO')):'—')+'</td>'+
         '<td class="right mono">'+(r.valorLinea!=null?('$'+r.valorLinea.toLocaleString('es-CO',{maximumFractionDigits:0})):'—')+'</td>'+
         '<td class="mono">'+esc(r.contenedor||'—')+'</td>'+
+        '<td class="center"><button onclick="window.__pcElegirDoc(\''+esc(r.codigo).replace(/'/g, "\\\\'")+'\','+(r.unidPedir!=null?r.unidPedir:'null')+')" title="Mandar '+esc(r.codigo)+' a un pedido de Producci\u00f3n China — sale de la Orden Sugerida" style="background:none;border:1px solid rgba(192,86,33,.4);border-radius:8px;padding:2px 7px;cursor:pointer;font-size:12px;">\ud83c\udfed</button></td>'+
         '<td class="center"><button onclick="window.__ntVetar(\''+esc(r.codigo).replace(/'/g, "\\\\'")+'\')" title="Vetar '+esc(r.codigo)+' — NO TRAER (pide el motivo y no se vuelve a sugerir)" style="background:none;border:1px solid rgba(215,0,21,.35);border-radius:8px;padding:2px 7px;cursor:pointer;font-size:12px;">\ud83d\udeab</button></td></tr>';
     }).join('');
-    document.getElementById('ordenTableBody').innerHTML = rowsHtml || '<tr><td colspan="16" class="center" style="padding:30px;color:#8E8E93">No hay referencias que coincidan con el filtro.</td></tr>';
+    document.getElementById('ordenTableBody').innerHTML = rowsHtml || '<tr><td colspan="17" class="center" style="padding:30px;color:#8E8E93">No hay referencias que coincidan con el filtro.</td></tr>';
     var valorOrden = (STATE.ordenar||[]).reduce(function(s,r){return s+(r.valorLinea||0);},0);
     document.getElementById('ordenCount').textContent = 'Mostrando '+filtered.length+' de '+list.length+' '+(showExcl?'excluidas':'referencias para ordenar')+(!showExcl && valorOrden>0 ? ' · Valor estimado con costo cargado: $'+valorOrden.toLocaleString('es-CO',{maximumFractionDigits:0}) : '');
     document.getElementById('exportBtnWrap').classList.toggle('hidden', showExcl);
@@ -6465,7 +6778,7 @@ updateYuanRate();
     return (s==null?'':s.toString()).replace(/[&<>]/g, function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;'}[c];});
   }
 
-  /* ═══ v5.75: GUÍA DE VIAJE A CHINA — un solo HTML offline con TODO el negocio:
+  /* ═══ v5.76: GUÍA DE VIAJE A CHINA — un solo HTML offline con TODO el negocio:
      foto, proveedor, precio RMB, cubicaje, días de venta, cadena completa
      (stock · en camino · San Benito · fábrica), ⭐ ganadores para pedir parecidos
      y 🐌 lentos (aunque tengan stock viejo) para NO repetir el error en otra
@@ -6877,7 +7190,7 @@ SC,
 
   function exportLiquidacion(){
     var source = STATE.liqView==='TODO' ? (STATE.stockDisponible||[]) : (STATE.liquidacion||[]);
-    // v5.75: precio de costo en pesos AL LADO de la proyección de venta total
+    // v5.76: precio de costo en pesos AL LADO de la proyección de venta total
     var headers = ['Codigo','Nombre','Categoria','Cantidad ultima entrada','Saldo actual','% Vendido','Dias en bodega','Fecha ultima entrada','Proyeccion dias para agotar stock','Precio costo unitario (COP)','Fuente de la proyeccion','Cubicaje unitario m3','Cubicaje inmovilizado m3','Capital inmovilizado (COP)'];
     var data = source.map(function(r){
       return [r.codigo, r.nombre, r.categoria, r.cantEntrada, r.saldo, r.pctVendido!=null?Math.round(r.pctVendido*1000)/10:'', r.diasEnBodega, r.fEntrada? r.fEntrada.toISOString().slice(0,10):'', r.diasEstimados, r.costoUnitario!=null? r.costoUnitario : '', r.velocidadFuente||'', r.cubicaje, r.cubicajeInmovilizado, r.valorLinea];
@@ -6925,7 +7238,7 @@ SC,
         var db = STATE.chinaDB || loadChinaDB();
         var n = 0, updated = 0;
         var today = new Date().toISOString().slice(0,10);
-        // v5.75: una fila vale si trae AL MENOS UN dato útil (precio, descripción
+        // v5.76: una fila vale si trae AL MENOS UN dato útil (precio, descripción
         // china o proveedor). Antes se exigía precio y los archivos que el proveedor
         // devolvía solo con descripciones/tiendas (como YUGIN) se descartaban enteros.
         var hasCJK = function(s){ return /[\u4e00-\u9fff]/.test(s); };
@@ -11589,7 +11902,7 @@ async function restaurarMaestro(){
       if(EMB.catRules && Object.keys(EMB.catRules).length) state.catRules=EMB.catRules;
       if(Array.isArray(EMB.categorias)) state.categorias=EMB.categorias;
       if(EMB.fecha) setCatDate(EMB.fecha);
-      // v5.75: un archivo generado para el cliente abre DIRECTO en el catálogo
+      // v5.76: un archivo generado para el cliente abre DIRECTO en el catálogo
       // PI2, ocultando la cáscara interna de TORI (sidebar y topbar).
       try{
         if(typeof showScreen==='function') showScreen('pi2');
@@ -11814,7 +12127,7 @@ async function exportarBackupConFotos() {
     }
 
     // 2. Construir facturas CON fotos reinyectadas
-    // v5.75: copiar TODOS los campos de la factura ({...f}) — antes se perdía 'meta'
+    // v5.76: copiar TODOS los campos de la factura ({...f}) — antes se perdía 'meta'
     const facConFotos = (TORI.facturas || []).map(f => ({
       ...f,
       rows: f.rows.map((r, i) => {
@@ -11834,7 +12147,7 @@ async function exportarBackupConFotos() {
       'praga_cubicaje_db_v1', 'praga_reorden_history_v1',
       'praga_reorden_params', 'praga_ext_files_log_v1', 'praga_cloud_url_v1',
       'tori_dist_overrides', 'tori_dist_seeded', 'tori_dist_nuevos',  // v5.68
-      'praga_no_traer_v1'  // v5.75: lista NO TRAER
+      'praga_no_traer_v1'  // v5.76: lista NO TRAER
     ];
     const motorLS = {};
     for (const k of lsKeys) {
@@ -11939,7 +12252,7 @@ async function exportarBackupMaestro() {
       'praga_reorden_params', 'praga_ext_files_log_v1',
       'praga_cloud_url_v1',
       'tori_dist_overrides', 'tori_dist_seeded', 'tori_dist_nuevos',
-      'praga_no_traer_v1'  // v5.75: lista NO TRAER
+      'praga_no_traer_v1'  // v5.76: lista NO TRAER
     ];
     const motorLS = {};
     for (const k of lsKeys) {
@@ -12027,7 +12340,7 @@ async function _leerPI2IndexedDB() {
         } else { pending--; }
 
         if (stores.includes('meta')) {
-          // v5.75: leer TODAS las claves del store meta (antes una lista fija dejaba
+          // v5.76: leer TODAS las claves del store meta (antes una lista fija dejaba
           // por fuera 'facturas' y 'params' de PI2). Se excluyen únicamente los
           // handles de archivo del sistema (no se pueden guardar en JSON).
           const tx2 = db.transaction('meta', 'readonly');
@@ -12145,7 +12458,7 @@ async function restaurarBackupMaestro(file) {
       // 2. Motor localStorage
       if (sec.motor) {
         const m = sec.motor;
-        // v5.75: restauración GENÉRICA — toda clave guardada en el backup vuelve
+        // v5.76: restauración GENÉRICA — toda clave guardada en el backup vuelve
         // a localStorage tal cual (antes una lista fija dejaba claves por fuera,
         // p. ej. los overrides de la junta y la mercancía nueva del Distribuidor).
         for (const lsKey of Object.keys(m)) {
@@ -12303,7 +12616,7 @@ async function _buildSnapshotData() {
                   'praga_cloud_url_v1',
                   // v5.68: el Distribuidor también queda respaldado
                   'tori_dist_overrides','tori_dist_seeded','tori_dist_nuevos',
-                  // v5.75: lista NO TRAER (vetados)
+                  // v5.76: lista NO TRAER (vetados)
                   'praga_no_traer_v1'];
   for (const k of lsKeys) {
     try { const v = localStorage.getItem(k); if (v !== null) motorLS[k] = JSON.parse(v); } catch(e) {}
@@ -12552,7 +12865,7 @@ async function _fsaWriteNow() {
       for (const f of savedFotos) fotosMap[f._key] = f.foto;
     } catch(fe) {}
 
-    // v5.75: copiar TODOS los campos de la factura ({...f}) — antes se perdía 'meta'
+    // v5.76: copiar TODOS los campos de la factura ({...f}) — antes se perdía 'meta'
     const facConFotos = (window.TORI && window.TORI.facturas || []).map(f => ({
       ...f,
       rows: f.rows.map((r, i) => {
@@ -12618,7 +12931,7 @@ async function _fsaInit() {
       _fsaUpdateBtn('linked');
       _fsaHubUpdate('conectado', handle.name);
       // Escribir estado actual al disco 1.5s después de arrancar.
-      // v5.75: SOLO si hay facturas cargadas — un arranque herido (sin datos) no
+      // v5.76: SOLO si hay facturas cargadas — un arranque herido (sin datos) no
       // debe pisar el backup bueno del disco con un estado vacío.
       setTimeout(() => {
         if (window.TORI && TORI.facturas && TORI.facturas.length) {
@@ -13013,7 +13326,7 @@ document.addEventListener('visibilitychange', function() {
   function lsGet(k){ try { return localStorage.getItem(k); } catch(e){ return null; } }
   function lsSet(k,v){
     try { localStorage.setItem(k,v); } catch(e){ if(window.diag) diag('DIST storage: '+e.message, e); }
-    // v5.75: todo cambio del Distribuidor (overrides, mercancía nueva) dispara el
+    // v5.76: todo cambio del Distribuidor (overrides, mercancía nueva) dispara el
     // autoguardado a disco (TORI_PRAGA_backup.json), igual que el resto de TORI.
     try { if (typeof window.triggerAutosave === 'function') window.triggerAutosave('distribuidor'); } catch(e){}
   }
@@ -13036,7 +13349,7 @@ document.addEventListener('visibilitychange', function() {
   function esc(s){ return String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
 
   /* ---------- Cargar la orden actual de TORI ---------- */
-  /* ═══ v5.75: el PROVEEDOR real viene de DATOS PARA CHINA (proveedor/tienda de
+  /* ═══ v5.76: el PROVEEDOR real viene de DATOS PARA CHINA (proveedor/tienda de
      praga_china_db_v1, adjuntado por el Motor como r.proveedorChina). Antes el
      Distribuidor usaba por error la columna "contenedor" del macro como proveedor. ═══ */
   function supOf(p){
@@ -13046,7 +13359,7 @@ document.addEventListener('visibilitychange', function() {
   }
   function loadFromOrder(){
     var ordenar = (window.STATE && STATE.ordenar) || [];
-    // v5.75: respaldo — si el Motor aún no adjuntó el proveedor, leerlo directo de Datos para China
+    // v5.76: respaldo — si el Motor aún no adjuntó el proveedor, leerlo directo de Datos para China
     var chinaDB = (window.STATE && STATE.chinaDB) || {};
     if (!ordenar.length){
       if (window.toast) toast('Primero carga el macro y genera la orden de compra','red');
@@ -13188,7 +13501,7 @@ document.addEventListener('visibilitychange', function() {
   }
 
   /* ---------- Motor de inteligencia (percentiles por descripción) ---------- */
-  /* ═══ v5.75: PRIORIDAD DE CADENA — el Distribuidor cruza EN VIVO cada referencia
+  /* ═══ v5.76: PRIORIDAD DE CADENA — el Distribuidor cruza EN VIVO cada referencia
      con toda la cadena de suministro (Stock tienda · San Benito · En camino · Fábrica China)
      y con las ventas históricas del macro (unidades salidas). Una referencia AGOTADA EN
      TODA LA CADENA (ej. DOMINO: sin stock, sin SB, sin camino, sin fábrica) es máxima
@@ -13315,7 +13628,7 @@ document.addEventListener('visibilitychange', function() {
       var newProds = allNew();
       newProds.forEach(function(p){ p.assignedContainer = null; });
       D.products.forEach(function(p){ p.assignedContainer = null; });
-      // v5.75: la mercanc\u00eda nueva VETADA (lista NO TRAER del Motor) no entra a los contenedores
+      // v5.76: la mercanc\u00eda nueva VETADA (lista NO TRAER del Motor) no entra a los contenedores
       D.ntNuevosExcluidos = 0;
       try {
         var ntDB = (typeof window.getNoTraerDB === 'function') ? window.getNoTraerDB() : {};
@@ -13327,7 +13640,7 @@ document.addEventListener('visibilitychange', function() {
         }
       } catch(e) {}
       var pool = D.filtered.concat(newProds);
-      computeCadena(pool);   // v5.75: cruce en vivo con Stock/SB/Camino/F\u00e1brica + ventas hist\u00f3ricas
+      computeCadena(pool);   // v5.76: cruce en vivo con Stock/SB/Camino/F\u00e1brica + ventas hist\u00f3ricas
 
       D.containers = []; D.rezagos = []; D.sobrantes = []; D.nuevosSinCupo = [];
       D.names = {}; D.sentDocs = {};
@@ -13337,7 +13650,7 @@ document.addEventListener('visibilitychange', function() {
       } else {
         var groups = {};
         pool.forEach(function(p){
-          var k = supOf(p);   // v5.75: separa por el PROVEEDOR de Datos para China, no por el contenedor del macro
+          var k = supOf(p);   // v5.76: separa por el PROVEEDOR de Datos para China, no por el contenedor del macro
           if (!groups[k]) groups[k] = [];
           groups[k].push(p);
         });
@@ -13355,12 +13668,12 @@ document.addEventListener('visibilitychange', function() {
 
   var tierRank = { 'A':0, 'B':1, 'C':2, 'N':1.5 };
   function qualityCmp(a, b){
-    // v5.75: 1\u00ba prioridad de cadena — lo AGOTADO en toda la cadena se queda; lo cubierto parcial cede su cupo
+    // v5.76: 1\u00ba prioridad de cadena — lo AGOTADO en toda la cadena se queda; lo cubierto parcial cede su cupo
     var pc = prioCadenaCmp(a, b);
     if (pc !== 0) return pc;
     var t = (tierRank[a.tier] !== undefined ? tierRank[a.tier] : 3) - (tierRank[b.tier] !== undefined ? tierRank[b.tier] : 3);
     if (t !== 0) return t;
-    // v5.75: 3\u00ba lo que M\u00c1S SE VENDI\u00d3 hist\u00f3ricamente (unidades salidas del macro) va primero
+    // v5.76: 3\u00ba lo que M\u00c1S SE VENDI\u00d3 hist\u00f3ricamente (unidades salidas del macro) va primero
     var va = a.ventas || 0, vb = b.ventas || 0;
     if (va !== vb) return vb - va;
     var da = a.dias > 0 ? a.dias : 9999, db = b.dias > 0 ? b.dias : 9999;
@@ -13403,7 +13716,7 @@ document.addEventListener('visibilitychange', function() {
       descIsHard[desc] = false;
     });
 
-    /* ═══ v5.75: PARÁMETROS ↔ INTELIGENCIA ↔ DISTRIBUCIÓN CONECTADOS.
+    /* ═══ v5.76: PARÁMETROS ↔ INTELIGENCIA ↔ DISTRIBUCIÓN CONECTADOS.
        Antes el límite se inflaba con Math.max(límite, refs÷contenedores) para que
        cupiera TODO — con 134 BOLSOS y 4 contenedores el límite "8 auto" se volvía 34
        y los parámetros no se respetaban. Ahora el límite de la Inteligencia (override
@@ -13420,7 +13733,7 @@ document.addEventListener('visibilitychange', function() {
       if (descIsHard[desc]) productsByDesc[desc].sort(qualityCmp);
     });
 
-    /* ═══ v5.75: el NÚMERO de contenedores lo define el VOLUMEN TOTAL de la orden
+    /* ═══ v5.76: el NÚMERO de contenedores lo define el VOLUMEN TOTAL de la orden
        (ej. 335 m³ ÷ 78 ≈ 4), y los límites por descripción (junta/inteligencia)
        aplican POR CONTENEDOR dentro de esos contenedores: con 4 contenedores y
        límite 8, el cupo total de BOLSO es 8×4=32; el resto va a REZAGOS.
@@ -13457,7 +13770,7 @@ document.addEventListener('visibilitychange', function() {
         cont.newDescCounts[p.desc] = (cont.newDescCounts[p.desc]||0)+1;
       }
       if (p.dias > 0){ cont.diasSum += p.dias; cont.diasCount++; }
-      var sup = supOf(p);   // v5.75: proveedor real (Datos para China)
+      var sup = supOf(p);   // v5.76: proveedor real (Datos para China)
       cont.supplierMix[sup] = (cont.supplierMix[sup]||0)+1;
       p.assignedContainer = cont.id;
     }
@@ -13473,7 +13786,7 @@ document.addEventListener('visibilitychange', function() {
         cont.newDescCounts[p.desc] = Math.max(0, (cont.newDescCounts[p.desc]||0)-1);
       }
       if (p.dias > 0){ cont.diasSum = Math.max(0, cont.diasSum - p.dias); cont.diasCount = Math.max(0, cont.diasCount-1); }
-      var sup = supOf(p);   // v5.75: proveedor real (Datos para China)
+      var sup = supOf(p);   // v5.76: proveedor real (Datos para China)
       cont.supplierMix[sup] = Math.max(0, (cont.supplierMix[sup]||0)-1);
       if (!cont.supplierMix[sup]) delete cont.supplierMix[sup];
     }
@@ -13517,7 +13830,7 @@ document.addEventListener('visibilitychange', function() {
       var items = productsByDesc[desc];
       var limit = descLimits[desc];
       var strategy = (document.getElementById('dpStrategy')||{}).value || 'balanced';
-      // v5.75: si la descripción tiene MÁS refs que su cupo total (límite × contenedores),
+      // v5.76: si la descripción tiene MÁS refs que su cupo total (límite × contenedores),
       // el orden decide quién sobrevive → manda la calidad (cadena → tier → ventas → días),
       // igual que en las reglas duras de la junta. Si todo cabe, la estrategia solo balancea.
       var overBudget = items.length > limit * groupContainers.length;
@@ -13548,7 +13861,7 @@ document.addEventListener('visibilitychange', function() {
             place(cont, p); placed = true;
           }
         }
-        // v5.75: el límite por descripción es REAL para todas (junta E inteligencia).
+        // v5.76: el límite por descripción es REAL para todas (junta E inteligencia).
         // Si todos los contenedores ya llegaron al límite de esta descripción → REZAGO
         // (la junta decide: contenedor extra, subir el límite o recortar).
         // Si hay cupo por límite pero no cabe por volumen → SOBRANTE.
@@ -13562,12 +13875,12 @@ document.addEventListener('visibilitychange', function() {
 
     // FASE 3: recorte al rango exacto [capMin, capMax] — sale lo PEOR del catálogo
     function worstFirst(a, b){
-      // v5.75: al recortar sale PRIMERO lo que tiene cobertura en la cadena; lo agotado en toda la cadena sale de \u00faltimas
+      // v5.76: al recortar sale PRIMERO lo que tiene cobertura en la cadena; lo agotado en toda la cadena sale de \u00faltimas
       var pc = prioCadenaCmp(b, a);
       if (pc !== 0) return pc;
       var t = (tierRank[b.tier]!==undefined?tierRank[b.tier]:3) - (tierRank[a.tier]!==undefined?tierRank[a.tier]:3);
       if (t !== 0) return t;
-      // v5.75: entre iguales, sale primero lo MENOS vendido hist\u00f3ricamente
+      // v5.76: entre iguales, sale primero lo MENOS vendido hist\u00f3ricamente
       var va = a.ventas || 0, vb = b.ventas || 0;
       if (va !== vb) return va - vb;
       var da = a.dias > 0 ? a.dias : 0, db = b.dias > 0 ? b.dias : 0;
@@ -13634,7 +13947,7 @@ document.addEventListener('visibilitychange', function() {
     var totalCbm = D.filtered.reduce(function(s,p){ return s+p.cubTotal; }, 0);
     var totalVal = D.filtered.reduce(function(s,p){ return s+p.valor; }, 0);
     var sups = {};
-    D.filtered.forEach(function(p){ sups[supOf(p)] = 1; });   // v5.75: proveedores reales de Datos para China
+    D.filtered.forEach(function(p){ sups[supOf(p)] = 1; });   // v5.76: proveedores reales de Datos para China
     var diasArr = D.filtered.filter(function(p){ return p.dias > 0; });
     var avgDias = diasArr.length ? diasArr.reduce(function(s,p){ return s+p.dias; },0)/diasArr.length : 0;
     var nNew = allNew().length;
@@ -13669,7 +13982,7 @@ document.addEventListener('visibilitychange', function() {
     if (sup){
       var sc = {};
       D.filtered.forEach(function(p){
-        var k = supOf(p);   // v5.75: proveedor real (Datos para China)
+        var k = supOf(p);   // v5.76: proveedor real (Datos para China)
         if (!sc[k]) sc[k] = {count:0, cbm:0, val:0};
         sc[k].count++; sc[k].cbm += p.cubTotal; sc[k].val += p.valor;
       });
@@ -13685,7 +13998,7 @@ document.addEventListener('visibilitychange', function() {
     if (!el) return;
     if (!D.loaded){ el.innerHTML = ''; return; }
     var sups = {};
-    D.filtered.forEach(function(p){ sups[supOf(p)] = 1; });   // v5.75: proveedores reales de Datos para China
+    D.filtered.forEach(function(p){ sups[supOf(p)] = 1; });   // v5.76: proveedores reales de Datos para China
     var keys = Object.keys(sups).sort();
     var html = '<span class="dp-supfilter '+(D.supFilter==='ALL'?'active':'')+'" onclick="DIST.filterSup(\'ALL\')">Todos</span>';
     keys.forEach(function(k){
@@ -13721,7 +14034,7 @@ document.addEventListener('visibilitychange', function() {
 
     var supplierInfo = {};
     D.filtered.forEach(function(p){
-      var s = supOf(p);   // v5.75: proveedor real (Datos para China)
+      var s = supOf(p);   // v5.76: proveedor real (Datos para China)
       if (!supplierInfo[s]) supplierInfo[s] = {count:0, cbm:0, val:0, conts:{}};
       supplierInfo[s].count++; supplierInfo[s].cbm += p.cubTotal; supplierInfo[s].val += p.valor;
       if (p.assignedContainer && typeof p.assignedContainer === 'number') supplierInfo[s].conts[p.assignedContainer] = 1;
@@ -13894,7 +14207,7 @@ document.addEventListener('visibilitychange', function() {
       (D.cadena && D.cadena.nuevosEnCadena ? '<br><span style="color:#FF9F0A">\u26a0\ufe0f '+D.cadena.nuevosEnCadena+' referencias de mercanc\u00eda NUEVA ya est\u00e1n en la cadena (stock, San Benito, camino o f\u00e1brica) — revisa que no est\u00e9s pidiendo doble.</span>' : '')+
       (D.ntNuevosExcluidos ? '<br><span style="color:#D70015">\ud83d\udeab '+D.ntNuevosExcluidos+' referencias de mercanc\u00eda nueva est\u00e1n en la lista NO TRAER y se excluyeron de la distribuci\u00f3n.</span>' : '')+
       (function(){
-        // v5.75: si los l\u00edmites por descripci\u00f3n dejaron los contenedores cortos, decirlo con n\u00fameros y soluciones
+        // v5.76: si los l\u00edmites por descripci\u00f3n dejaron los contenedores cortos, decirlo con n\u00fameros y soluciones
         if (!D.containers.length || !D.rezagos.length) return '';
         var rezCbm = D.rezagos.reduce(function(s,p){ return s+p.cubTotal; }, 0);
         var avgPct = cbmPlaced / (D.containers.length * capacity) * 100;
@@ -14257,7 +14570,7 @@ document.addEventListener('visibilitychange', function() {
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', wire);
   else wire();
 
-  // v5.75: tras restaurar un backup, relee overrides y mercancía nueva de localStorage
+  // v5.76: tras restaurar un backup, relee overrides y mercancía nueva de localStorage
   function reloadStored(){
     try { var ov = lsGet('tori_dist_overrides'); D.overrides = ov ? JSON.parse(ov) : {}; } catch(e){ D.overrides = {}; }
     try { var nb = lsGet('tori_dist_nuevos'); D.newBatches = nb ? JSON.parse(nb) : []; } catch(e){ D.newBatches = []; }
