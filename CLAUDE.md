@@ -130,6 +130,7 @@ Tendencias, Costos, China, Distribuidor, Faltantes, Parámetros) ·
 | **tori-motor-distribuidor** | Auditor de reglas con plata: repetidos en la cadena, límites de la junta, tiers | Cambios a bloques 1 o 4 |
 | **tori-entrega** | El acta de entrega: changelog automático, checklist final, resumen en el formato de Andrés | Cierre de cada sesión |
 | **tori-app-escritorio** | El mecánico del .exe: cómo se instala cada versión (los 2 .bat), la cáscara Electron, sus invariantes y cómo probarla sin Electron | TORI.exe, .bat, main.js, descargas, o CUALQUIER entrega |
+| **tori-revision-real** | El inspector final: revisión en Chromium REAL con clics + panel de diagnóstico en 0, el diccionario de las formas REALES de los datos (diasRaw, QTY_CTN…) y la regla de cascada de fuentes | ANTES de entregar cualquier versión, al escribir pruebas nuevas, y al cruzar datos entre módulos |
 
 El mapa técnico detallado (bloques, persistencia, los 10 invariantes) vive en
 `references/mapa_tecnico.md` dentro de tori-engineering.
@@ -233,6 +234,29 @@ importantes en cristiano:
   de cada versión lo verifica (0 usos en toda la app). Regla nueva de pruebas:
   los flujos interactivos se prueban también con `prompt()` LANZANDO el error de
   Electron (`prueba_electron_reabrir.js`), no solo con un prompt que funciona.
+
+- **2026-08-03 — El visor de foto grande era invisible fuera de PI2** (clic "no hacía
+  nada"): el #lightbox vivía DENTRO de la pantalla PI2, oculta desde el Motor. La
+  lógica corría perfecta — pero nadie la VEÍA. Desde v5_80 es un overlay global.
+  Regla: verificar VISIBILIDAD real en Chromium, no solo que la función se ejecute.
+
+- **2026-08-03 — Los Días salían "—" en Producción China y sus Excel**: el macro real
+  guarda los días como `diasRaw`, y el código (y las PRUEBAS) usaban `dias` — por eso
+  todas las pruebas pasaban y producción fallaba. Desde v5_84 se leen ambos. Regla:
+  sembrar pruebas con la FORMA REAL de los datos (diccionario en tori-revision-real §3),
+  idealmente con los archivos de `muestras/`.
+
+- **2026-08-03 — El cubicaje "no lo tomaba" aunque estaba en el Liquidador** (caso
+  313-147): el lookup miraba UNA sola fuente (el macro). Desde v5_87 todo dato de una
+  referencia se resuelve en CASCADA: fila guardada → macro → bases del Motor →
+  facturas del Liquidador. Regla: si Andrés ve un dato en una pantalla y no en otra,
+  es integración faltante — nunca decirle que el dato no existe sin revisar las 4 fuentes.
+
+- **2026-08-03 — Regla de entrega nueva (pedida por Andrés): REVISAR EN EL ENTORNO
+  REAL antes de entregar.** Además de la regresión: Chromium real servido como el
+  .exe, clics de usuario sobre lo nuevo, panel de diagnóstico en 0, modo .exe
+  (prompt() lanzando error) y cerrar/reabrir para persistencia. El ritual y los
+  arneses viven en la skill **tori-revision-real**.
 
 Cuando aparezca un incidente nuevo: se documenta aquí, se convierte en invariante
 en el mapa técnico, y se le crea prueba que lo atrape para siempre.
