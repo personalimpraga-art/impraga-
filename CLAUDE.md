@@ -152,8 +152,9 @@ El mapa técnico detallado (bloques, persistencia, los 10 invariantes) vive en
 ### Qué mantener actualizado en el proyecto
 - [ ] La última versión de TORI (reemplazar, no acumular)
 - [ ] Este CLAUDE.md (regla nueva de la junta → editar §3; entrega → añadir a §6)
-- [ ] Idealmente: carpeta de archivos de muestra reales (Excel YUGIN real, factura
-      de contenedor, macro, un backup viejo) para que Claude pruebe contra la realidad
+- [x] Carpeta `muestras/` con archivos reales: factura de contenedor (PRAGA145,
+      con fotos) y macro de inventario (03/08/2026). Pendiente: un Excel YUGIN
+      real y un backup viejo.
 
 ---
 
