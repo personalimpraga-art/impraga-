@@ -147,17 +147,6 @@ PERO las reglas de TORI mandan sobre ponytail: sus audits/reviews son SOLO infor
 ninguna limpieza o borrado que sugieran se aplica sin pedido explícito de Andrés +
 regresión completa. Los 10 invariantes y la persistencia jamás se "simplifican".
 
-### Skills de diseño de Emil Kowalski (desde 2026-08-03)
-
-Instaladas 5 skills de [emilkowalski/skills](https://github.com/emilkowalski/skills)
-(MIT): `emil-design-eng` (pulido de UI y animación con criterio), `apple-design`
-(principios Apple para la web — TORI ya es estética iOS), `review-animations` (+ su
-STANDARDS.md), `find-animation-opportunities` y `animation-vocabulary`.
-**Cómo aplican a TORI:** guían CUALQUIER cambio visual (transiciones ease-out y
-rápidas, movimiento según frecuencia de uso — TORI es herramienta diaria: sobrio —,
-sombras suaves en capas, reduced-motion). Todo cambio visual sigue siendo PRUEBA
-que Andrés aprueba viendo capturas antes de formalizarse.
-
 ---
 
 ## 5. Cómo se trabaja una sesión (para Andrés)
