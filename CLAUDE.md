@@ -5,7 +5,7 @@
 > o se entrega una versión. Si algo aquí contradice el código de TORI, el código
 > manda — y este archivo se corrige.
 >
-> **Última actualización:** 2026-08-03 · **Versión vigente de TORI: v5_82**
+> **Última actualización:** 2026-08-03 · **Versión vigente de TORI: v5_83**
 
 ---
 
@@ -183,6 +183,7 @@ El mapa técnico detallado (bloques, persistencia, los 10 invariantes) vive en
 | v5_80 | 2026-08-03 | 🚨 Corrección: el visor de foto grande (lightbox) vivía DENTRO de la pantalla PI2 y era invisible desde el resto de TORI — clic en una foto de la Orden de Compra/Repetidos/China "no hacía nada". Ahora es un overlay global con CSS propio (#lightbox, z-index 9990, clic = cerrar). Cero cambios en los bloques JS (solo HTML/CSS). Bug REPRODUCIDO en v5_79 y verificado el arreglo en Chromium real (visor visible en el Motor, clic cierra, PI2 intacto). Regresión completa en verde. | ✅ En producción (Andrés trabajando sobre ella) |
 | v5_81 | 2026-08-03 | Información de compra en el detalle del pedido (pestaña 🏭): columnas Tier y Días FRESCAS del macro vigente, chips de días promedio ponderado y mezcla de Tiers, y desglose "qué trae este pedido por descripción" agrupado por palabra clave de la junta (BOLSO DAMA + BOLSO PLAYA cuentan juntos) con ⚠ cuando pasa el límite (overrides de tori_dist_overrides respetados). Regresión completa + 13 pruebas de la vista + todas las baterías (29+23+17+12+7+19+Excel+Motor/Dist) en verde. | ✅ En producción (Andrés mostró la vista v5.81 funcionando) |
 | v5_82 | 2026-08-03 | Filtros en el detalle del pedido (pestaña 🏭): buscador por referencia/descripción/desc china/proveedor (solo re-pinta el cuerpo — el input no pierde el foco al teclear), chips de Tier clicables, clic en una fila del desglose = filtrar por ese grupo, todos combinables, contador "Mostrando X de Y", ✕ Limpiar, y filtro limpio al cambiar de pedido. Regresión completa + 16 pruebas de filtros + todas las baterías (29+23+17+13+12+7+19+Excel+Motor/Dist) en verde. | 🆕 Entregada |
+| v5_83 | 2026-08-03 | En la Orden de Compra, la línea "Mostrando X de Y" ahora suma el CUBICAJE de lo mostrado: al buscar "bolso" (o filtrar por categoría) se ve al instante cuántos m³ y cajas suma eso, y si hay filtro, también el total de toda la Orden Sugerida. Regresión completa + 8 pruebas del contador + todas las baterías re-corridas en verde. | 🆕 Entregada |
 
 ---
 
