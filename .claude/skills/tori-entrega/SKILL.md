@@ -30,10 +30,6 @@ Compara bloque a bloque: líneas +/−, **funciones tocadas por nombre**, y camb
    el pill de versión (TORI corre como app de escritorio; ver §1 del CLAUDE.md).
    Si el cambio tocó la cáscara (`desktop/main.js`, `vendor/`), avisar EXPLÍCITAMENTE
    que esta vez toca `RECONSTRUIR_COMPLETO.bat`.
-7. Pasada `/ponytail-review` sobre el diff de la versión: si el cambio trae
-   sobre-ingeniería (abstracciones especulativas, código que TORI ya tiene, más
-   líneas de las necesarias), simplificar ANTES de entregar y re-correr la
-   regresión. Solo informe — nunca borrar código existente de TORI por esto.
 
 ## 3. Resumen para Andrés (formato exacto)
 

@@ -134,19 +134,6 @@ Tendencias, Costos, China, Distribuidor, Faltantes, Parámetros) ·
 El mapa técnico detallado (bloques, persistencia, los 10 invariantes) vive en
 `references/mapa_tecnico.md` dentro de tori-engineering.
 
-### Skills ponytail (filosofía de mínima cirugía — desde 2026-07-24)
-
-Instaladas las 6 skills de [ponytail](https://github.com/DietrichGebert/ponytail)
-(MIT): `/ponytail` (modo perezoso: la solución MÁS simple que funcione),
-`/ponytail-review` (caza sobre-ingeniería en un diff), `/ponytail-audit` (ídem en
-todo el repo), `/ponytail-debt`, `/ponytail-gain`, `/ponytail-help`.
-
-**Cómo aplican a TORI:** la filosofía (diff más corto, nada especulativo, reusar lo
-que ya existe en TORI) rige CÓMO se hacen los cambios — refuerza la regla de oro 2.
-PERO las reglas de TORI mandan sobre ponytail: sus audits/reviews son SOLO informe;
-ninguna limpieza o borrado que sugieran se aplica sin pedido explícito de Andrés +
-regresión completa. Los 10 invariantes y la persistencia jamás se "simplifican".
-
 ---
 
 ## 5. Cómo se trabaja una sesión (para Andrés)
