@@ -5,7 +5,7 @@
 > o se entrega una versión. Si algo aquí contradice el código de TORI, el código
 > manda — y este archivo se corrige.
 >
-> **Última actualización:** 2026-08-03 · **Versión vigente de TORI: v5_85**
+> **Última actualización:** 2026-08-03 · **Versión vigente de TORI: v5_86**
 
 ---
 
@@ -185,7 +185,8 @@ El mapa técnico detallado (bloques, persistencia, los 10 invariantes) vive en
 | v5_82 | 2026-08-03 | Filtros en el detalle del pedido (pestaña 🏭): buscador por referencia/descripción/desc china/proveedor (solo re-pinta el cuerpo — el input no pierde el foco al teclear), chips de Tier clicables, clic en una fila del desglose = filtrar por ese grupo, todos combinables, contador "Mostrando X de Y", ✕ Limpiar, y filtro limpio al cambiar de pedido. Regresión completa + 16 pruebas de filtros + todas las baterías (29+23+17+13+12+7+19+Excel+Motor/Dist) en verde. | 🆕 Entregada |
 | v5_83 | 2026-08-03 | En la Orden de Compra, la línea "Mostrando X de Y" ahora suma el CUBICAJE de lo mostrado: al buscar "bolso" (o filtrar por categoría) se ve al instante cuántos m³ y cajas suma eso, y si hay filtro, también el total de toda la Orden Sugerida. Regresión completa + 8 pruebas del contador + todas las baterías re-corridas en verde. | ✅ En producción (Andrés trabajando sobre ella) |
 | v5_84 | 2026-08-03 | Detalle del pedido 🏭: (1) ORDENAR con clic en los encabezados (Referencia, Descripción, Precio, Tier, Días, Proveedor… y el desglose también), flecha ▲▼, sin-datos de últimos; (2) 🚨 corrección del "—" en Días: el macro real trae `diasRaw` y el lookup solo miraba `dias` — ahora Días/⌀ promedio/desglose salen con datos reales; (3) el 📗 Excel refresca Tier/Días del macro vigente y rellena huecos (desc china, precio, proveedor) antes de generar, sin pisar datos. Regla nueva de entrega: REVISIÓN EN NAVEGADOR REAL con clics (prueba_browser) + panel de diagnóstico en 0 antes de entregar. 12 pruebas browser + 12 orden + 10 días reales + todas las baterías + regresión en verde. | ✅ En producción (Andrés mostró el pill v5.84 y confirmó el contador de cubicaje) |
-| v5_85 | 2026-08-03 | Mover pedidos ▲▼ en la lista de la pestaña 🏭: Andrés acomoda las órdenes de fabricación en el orden que quiera; el orden queda guardado (bóveda al instante + backup de disco) y se respeta también en la tarjeta de Importar Archivos. Flechas con tope en el primero/último y sin abrir el pedido por accidente. Revisión en navegador real con clics (8/8, diagnóstico en 0) + 9 pruebas de lógica/persistencia + todas las baterías + regresión en verde. | 🆕 Entregada |
+| v5_85 | 2026-08-03 | Mover pedidos ▲▼ en la lista de la pestaña 🏭: Andrés acomoda las órdenes de fabricación en el orden que quiera; el orden queda guardado (bóveda al instante + backup de disco) y se respeta también en la tarjeta de Importar Archivos. Flechas con tope en el primero/último y sin abrir el pedido por accidente. Revisión en navegador real con clics (8/8, diagnóstico en 0) + 9 pruebas de lógica/persistencia + todas las baterías + regresión en verde. | ✅ En producción (Andrés mostró el pill v5.85 con las flechas) |
+| v5_86 | 2026-08-03 | Chip "⌀ X días venta" en CADA tarjeta de la lista de pedidos (pestaña 🏭): días de venta promedio del pedido ponderado por unidades, con el macro vigente (mismo número que el detalle); pedidos sin datos muestran "⌀ — días". Revisión en navegador real (10/10, diagnóstico en 0) + 5 pruebas del promedio calculado a mano + las 13 baterías + regresión en verde. | 🆕 Entregada |
 
 ---
 
