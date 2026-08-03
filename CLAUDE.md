@@ -5,7 +5,7 @@
 > o se entrega una versión. Si algo aquí contradice el código de TORI, el código
 > manda — y este archivo se corrige.
 >
-> **Última actualización:** 2026-08-03 · **Versión vigente de TORI: v5_80**
+> **Última actualización:** 2026-08-03 · **Versión vigente de TORI: v5_81**
 
 ---
 
@@ -180,7 +180,8 @@ El mapa técnico detallado (bloques, persistencia, los 10 invariantes) vive en
 | v5_77 | 2026-08-03 | Pestaña 🏭 Producción China en el Motor (al lado de Parámetros), vista tipo Liquidador: lista de pedidos como tarjetas → detalle con tabla completa (foto, desc ES/CN, und/caja, cajas, unidades editables, ¥, proveedor), buscador ➕, renombrar, Excel FOTOS y despachar. Coherencia probada con el Motor real: agregar → sale de la Orden Sugerida (PROD_CHINA); quitar → vuelve sola (ORDENAR); vetar → NO_TRAER con motivo; quitar veto → vuelve. Regresión completa + 29 pruebas de coherencia/pestaña + 23 del editor + auditoría Excel en verde. | ✅ En producción (Andrés confirmó el pill v5.77) |
 | v5_78 | 2026-08-03 | Columna Foto en la Orden de Compra del Motor (todas las vistas): placeholder de cero peso, la imagen solo carga cuando la fila entra en pantalla (mecanismo de la pestaña China) y clic = ampliar en el lightbox. El pintado inicial no lleva ni un base64 — no se tilda ni tecleando en el buscador. Regresión completa + 12 pruebas de la columna + todas las baterías anteriores (29+23+17+7+Excel+Motor/Dist) re-corridas en verde. | ✅ En producción (Andrés mostró el pill v5.78) |
 | v5_79 | 2026-08-03 | 🚨 Corrección: TORI.exe (Electron) no soporta `prompt()` — vetar desde la Orden de Compra reventaba con "prompt() is not supported". Ventana propia `toriPrompt` (Enter/Escape, Aceptar/Cancelar, estilo TORI) y reemplazo de LOS 9 usos: veto de la Orden, renombrar/vetar/agregar/crear de Producción China, renombrar contenedor del Distribuidor y 3 de PI2. Probado simulando el .exe (prompt roto) + cerrar y reabrir TORI: pedidos, vetos y devoluciones quedan guardados y el Motor recalcula igual (19 verificaciones). Regresión + todas las baterías (29+23+17+12+7+Excel+Motor/Dist) en verde. | ✅ En producción (Andrés mostró el pill v5.79) |
-| v5_80 | 2026-08-03 | 🚨 Corrección: el visor de foto grande (lightbox) vivía DENTRO de la pantalla PI2 y era invisible desde el resto de TORI — clic en una foto de la Orden de Compra/Repetidos/China "no hacía nada". Ahora es un overlay global con CSS propio (#lightbox, z-index 9990, clic = cerrar). Cero cambios en los bloques JS (solo HTML/CSS). Bug REPRODUCIDO en v5_79 y verificado el arreglo en Chromium real (visor visible en el Motor, clic cierra, PI2 intacto). Regresión completa en verde. | 🆕 Entregada |
+| v5_80 | 2026-08-03 | 🚨 Corrección: el visor de foto grande (lightbox) vivía DENTRO de la pantalla PI2 y era invisible desde el resto de TORI — clic en una foto de la Orden de Compra/Repetidos/China "no hacía nada". Ahora es un overlay global con CSS propio (#lightbox, z-index 9990, clic = cerrar). Cero cambios en los bloques JS (solo HTML/CSS). Bug REPRODUCIDO en v5_79 y verificado el arreglo en Chromium real (visor visible en el Motor, clic cierra, PI2 intacto). Regresión completa en verde. | ✅ En producción (Andrés trabajando sobre ella) |
+| v5_81 | 2026-08-03 | Información de compra en el detalle del pedido (pestaña 🏭): columnas Tier y Días FRESCAS del macro vigente, chips de días promedio ponderado y mezcla de Tiers, y desglose "qué trae este pedido por descripción" agrupado por palabra clave de la junta (BOLSO DAMA + BOLSO PLAYA cuentan juntos) con ⚠ cuando pasa el límite (overrides de tori_dist_overrides respetados). Regresión completa + 13 pruebas de la vista + todas las baterías (29+23+17+12+7+19+Excel+Motor/Dist) en verde. | 🆕 Entregada |
 
 ---
 
