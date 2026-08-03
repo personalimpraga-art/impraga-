@@ -149,6 +149,14 @@ El mapa técnico detallado (bloques, persistencia, los 10 invariantes) vive en
    versión, la última).
 5. Si la conversación se pone pesada, Claude entrega lo probado y se sigue en
    chat nuevo.
+6. **Las ramas del repositorio** (regla desde 2026-08-03, autorizada por Andrés):
+   cada chat trabaja en su propia rama, pero **en cada entrega Claude también
+   actualiza la rama principal** (`claude/repository-confirmation-wnz998`, la que
+   los chats nuevos toman por defecto) con un push de avance rápido
+   (`git push origin <rama-del-chat>:claude/repository-confirmation-wnz998`).
+   Así CUALQUIER chat nuevo arranca siempre con la última versión, sin que Andrés
+   tenga que fijarse en el selector de ramas. Si el push de avance rápido falla
+   (ramas divergieron), avisar a Andrés en vez de forzar.
 
 ### Qué mantener actualizado en el proyecto
 - [ ] La última versión de TORI (reemplazar, no acumular)
