@@ -5,7 +5,7 @@
 > o se entrega una versión. Si algo aquí contradice el código de TORI, el código
 > manda — y este archivo se corrige.
 >
-> **Última actualización:** 2026-08-04 · **Versión vigente de TORI: v5_98**
+> **Última actualización:** 2026-08-04 · **Versión vigente de TORI: v5_99**
 
 ---
 
@@ -227,6 +227,7 @@ El mapa técnico detallado (bloques, persistencia, los 10 invariantes) vive en
 | v5_96 | 2026-08-04 | Reporte "los faltantes no suben": las refs mandadas a Producción China salían de la Orden Sugerida y POR ESO salían de la lista "Datos para China" — justo las que hay que pedirle al proveedor (el 📗 Excel del pedido usa desc china/¥/proveedor). Ahora `chinaFaltan` incluye también lo **FABRICÁNDOSE** (status PROD_CHINA), la tarjeta lo dice, y las listas YUGIN/YUFUN lo heredan solas. (Verificado además que las refs con 🔄 SÍ suben los faltantes al volver a la orden.) Browser real 7/7 (105 refs al pedido: orden 1759→1654 pero Datos para China se mantiene, Excel releído completo) + baterías 27+16+14+18+11 + backup extendido + Motor/Dist + regresión en verde. | 🆕 Entregada |
 | v5_97 | 2026-08-04 | 🚨 Corrección (reporte "queda congelado para buscar" tras mandar refs a fábrica): el `confirm()` NATIVO en TORI.exe (Electron) roba el foco del teclado al cerrarse — el buscador quedaba muerto hasta reabrir la app (en Chrome no pasa, por eso ninguna prueba lo atrapaba; hermano del bug de `prompt()` de v5_79). Ventana propia **toriConfirm** (Aceptar enfocado, Enter/Escape) y reemplazo en los 5 confirm de los flujos diarios de Producción China: envío masivo 🏭 (el caso), ↩ devolver ref, borrar pedido, 🔄 segunda oportunidad y enviar contenedor del Distribuidor. Los confirm de flujos raros (borrar bases, PI2, restaurar) quedan pendientes; `deleteLiqFactura` se dejó a propósito (lo ejercita la prueba de flujos vivos). Flujo del reporte validado (buscar→mandar→buscar, CERO diálogos nativos) + las 6 suites browser (29+12+15+11+12+7) + baterías 27+16+14+18 + backup ext + Motor/Dist + regresión en verde. | 🆕 Entregada |
 | v5_98 | 2026-08-04 | (1) **CAJAS editables** en el detalle del pedido 🏭 (así se pide a fábrica): al cambiarlas, unidades = cajas × und/caja, m³ total = cajas × m³/caja y valor ¥ = unidades × precio; acepta coma decimal (2,5), refs sin und/caja intentan la cascada de fuentes y si no hay dato avisan sin tocar nada; editar unidades sigue vivo (cadena inversa). (2) **Guardar antes de cerrar**: si al cerrar TORI hay guardados pendientes por debounce (snapshot 3s / archivo de disco 10s), `beforeunload` los dispara YA — la bóveda IDB y localStorage siempre estuvieron al instante. 13 pruebas de la cadena + browser real 9/9 (macro+factura reales: 5 cajas → 1.200 und → ¥10.200 → 0,8 m³ visibles; snapshot fresco al "cerrar"; reabrir conserva) + baterías 27+16+14+18+13 + backup ext + las 6 suites browser + Motor/Dist + regresión en verde. | 🆕 Entregada |
+| v5_99 | 2026-08-04 | Ajuste del editor de cajas (pedido de Andrés sobre v5_98): las UNIDADES del detalle 🏭 ya **no se editan a mano** — se calculan solas (cajas × und/caja); solo se pide por CAJAS. Excepción con lógica: las refs SIN und/caja en ninguna fuente conservan la edición de unidades (única vía posible). Leyenda actualizada. Browser real 10/10 (celda unidades sin input, cadena completa intacta) + baterías 13+27+18 + regresión completa en verde. | 🆕 Entregada |
 
 ---
 
