@@ -5,7 +5,7 @@
 > o se entrega una versión. Si algo aquí contradice el código de TORI, el código
 > manda — y este archivo se corrige.
 >
-> **Última actualización:** 2026-08-04 · **Versión vigente de TORI: v5_95**
+> **Última actualización:** 2026-08-04 · **Versión vigente de TORI: v5_96**
 
 ---
 
@@ -224,6 +224,7 @@ El mapa técnico detallado (bloques, persistencia, los 10 invariantes) vive en
 | v5_93 | 2026-08-04 | El buscador de la Orden de Compra encuentra también por **PROVEEDOR** (además de código y nombre): teclear "yugin" o "36243" deja solo las refs de ese proveedor, combinable con categoría, marroquinería/PG y el envío masivo 🏭. Placeholder actualizado. 1 línea en `_ordenPasaFiltro` (el predicado único: tabla, contador y envío masivo quedan coherentes solos). 14 pruebas de lógica + browser real 15/15 (tecleo "yugin" → solo YUGIN) + baterías 27+16+Motor/Dist + regresión completa en verde. | 🆕 Entregada |
 | v5_94 | 2026-08-04 | Tarjeta "Datos para China" del hub de Faltantes: dos listas nuevas además de la completa, según el proveedor que las llena — **⬇ YUGIN · sin PG** y **⬇ YUFUN · solo PG** (por prefijo de la referencia), cada botón con su conteo es-CO y el archivo con sufijo propio (`_YUGIN_sin_PG` / `_YUFUN_solo_PG`), mismo formato ES/CN de siempre. Browser real 11/11 con el macro (182 PG + 1.577 sin PG = 1.759; los 3 Excel descargados y RELEÍDOS) + baterías 27+16+14+Motor/Dist + regresión completa en verde. | 🆕 Entregada |
 | v5_95 | 2026-08-04 | 🔄 **Segunda oportunidad** para refs de Rotación > límite (regla nueva de Andrés, documentada en §3): botón "🔄 Otra oportunidad" en cada fila de esa vista → la ref vuelve a la Orden Sugerida (Tier C, marca 🔄 clicable para quitarla). Vale por la importación vigente: se guarda la fecha de entrada al darla y al llegar entrada MÁS NUEVA se consume sola (poda automática); si el ciclo nuevo también pasa el límite, cae de vuelta y solo el toque manual la revive. Clave nueva `tori_segunda_oport_v1` en las 3 listas del backup + round-trip extendido en verde. 18 pruebas de la regla + browser real 12/12 (macro real: dar → orden 1759→1760, reabrir, quitar) + baterías 27+16+14+11+Motor/Dist + regresión completa en verde. | 🆕 Entregada |
+| v5_96 | 2026-08-04 | Reporte "los faltantes no suben": las refs mandadas a Producción China salían de la Orden Sugerida y POR ESO salían de la lista "Datos para China" — justo las que hay que pedirle al proveedor (el 📗 Excel del pedido usa desc china/¥/proveedor). Ahora `chinaFaltan` incluye también lo **FABRICÁNDOSE** (status PROD_CHINA), la tarjeta lo dice, y las listas YUGIN/YUFUN lo heredan solas. (Verificado además que las refs con 🔄 SÍ suben los faltantes al volver a la orden.) Browser real 7/7 (105 refs al pedido: orden 1759→1654 pero Datos para China se mantiene, Excel releído completo) + baterías 27+16+14+18+11 + backup extendido + Motor/Dist + regresión en verde. | 🆕 Entregada |
 
 ---
 
