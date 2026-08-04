@@ -5,7 +5,7 @@
 > o se entrega una versión. Si algo aquí contradice el código de TORI, el código
 > manda — y este archivo se corrige.
 >
-> **Última actualización:** 2026-08-04 · **Versión vigente de TORI: v5_96**
+> **Última actualización:** 2026-08-04 · **Versión vigente de TORI: v5_97**
 
 ---
 
@@ -225,6 +225,7 @@ El mapa técnico detallado (bloques, persistencia, los 10 invariantes) vive en
 | v5_94 | 2026-08-04 | Tarjeta "Datos para China" del hub de Faltantes: dos listas nuevas además de la completa, según el proveedor que las llena — **⬇ YUGIN · sin PG** y **⬇ YUFUN · solo PG** (por prefijo de la referencia), cada botón con su conteo es-CO y el archivo con sufijo propio (`_YUGIN_sin_PG` / `_YUFUN_solo_PG`), mismo formato ES/CN de siempre. Browser real 11/11 con el macro (182 PG + 1.577 sin PG = 1.759; los 3 Excel descargados y RELEÍDOS) + baterías 27+16+14+Motor/Dist + regresión completa en verde. | 🆕 Entregada |
 | v5_95 | 2026-08-04 | 🔄 **Segunda oportunidad** para refs de Rotación > límite (regla nueva de Andrés, documentada en §3): botón "🔄 Otra oportunidad" en cada fila de esa vista → la ref vuelve a la Orden Sugerida (Tier C, marca 🔄 clicable para quitarla). Vale por la importación vigente: se guarda la fecha de entrada al darla y al llegar entrada MÁS NUEVA se consume sola (poda automática); si el ciclo nuevo también pasa el límite, cae de vuelta y solo el toque manual la revive. Clave nueva `tori_segunda_oport_v1` en las 3 listas del backup + round-trip extendido en verde. 18 pruebas de la regla + browser real 12/12 (macro real: dar → orden 1759→1760, reabrir, quitar) + baterías 27+16+14+11+Motor/Dist + regresión completa en verde. | 🆕 Entregada |
 | v5_96 | 2026-08-04 | Reporte "los faltantes no suben": las refs mandadas a Producción China salían de la Orden Sugerida y POR ESO salían de la lista "Datos para China" — justo las que hay que pedirle al proveedor (el 📗 Excel del pedido usa desc china/¥/proveedor). Ahora `chinaFaltan` incluye también lo **FABRICÁNDOSE** (status PROD_CHINA), la tarjeta lo dice, y las listas YUGIN/YUFUN lo heredan solas. (Verificado además que las refs con 🔄 SÍ suben los faltantes al volver a la orden.) Browser real 7/7 (105 refs al pedido: orden 1759→1654 pero Datos para China se mantiene, Excel releído completo) + baterías 27+16+14+18+11 + backup extendido + Motor/Dist + regresión en verde. | 🆕 Entregada |
+| v5_97 | 2026-08-04 | 🚨 Corrección (reporte "queda congelado para buscar" tras mandar refs a fábrica): el `confirm()` NATIVO en TORI.exe (Electron) roba el foco del teclado al cerrarse — el buscador quedaba muerto hasta reabrir la app (en Chrome no pasa, por eso ninguna prueba lo atrapaba; hermano del bug de `prompt()` de v5_79). Ventana propia **toriConfirm** (Aceptar enfocado, Enter/Escape) y reemplazo en los 5 confirm de los flujos diarios de Producción China: envío masivo 🏭 (el caso), ↩ devolver ref, borrar pedido, 🔄 segunda oportunidad y enviar contenedor del Distribuidor. Los confirm de flujos raros (borrar bases, PI2, restaurar) quedan pendientes; `deleteLiqFactura` se dejó a propósito (lo ejercita la prueba de flujos vivos). Flujo del reporte validado (buscar→mandar→buscar, CERO diálogos nativos) + las 6 suites browser (29+12+15+11+12+7) + baterías 27+16+14+18 + backup ext + Motor/Dist + regresión en verde. | 🆕 Entregada |
 
 ---
 
@@ -296,6 +297,16 @@ importantes en cristiano:
   dato** en cubicaje, unid/caja, cajas ni precio — es hueco y la cascada sigue,
   sin pisar jamás un valor real. Regla para siempre: al revisar las 4 fuentes de
   la cascada, un 0 cuenta como "no está", igual que un vacío.
+
+- **2026-08-04 — El buscador "quedaba congelado" tras mandar refs a fábrica
+  (confirm() nativo).** En TORI.exe (Electron), el diálogo nativo de `confirm()`
+  roba el foco del teclado de la ventana al cerrarse: los inputs quedan muertos
+  hasta cerrar y reabrir la app. En Chrome NO pasa — por eso la simulación no lo
+  reproducía (mismo patrón que el `prompt()` de v5_79). Desde v5_97 existe
+  `toriConfirm` (ventana propia, Enter/Escape) y los flujos diarios de Producción
+  China lo usan. Regla: en flujos que se usan repetidamente, NINGÚN diálogo
+  nativo — ni prompt() (revienta) ni confirm() (roba el foco); siempre
+  toriPrompt/toriConfirm. Pendiente migrar los confirm de flujos raros.
 
 - **2026-08-04 — "Tarda mucho en guardar / se tilda" al mandar refs a Producción
   China una por una.** Causa medida (no adivinada): cada "Aceptar" corría el
