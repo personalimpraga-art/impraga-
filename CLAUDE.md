@@ -5,7 +5,7 @@
 > o se entrega una versión. Si algo aquí contradice el código de TORI, el código
 > manda — y este archivo se corrige.
 >
-> **Última actualización:** 2026-08-04 · **Versión vigente de TORI: v5_93**
+> **Última actualización:** 2026-08-04 · **Versión vigente de TORI: v5_94**
 
 ---
 
@@ -215,6 +215,7 @@ El mapa técnico detallado (bloques, persistencia, los 10 invariantes) vive en
 | v5_91 | 2026-08-04 | Columna **Proveedor** en la Orden de Compra (entre Contenedor y 🏭): el dato sale de la base Datos China del Motor, se ORDENA con clic en el encabezado (▲▼, texto alfabético — lo del mismo proveedor queda junto, sin proveedor al final) y entra también al "Exportar a Excel" de la orden ("Proveedor / Tienda"). Convive con los filtros de marroquinería/PG. 10 pruebas de lógica + browser real 13/13 (macro real, clics en el encabezado, Excel releído) + baterías 27+16+Motor/Dist + regresión completa en verde. | 🆕 Entregada |
 | v5_92 | 2026-08-04 | 🚨 Rendimiento (reporte "tarda mucho en guardar / se tilda" al mandar refs con 🏭): medido en Chromium con macro real + fotos a escala, cada "Aceptar" recalculaba y repintaba TODO el Motor (0,5–1,7 s por ref) y cada cambio re-agendaba el respaldo a disco CON TODAS las fotos (escrituras gigantes repetidas). Ahora: (1) el 🏭 fila-por-fila guarda la bóveda al instante pero agrupa el recálculo (350 ms tras el último clic — 10 clics = 1 recálculo; "Aceptar" pasó de ~600–1700 ms a ~125 ms); (2) el respaldo a disco espera 10 s de calma y tiene candado anti-solape (la bóveda IDB y el autosave del navegador siguen a 3 s). Completitud verificada: el respaldo final contiene el pedido con sus refs, fotos y tipo correcto. Baterías 27+16+10+Motor/Dist + browser 29+12+13 + regresión completa en verde. | ✅ En producción (Andrés mostró el pill v5.92 con sus datos completos) |
 | v5_93 | 2026-08-04 | El buscador de la Orden de Compra encuentra también por **PROVEEDOR** (además de código y nombre): teclear "yugin" o "36243" deja solo las refs de ese proveedor, combinable con categoría, marroquinería/PG y el envío masivo 🏭. Placeholder actualizado. 1 línea en `_ordenPasaFiltro` (el predicado único: tabla, contador y envío masivo quedan coherentes solos). 14 pruebas de lógica + browser real 15/15 (tecleo "yugin" → solo YUGIN) + baterías 27+16+Motor/Dist + regresión completa en verde. | 🆕 Entregada |
+| v5_94 | 2026-08-04 | Tarjeta "Datos para China" del hub de Faltantes: dos listas nuevas además de la completa, según el proveedor que las llena — **⬇ YUGIN · sin PG** y **⬇ YUFUN · solo PG** (por prefijo de la referencia), cada botón con su conteo es-CO y el archivo con sufijo propio (`_YUGIN_sin_PG` / `_YUFUN_solo_PG`), mismo formato ES/CN de siempre. Browser real 11/11 con el macro (182 PG + 1.577 sin PG = 1.759; los 3 Excel descargados y RELEÍDOS) + baterías 27+16+14+Motor/Dist + regresión completa en verde. | 🆕 Entregada |
 
 ---
 
