@@ -5,7 +5,7 @@
 > o se entrega una versión. Si algo aquí contradice el código de TORI, el código
 > manda — y este archivo se corrige.
 >
-> **Última actualización:** 2026-08-04 · **Versión vigente de TORI: v5_91**
+> **Última actualización:** 2026-08-04 · **Versión vigente de TORI: v5_92**
 
 ---
 
@@ -213,6 +213,7 @@ El mapa técnico detallado (bloques, persistencia, los 10 invariantes) vive en
 | v5_89 | 2026-08-03 | Armar pedidos de Producción China MASIVO desde la Orden de Compra: (1) filtros nuevos combinables — 👜 Solo/Sin **marroquinería** (lista de la junta, por palabra del nombre) y **PG** Solo/Sin (proveedor aparte, por prefijo de la referencia) — junto al buscador y la categoría, con el contador de cubicaje reflejando lo filtrado; (2) botón **🏭 "Mandar estas N refs a un pedido…"**: TODO lo filtrado entra de un golpe a un pedido existente o nuevo (unidades sugeridas del Motor; sin sugerencia entran en 0 para editar), sale de la Orden Sugerida (FABRICÁNDOSE) y guarda en UNA transacción. 27 pruebas de lógica + revisión browser real 29/29 con el macro de muestras (1759 refs: 581 marroquinería, 182 PG; envío de 105 refs, cerrar/reabrir OK, diagnóstico en 0, modo .exe) + Motor/Distribuidor + regresión completa en verde. | 🆕 Entregada |
 | v5_90 | 2026-08-04 | 🚨 Corrección (pedido yugin 147): en Producción China "no aparecía la información y ya estaba en el Liquidador" — el macro traía cubicaje EN 0 y la cascada tomaba ese 0 como dato válido (se detenía sin llegar a la factura); los 0 guardados en filas de pedidos tampoco se sanaban. Regla nueva: **0 no es dato** en cubicaje/unid-caja/cajas/precio — es hueco y la cascada sigue (fila → macro → base cubicaje → facturas), sin pisar jamás un valor real. Además el precio ¥ de las facturas entra a la cascada, el valor se recalcula y "Tipo de producto" se rellena con la categoría del Motor. Reproducido con el Excel de Andrés (145/190 refs con cubicaje 0) + macro y factura reales de muestras. 16 pruebas del caso + browser real 12/12 (vista sanada + 📗 Excel releído: 0,16 m³/caja, ¥8.5, fotos) + todas las baterías (27+29+Motor/Dist) + regresión en verde. | 🆕 Entregada |
 | v5_91 | 2026-08-04 | Columna **Proveedor** en la Orden de Compra (entre Contenedor y 🏭): el dato sale de la base Datos China del Motor, se ORDENA con clic en el encabezado (▲▼, texto alfabético — lo del mismo proveedor queda junto, sin proveedor al final) y entra también al "Exportar a Excel" de la orden ("Proveedor / Tienda"). Convive con los filtros de marroquinería/PG. 10 pruebas de lógica + browser real 13/13 (macro real, clics en el encabezado, Excel releído) + baterías 27+16+Motor/Dist + regresión completa en verde. | 🆕 Entregada |
+| v5_92 | 2026-08-04 | 🚨 Rendimiento (reporte "tarda mucho en guardar / se tilda" al mandar refs con 🏭): medido en Chromium con macro real + fotos a escala, cada "Aceptar" recalculaba y repintaba TODO el Motor (0,5–1,7 s por ref) y cada cambio re-agendaba el respaldo a disco CON TODAS las fotos (escrituras gigantes repetidas). Ahora: (1) el 🏭 fila-por-fila guarda la bóveda al instante pero agrupa el recálculo (350 ms tras el último clic — 10 clics = 1 recálculo; "Aceptar" pasó de ~600–1700 ms a ~125 ms); (2) el respaldo a disco espera 10 s de calma y tiene candado anti-solape (la bóveda IDB y el autosave del navegador siguen a 3 s). Completitud verificada: el respaldo final contiene el pedido con sus refs, fotos y tipo correcto. Baterías 27+16+10+Motor/Dist + browser 29+12+13 + regresión completa en verde. | 🆕 Entregada |
 
 ---
 
@@ -284,6 +285,17 @@ importantes en cristiano:
   dato** en cubicaje, unid/caja, cajas ni precio — es hueco y la cascada sigue,
   sin pisar jamás un valor real. Regla para siempre: al revisar las 4 fuentes de
   la cascada, un 0 cuenta como "no está", igual que un vacío.
+
+- **2026-08-04 — "Tarda mucho en guardar / se tilda" al mandar refs a Producción
+  China una por una.** Causa medida (no adivinada): cada "Aceptar" corría el
+  recálculo+repintado COMPLETO del Motor (0,5–1,7 s por referencia) y además cada
+  cambio re-agendaba la escritura del respaldo a disco CON TODAS LAS FOTOS a los
+  3 s — mandar refs seguidas = escrituras gigantes repetidas encima del trabajo.
+  Desde v5_92: la bóveda (IndexedDB) se guarda al instante como siempre, el
+  recálculo se AGRUPA (350 ms tras el último clic) y el archivo de disco espera
+  10 s de calma con candado anti-solape. Regla: el archivo de respaldo con fotos
+  es pesado — jamás re-escribirlo por cada tecla/clic; agrupar, y verificar la
+  completitud del archivo FINAL (no leerlo a mitad de escritura: parece viejo).
 
 - **2026-08-03 — Regla de entrega nueva (pedida por Andrés): REVISAR EN EL ENTORNO
   REAL antes de entregar.** Además de la regresión: Chromium real servido como el
