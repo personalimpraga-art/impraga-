@@ -5,7 +5,7 @@
 > o se entrega una versión. Si algo aquí contradice el código de TORI, el código
 > manda — y este archivo se corrige.
 >
-> **Última actualización:** 2026-08-04 · **Versión vigente de TORI: v5_94**
+> **Última actualización:** 2026-08-04 · **Versión vigente de TORI: v5_95**
 
 ---
 
@@ -101,6 +101,13 @@ Tendencias, Costos, China, Distribuidor, Faltantes, Parámetros) ·
 - Una referencia **NO debe estar en 2+ eslabones a la vez** (Stock / San Benito /
   En camino / Fábrica). La vista 🔁 Repetidos es la oficial para detectarlo, con
   nombres de doc/factura visibles y orden de columnas Stock → SB → En camino → Fábrica.
+- **Segunda oportunidad 🔄** (regla de Andrés, 2026-08-04): una referencia de
+  Rotación > límite puede devolverse A MANO a la Orden Sugerida ("quizás en esta
+  importación no se vendió bien"). Vale por LA IMPORTACIÓN VIGENTE: al llegar
+  mercancía nueva (entrada más reciente en el macro) la oportunidad se consume
+  sola, y si el ciclo nuevo también pasa el límite de días, vuelve a Rotación >
+  límite — SOLO un nuevo toque manual la revive. Clave `tori_segunda_oport_v1`
+  (viaja en el backup).
 - **Traslados San Benito** (semáforo): TRAER (sin stock en tienda, verde) ·
   EVALUAR (stock ≤10, amarillo) · NO TRAER (hay stock, rojo). Refs que solo están
   en SB salen como TRAER "(no está en el macro)".
@@ -216,6 +223,7 @@ El mapa técnico detallado (bloques, persistencia, los 10 invariantes) vive en
 | v5_92 | 2026-08-04 | 🚨 Rendimiento (reporte "tarda mucho en guardar / se tilda" al mandar refs con 🏭): medido en Chromium con macro real + fotos a escala, cada "Aceptar" recalculaba y repintaba TODO el Motor (0,5–1,7 s por ref) y cada cambio re-agendaba el respaldo a disco CON TODAS las fotos (escrituras gigantes repetidas). Ahora: (1) el 🏭 fila-por-fila guarda la bóveda al instante pero agrupa el recálculo (350 ms tras el último clic — 10 clics = 1 recálculo; "Aceptar" pasó de ~600–1700 ms a ~125 ms); (2) el respaldo a disco espera 10 s de calma y tiene candado anti-solape (la bóveda IDB y el autosave del navegador siguen a 3 s). Completitud verificada: el respaldo final contiene el pedido con sus refs, fotos y tipo correcto. Baterías 27+16+10+Motor/Dist + browser 29+12+13 + regresión completa en verde. | ✅ En producción (Andrés mostró el pill v5.92 con sus datos completos) |
 | v5_93 | 2026-08-04 | El buscador de la Orden de Compra encuentra también por **PROVEEDOR** (además de código y nombre): teclear "yugin" o "36243" deja solo las refs de ese proveedor, combinable con categoría, marroquinería/PG y el envío masivo 🏭. Placeholder actualizado. 1 línea en `_ordenPasaFiltro` (el predicado único: tabla, contador y envío masivo quedan coherentes solos). 14 pruebas de lógica + browser real 15/15 (tecleo "yugin" → solo YUGIN) + baterías 27+16+Motor/Dist + regresión completa en verde. | 🆕 Entregada |
 | v5_94 | 2026-08-04 | Tarjeta "Datos para China" del hub de Faltantes: dos listas nuevas además de la completa, según el proveedor que las llena — **⬇ YUGIN · sin PG** y **⬇ YUFUN · solo PG** (por prefijo de la referencia), cada botón con su conteo es-CO y el archivo con sufijo propio (`_YUGIN_sin_PG` / `_YUFUN_solo_PG`), mismo formato ES/CN de siempre. Browser real 11/11 con el macro (182 PG + 1.577 sin PG = 1.759; los 3 Excel descargados y RELEÍDOS) + baterías 27+16+14+Motor/Dist + regresión completa en verde. | 🆕 Entregada |
+| v5_95 | 2026-08-04 | 🔄 **Segunda oportunidad** para refs de Rotación > límite (regla nueva de Andrés, documentada en §3): botón "🔄 Otra oportunidad" en cada fila de esa vista → la ref vuelve a la Orden Sugerida (Tier C, marca 🔄 clicable para quitarla). Vale por la importación vigente: se guarda la fecha de entrada al darla y al llegar entrada MÁS NUEVA se consume sola (poda automática); si el ciclo nuevo también pasa el límite, cae de vuelta y solo el toque manual la revive. Clave nueva `tori_segunda_oport_v1` en las 3 listas del backup + round-trip extendido en verde. 18 pruebas de la regla + browser real 12/12 (macro real: dar → orden 1759→1760, reabrir, quitar) + baterías 27+16+14+11+Motor/Dist + regresión completa en verde. | 🆕 Entregada |
 
 ---
 
