@@ -70,7 +70,10 @@ function ok(cond, msg) {
 
   const provCol = () => page.evaluate(() => Array.from(document.querySelectorAll('#ordenTableBody tr')).map(tr => {
     const tds = tr.querySelectorAll('td');
-    return tds.length > 17 ? { codigo: tds[1].textContent.trim().split(' ')[0], prov: tds[16].textContent.trim() } : null;
+    if (tds.length <= 17) return null;
+    // v5_100: la celda puede llevar el recuadrito ×N — el nombre del proveedor es el primer nodo de texto
+    const prov = (tds[16].childNodes[0] && tds[16].childNodes[0].textContent || tds[16].textContent).trim();
+    return { codigo: tds[1].textContent.trim().split(' ')[0], prov };
   }).filter(Boolean));
 
   let f = await provCol();
