@@ -18,6 +18,16 @@ eran los de Andrés**. Esta skill existe para no repetirlos.
 | Días en "—" en toda la app (v5_84) | Las pruebas sembraban `dias` pero el macro REAL clasificado por el bloque 0 trae `diasRaw` | Sembrar pruebas con la FORMA REAL de los datos (§3), idealmente con los archivos de `muestras/`. Si un dato sale vacío en producción pero lleno en pruebas, sospechar del NOMBRE del campo |
 | Cubicaje "—" con el dato en el Liquidador (v5_87) | El enriquecimiento solo miraba el macro; el dato vivía en las facturas | Los datos de TORI viven en VARIAS fuentes: todo lookup nuevo debe ser una CASCADA (§4). Si Andrés ve el dato en una pantalla y no en otra, es integración faltante, no dato faltante |
 
+## 1b. Lecciones pagadas el 2026-08-04 (sesión v5_89 → v5_99)
+
+| Bug/reporte | Causa raíz | Lección/regla |
+|---|---|---|
+| "No aparece la información y ya está en el Liquidador" (yugin 147: 145/190 refs con cubicaje 0) | El macro traía cubicaje EN 0 y la cascada tomaba el 0 como dato válido — se detenía sin llegar a la factura; los 0 GUARDADOS en filas tampoco se sanaban | **0 no es dato** en cubicaje/unid-caja/cajas/precio: es hueco y la cascada sigue. Al sembrar pruebas, incluir el caso "celda en 0" además de "celda vacía" |
+| "Tarda mucho en guardar / se tilda" al mandar refs 🏭 una por una | Cada Aceptar recalculaba TODO el Motor (0,5–1,7s) y re-agendaba el respaldo a disco CON TODAS las fotos | MEDIR antes de arreglar (latido de 50ms para congelamientos + contador de escrituras). El respaldo con fotos jamás se reescribe por clic. No leer el archivo de respaldo A MITAD de escritura: parece viejo (falsa alarma de datos perdidos) |
+| "Queda congelado para buscar" tras el envío masivo (solo en el .exe) | `confirm()` NATIVO en Electron roba el foco del teclado al cerrarse — en Chrome no pasa, la simulación no lo reproducía | Ningún diálogo nativo en flujos repetitivos: `toriConfirm`/`toriPrompt`. En los arneses de esos flujos, stubear `confirm` para que LANCE error |
+| Falsos fallos del propio arnés | `offsetParent` es null en elementos `position:fixed`; los conteos van formateados es-CO ("1.577") | Visibilidad de overlays con `getBoundingClientRect().width>0`; comparar conteos con `toLocaleString('es-CO')` |
+| Clave nueva de persistencia no llegaba al archivo de disco | Hay TRES listas lsKeys en el archivo (formatos distintos) | Extender SIEMPRE la prueba round-trip con la clave nueva ANTES de entregar — en v5_95 la prueba extendida atrapó la 3ª lista |
+
 ## 2. El ritual de revisión ANTES de entregar (además de validar_todo.sh)
 
 1. **Chromium real** con TORI servido como el .exe: vendor inyectado antes del tag
@@ -75,6 +85,26 @@ El bump renumera TODO comentario que diga la versión corriente (un comentario
 anclas de parche NO deben incluir comentarios con número de versión — o buscarlos
 con regex `v5\.\d+`. Y los comentarios nuevos que uno escribe van a driftear:
 no anclarse a ellos en versiones futuras.
+
+## 5b. Arneses listos en `scripts/` (sesión 2026-08-04 — reusar, no reconstruir)
+
+Todos reciben el HTML o el dir de bloques por argumento (`node <script> <ruta>`):
+- `prueba_browser_v5_89.js` filtros marroquinería/PG + envío masivo 🏭 (29 checks)
+- `prueba_browser_v5_90.js` caso 147: vista sanada + 📗 Excel releído (12)
+- `prueba_browser_v5_91.js` columna/orden/buscador por proveedor + Excel (15)
+- `prueba_browser_v5_94.js` listas YUGIN/YUFUN releídas (11)
+- `prueba_browser_v5_95.js` segunda oportunidad 🔄 punta a punta (12)
+- `prueba_browser_v5_96.js` faltantes incluyen lo fabricándose (7)
+- `prueba_browser_v5_98.js` cajas editables + guardar al cerrar (10)
+- Baterías Node (entorno_tori de tori-engineering): `prueba_filtros_masivo.js` (27),
+  `prueba_caso_147.js` (16), `prueba_proveedor.js` (14), `prueba_segunda_oport.js` (18),
+  `prueba_cajas.js` (13), `prueba_backup_ext.js` (round-trip CON tori_segunda_oport_v1)
+- `perfil_completo.js` perfilador de rendimiento: macro real + fotos sintéticas a
+  escala + respaldo OPFS enlazado (siembra el handle en IDB praga_fsa_v1 ANTES del
+  boot), latido anti-congelamiento y contador de escrituras (PAUSA/COLA por env)
+- En este entorno: playwright en `/opt/node22/lib/node_modules/playwright`,
+  Chromium en `/opt/pw-browsers/chromium-1194/chrome-linux/chrome`, exceljs local
+  con `npm install exceljs --prefix ./lib`
 
 ## 6. Infraestructura ya montada (no reconstruir de cero)
 

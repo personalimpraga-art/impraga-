@@ -36,7 +36,14 @@ OJO: `items` es un MAPA ref→unidades, NO un contador. Si `items` suma 0 y hay 
 `_fsaWriteNow` = ese snapshot + fotos reinyectadas + tipo `tori_backup_disco_v1`. El autosave del navegador va SIN fotos (tamaño); el archivo de disco y el botón "Backup con fotos" van CON fotos.
 **Al restaurar:** facturas hacen MERGE por nombre (backup gana, las que solo están en la app se conservan) y se ordenan por fecha; params hacen merge `{...TORI.params, ...backup}`; la sección motor se restaura GENÉRICAMENTE (loop sobre todas las claves, saltando `tori_macro_live`/`tori_macro` que van a TORI.macroRows + classifyMotorRow).
 
-**Disparos de autosave existentes** (razones): liq-params, facturas-importadas, factura-eliminada, china-db, clear-china, cost-db, cubicaje-db, history, san-benito, prod-china, en-camino, pi2-cat, pi2-del, pi2-meta, distribuidor, motor-params.
+**Clave v5_95+**: `tori_segunda_oport_v1` = { refNorm: {codigo, fecha, fEntradaBase} }
+(segunda oportunidad de Rotación > límite; se consume sola cuando el macro trae
+una entrada MÁS NUEVA que fEntradaBase). ⚠ Al agregar una clave de persistencia
+hay **TRES listas lsKeys** que actualizar en el archivo: `_buildSnapshotData`
+(formato sin espacios tras las comas), el backup con fotos y el backup maestro
+(ambas con espacios) — en v5_95 la prueba round-trip extendida atrapó la tercera.
+
+**Disparos de autosave existentes** (razones): liq-params, no-traer, segunda-oport, facturas-importadas, factura-eliminada, china-db, clear-china, cost-db, cubicaje-db, history, san-benito, prod-china, en-camino, pi2-cat, pi2-del, pi2-meta, distribuidor, motor-params.
 
 ## §4. Reglas de negocio
 
@@ -59,6 +66,10 @@ OJO: `items` es un MAPA ref→unidades, NO un contador. Si `items` suma 0 y hay 
 8. `DIST.lsSet` dispara `triggerAutosave('distribuidor')`; `DIST.reloadStored()` existe y se llama tras restaurar.
 9. Toda clave nueva de persistencia entra al snapshot Y a la prueba de round-trip antes de entregar.
 10. Los exports con foto usan `_fotoThumbForExport(foto, 480, 0.78)` y anclaje EMU (`_aOff=18000`, `_aImg=609600`, `editAs:'twoCell'`, row height 52).
+11. Guardado de facturas/macro ATÓMICO (una sola transacción IDB, v5_73) y guard del escrito FSA al arrancar (solo escribe si hay facturas).
+12. **0 no es dato** en la cascada de fuentes (cubicaje, unid/caja, cajas, precio): un 0 cuenta como hueco y la cascada sigue fila → macro → base cubicaje → facturas del Liquidador, sin pisar jamás un valor real (v5_90, caso yugin 147).
+13. **Ningún diálogo nativo en flujos repetitivos**: `prompt()` revienta en Electron (v5_79) y `confirm()` roba el foco del teclado al cerrarse (v5_97) — siempre `toriPrompt`/`toriConfirm` (bloque 0). Los confirm de flujos raros (borrar bases, PI2, restaurar, deleteLiqFactura) siguen nativos a propósito.
+14. El archivo de respaldo con fotos JAMÁS se reescribe por cada clic: la bóveda IDB va al instante, el recálculo del Motor se agrupa (350ms, `_pcCommit(true)`), y el archivo de disco espera 10s de calma con candado anti-solape (v5_92); `beforeunload` dispara los pendientes al cerrar (v5_98).
 11. **Los guardados de IndexedDB son ATÓMICOS**: `saveFacturasToStorage` y `saveMacroToStorage` hacen clear+puts dentro de UNA sola transacción. NUNCA volver al patrón clear-en-una-tx / puts-en-otras: un cierre a mitad del guardado dejaba el store vacío (incidente 2026-08-01: se perdieron todas las facturas al cerrar tras cambiar params). El escrito FSA del arranque solo corre si `TORI.facturas.length > 0` (no pisar el backup de disco con un estado vacío). Prueba que lo atrapa: `scripts/prueba_cierre_fatal.js` (Chromium real: mata la página a 300ms del guardado; v5_72 perdía 39/40 facturas, v5_73 conserva 40/40).
 
 12. **Los campos de dinero entero (TRM `pDolarPeso`, flete `pEnvio`) se leen con `_liqParseEntero`** (todo punto/coma = separador de miles). NUNCA volver a `parseFloat` desnudo ahí: "1.540.000" tecleado a la colombiana se convertía en 1,54 y los costos quedaban absurdos (incidente PRAGA-139, 2026-08-01).
