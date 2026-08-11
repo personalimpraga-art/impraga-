@@ -1,2 +1,2 @@
 node_modules/
-.claude/skills/tori-revision-real/scripts/orden_*.xlsx
+.claude/skills/tori-revision-real/scripts/*.xlsx
