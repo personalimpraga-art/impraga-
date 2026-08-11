@@ -45,4 +45,4 @@ Copia el patrón de `probar_addChinaSheet.js`:
 4. Genera, escribe a /tmp, relee con `leer_excel.js` y con aserciones propias. Verifica también lo NEGATIVO (la fila sin foto no debe tener alto 52; la ref nueva no debe llevar foto).
 5. Si una aserción falla, primero decide si el bug está en TORI o en tu expectativa — lee el código real antes de "corregir" a TORI.
 
-Los exports con foto de TORI usan `_fotoThumbForExport(foto, 480, 0.78)` y anclaje EMU (`_aOff=18000`, `_aImg=609600`, `editAs:'twoCell'`, alto 52). Cualquier export nuevo debe respetar eso (invariante 10) y esta skill es quien lo comprueba.
+Los exports con foto de TORI usan `_fotoThumbForExport` y anclaje EMU (`_aOff=18000`, `editAs:'twoCell'`). Desde v5_101, los exports DE PROVEEDOR (Excel FOTOS de China y `addChinaSheet`) van nítidos: `(foto, 1200, 0.8)` (passthrough de la bóveda), extensión png/jpeg detectada, `_aImg=914400` (96px), alto 76; los internos (Traslado SB, Repetidos) siguen en `(480, 0.78)`, `_aImg=609600`, alto 52. Cualquier export nuevo debe respetar eso (invariante 10) y esta skill es quien lo comprueba.

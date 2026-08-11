@@ -6,7 +6,7 @@
  *   2. Evaluarla en el REALM HOST (eval), nunca en vm — ExcelJS falla cross-realm.
  *   3. Mockear solo sus dependencias externas (fotoOf, window._fotoThumbForExport).
  *   4. Generar con ExcelJS REAL → escribir a /tmp → RELEER → verificar:
- *      encabezados ES y CN por posición, valores de filas, imágenes, alto 52.
+ *      encabezados ES y CN por posición, valores de filas, imágenes, alto 76 (v5.101).
  *
  * Uso:  node probar_addChinaSheet.js [dir_bloques]     (default /tmp/tori_bloques)
  */
@@ -76,8 +76,9 @@ async function main() {
     const tl = imgs[0].range.tl;
     check((tl.nativeRow ?? tl.row) === 2 && (tl.nativeCol ?? tl.col) === 0, 'imagen anclada en col A de la fila 3 (anclaje EMU, invariante 10)');
   }
-  check(ws.getRow(3).height === 52, 'alto de fila con foto = 52 (invariante 10)');
-  check(ws.getRow(4).height !== 52, 'la fila sin foto conserva alto normal');
+  // v5.101: foto nítida para el proveedor — 96px en celda (fila 76), resolución hasta 1200px
+  check(ws.getRow(3).height === 76, 'alto de fila con foto = 76 (invariante 10, v5.101)');
+  check(ws.getRow(4).height !== 76, 'la fila sin foto conserva alto normal');
 
   console.log(ok ? '\n★ AUDITORÍA addChinaSheet: PASÓ' : '\n★ AUDITORÍA addChinaSheet: FALLÓ');
   process.exit(ok ? 0 : 1);
