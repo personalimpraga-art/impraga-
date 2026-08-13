@@ -6,7 +6,7 @@
  */
 'use strict';
 const path = require('path');
-const { crearEntorno } = require('/root/.claude/skills/tori-engineering/scripts/entorno_tori');
+const { crearEntorno } = require('/home/user/impraga-/.claude/skills/tori-engineering/scripts/entorno_tori');
 
 const DIR = process.argv[2] || path.join(__dirname, 'bloques91');
 let total = 0, ok = 0;

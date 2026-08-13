@@ -10,7 +10,7 @@
  */
 'use strict';
 const vm = require('vm');
-const { crearEntorno } = require('/root/.claude/skills/tori-engineering/scripts/entorno_tori');
+const { crearEntorno } = require('/home/user/impraga-/.claude/skills/tori-engineering/scripts/entorno_tori');
 // Uso: node prueba_electron_reabrir.js /dir/de/bloques  (extraidos con extraer_bloques.py)
 const B = process.argv[2] || '/home/claude/work/bloques';
 

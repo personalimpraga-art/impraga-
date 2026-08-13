@@ -5,7 +5,7 @@
 > o se entrega una versión. Si algo aquí contradice el código de TORI, el código
 > manda — y este archivo se corrige.
 >
-> **Última actualización:** 2026-08-11 · **Versión vigente de TORI: v5_101**
+> **Última actualización:** 2026-08-13 · **Versión vigente de TORI: v5_102**
 
 ---
 
@@ -230,6 +230,7 @@ El mapa técnico detallado (bloques, persistencia, los 10 invariantes) vive en
 | v5_99 | 2026-08-04 | Ajuste del editor de cajas (pedido de Andrés sobre v5_98): las UNIDADES del detalle 🏭 ya **no se editan a mano** — se calculan solas (cajas × und/caja); solo se pide por CAJAS. Excepción con lógica: las refs SIN und/caja en ninguna fuente conservan la edición de unidades (única vía posible). Leyenda actualizada. Browser real 10/10 (celda unidades sin input, cadena completa intacta) + baterías 13+27+18 + regresión completa en verde. | 🆕 Entregada |
 | v5_100 | 2026-08-05 | Recuadrito morado **×N** junto al proveedor en la Orden de Compra: si un proveedor se repite en la vista (ej. 1-G1-11855 con 5 refs) cada fila suya muestra un pill ×5 con los tonos del pill de versión (#6C5CE7 / #efeaff) y tooltip explicativo; proveedores con 1 sola ref van limpios, el conteo es de TODA la orden (no cambia al filtrar) y el Excel exportado queda igual que siempre. Cambio de solo render (+4/−1 líneas en `renderOrdenTable`, bloque 1), sin persistencia nueva. Browser real 17/17 (macro real, estilos computados, orden/filtro/vistas excluidas, diagnóstico en 0, modo .exe) + baterías 15+14+27 re-corridas + regresión completa en verde. | 🆕 Entregada |
 | v5_101 | 2026-08-11 | 🚨 Reporte de Andrés: los proveedores no alcanzan a VER el producto en los Excel con fotos. Causa medida: el export recortaba toda foto a 480px re-comprimida y la mostraba a 64px. Ahora los 2 exports de proveedor (📗 Excel FOTOS de la pestaña China y `addChinaSheet` — Distribuidor + pedidos 🏭) llevan la foto TAL CUAL está en la bóveda (hasta 1200px, sin recomprimir — el helper descarta el re-encode si pesa más), extensión png/jpeg detectada y celda de 96px (fila 76). Verdad incómoda documentada: las fotos de las facturas reales vienen en ~203px nativos (medido en PRAGA145) — TORI ya conserva todo; para más nitidez el proveedor debe mandar fotos más grandes y la tubería ya las aguanta. Sin lentitud: export medido 4,8s vs 5,7s de antes (mismos datos). Browser real 12/12 (ANTES reproducido: 900px→480px · DESPUÉS: 900px completa) + auditoría addChinaSheet 13/13 (alto 76) + caso 147 12/12 + Motor/Dist + recuadrito ×N 17/17 + regresión completa en verde. Invariante 10 actualizado. | 🆕 Entregada |
+| v5_102 | 2026-08-13 | 🚨 Reporte de Andrés: "↩ devolver una ref tarda mucho y el Backup ⬇ se queda cargando y nunca sale". Causa MEDIDA en Chromium a escala real (64 facturas con fotos + PI2 6.000+ + pedido de 251 refs): cada ↩/🚫/editar cajas corría el recálculo completo del Motor Y ADEMÁS `__pi2Bridge` reescribía el catálogo PI2 ENTERO en la bóveda (~6.400 escrituras con foto POR CLIC) — el Backup, que lee esa base, quedaba haciendo fila detrás (86–221 s medidos; se sentía "nunca sale"). Ahora: (1) `__pi2Bridge` escribe SOLO lo que cambió (una devolución = 0 escrituras; una ref nueva de factura = 1); (2) ↩ devolver, 🚫 vetar y editar unidades/cajas agrupan el recálculo (350 ms tras el último clic, patrón v5_92) con el detalle repintado AL INSTANTE. Medido después: ↩ 18–90 ms por clic (antes 660–1.440 congelados), 0 escrituras PI2, Backup ⬇ 8–26 s COMPLETO (pedido con sus refs exactas, 64 facturas, macro, PI2), cerrar/reabrir conserva todo. Browser 13/13 + cajas 10/10 y 13/13 + masivo 29/29 + caso 147 12/12 + backup ext + regresión completa en verde. | 🆕 Entregada |
 
 ---
 
@@ -328,6 +329,20 @@ importantes en cristiano:
   .exe, clics de usuario sobre lo nuevo, panel de diagnóstico en 0, modo .exe
   (prompt() lanzando error) y cerrar/reabrir para persistencia. El ritual y los
   arneses viven en la skill **tori-revision-real**.
+
+- **2026-08-13 — "Devolver una ref tarda mucho y el Backup se queda cargando"
+  (el puente PI2 reescribía TODO el catálogo por cada clic).** `__pi2Bridge`
+  corría en CADA recálculo del Motor y reescribía las ~6.400 refs del catálogo
+  PI2 (con foto) en IndexedDB aunque NADA hubiera cambiado; miles de escrituras
+  quedaban en fila y cualquier LECTURA posterior de esa base (el Backup ⬇) esperaba
+  la fila completa — 86–221 s medidos, con el hilo de la interfaz OCIOSO (no era
+  cómputo: era la fila de la bóveda). Además ↩/🚫/editar cajas recalculaban todo
+  el Motor por clic (el patrón que v5_92 ya había arreglado para el 🏭 masivo, pero
+  estos flujos quedaron por fuera). Desde v5_102: todo puente/sincronización masiva
+  escribe SOLO deltas (comparar antes de escribir), y los flujos repetibles agrupan
+  el recálculo con la UI local repintada al instante. Regla de diagnóstico: si algo
+  "se queda cargando" con la interfaz suelta, buscar la FILA de transacciones de
+  IndexedDB (espía de puts por store), no el CPU.
 
 Cuando aparezca un incidente nuevo: se documenta aquí, se convierte en invariante
 en el mapa técnico, y se le crea prueba que lo atrape para siempre.

@@ -16,7 +16,7 @@
  */
 'use strict';
 const path = require('path');
-const { crearEntorno } = require('/root/.claude/skills/tori-engineering/scripts/entorno_tori');
+const { crearEntorno } = require('/home/user/impraga-/.claude/skills/tori-engineering/scripts/entorno_tori');
 
 const FOTO1 = 'data:image/jpeg;base64,/9j/FOTOPRUEBA_A==';
 const FOTO2 = 'data:image/jpeg;base64,/9j/FOTOPRUEBA_B==';
