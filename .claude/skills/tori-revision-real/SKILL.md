@@ -28,6 +28,17 @@ eran los de Andrés**. Esta skill existe para no repetirlos.
 | Falsos fallos del propio arnés | `offsetParent` es null en elementos `position:fixed`; los conteos van formateados es-CO ("1.577") | Visibilidad de overlays con `getBoundingClientRect().width>0`; comparar conteos con `toLocaleString('es-CO')` |
 | Clave nueva de persistencia no llegaba al archivo de disco | Hay TRES listas lsKeys en el archivo (formatos distintos) | Extender SIEMPRE la prueba round-trip con la clave nueva ANTES de entregar — en v5_95 la prueba extendida atrapó la 3ª lista |
 
+## 1c. Lecciones pagadas 2026-08-11 → 2026-08-21 (sesión v5_100 → v5_103)
+
+| Bug/reporte | Causa raíz | Lección/regla |
+|---|---|---|
+| "Devolver una ref tarda mucho y el Backup ⬇ se queda cargando y nunca sale" (v5_102) | `__pi2Bridge` corría en CADA recálculo del Motor y reescribía el catálogo PI2 ENTERO (~6.400 puts con foto POR CLIC); el Backup, que LEE esa base, hacía fila detrás — 86–221s con el hilo de la interfaz OCIOSO | Si algo "se queda cargando" con la UI suelta, el culpable es la FILA de transacciones de IndexedDB, no el CPU: espiar `IDBObjectStore.prototype.put` por store + longtasks + latido (arnés `perfil_devolver_backup.js`). Regla: todo puente/sincronización masiva escribe SOLO deltas (comparar antes de escribir); los flujos repetibles (↩/🚫/editar cajas) agrupan el recálculo (patrón v5_92) con la UI local repintada al instante |
+| Proveedores "no ven la foto del producto" en los Excel (v5_101) | Doble compresión (importación 1200px q0.5 → export 480px q0.78) y celda de 64px; y la VERDAD DE FONDO: las fotos de las facturas reales vienen en ~203px nativos (medido en PRAGA145) | La calidad tiene un TECHO en la fuente: MEDIR la resolución real guardada ANTES de prometer nitidez (nadie puede inventar píxeles). Exports de proveedor: foto TAL CUAL de la bóveda hasta 1200px (el helper ya descarta el re-encode si pesa más), extensión png/jpeg detectada, celda 96px/fila 76 (invariante 10 actualizado) |
+| "El CSV Precios corta palabras y referencias" (v5_103, PRAGA-138) | Las celdas de los Excel de proveedor traen SALTOS DE LÍNEA DENTRO ("BOTELLA\nPLASTICA") y cada \n partía la fila del CSV: palabra cortada + precio suelto | FORMA REAL de los datos (§3): las DESCRIPCION de factura pueden traer \r\n internos. Todo texto que va a una línea de CSV se APLANA (saltos → espacio, espacios repetidos → uno, `;` → `,`); al sembrar pruebas de CSV, incluir filas con \n y con `;` |
+| "Necesito que Faltantes también incluya las refs 🔄" — y YA funcionaba desde v5_95/96 | El pedido sonaba a feature faltante, pero la lógica existía | REPRODUCIR antes de implementar: si el flujo ya hace lo pedido, la entrega es la DEMOSTRACIÓN con números + la prueba permanente (`prueba_browser_so_faltantes.js`), no una versión nueva. Nunca implementar por encima de algo que ya está |
+| Falsos fallos del arnés v5_91 tras el recuadrito ×N (v5_100) | El lector de celdas usaba `textContent` completo y el badge nuevo lo ensuciaba ("YUGIN ×2") | Los arneses leen el PRIMER NODO DE TEXTO de la celda (`td.childNodes[0].textContent`), no el textContent completo — así los badges/pills futuros no rompen pruebas viejas |
+| Arneses muertos por rutas (`Cannot find module`) | Los require apuntaban a `/root/.claude/skills/...`, que cambia de carpeta entre entornos | Los arneses requieren `entorno_tori` y scripts hermanos con la ruta DEL REPO (`/home/user/impraga-/.claude/skills/...`) — lo que viaja con el proyecto no se pierde |
+
 ## 2. El ritual de revisión ANTES de entregar (además de validar_todo.sh)
 
 1. **Chromium real** con TORI servido como el .exe: vendor inyectado antes del tag
@@ -65,6 +76,10 @@ eran los de Andrés**. Esta skill existe para no repetirlos.
 - **`praga_no_traer_v1`**: `{ refNorm: { codigo, nombre, motivo, fecha } }`.
 - **`tori_dist_overrides`**: `{ 'BOLSO': 12, ... }` (claves MAYÚSCULAS; defaults
   junta: BOLSO/BILLETERA/CORREA/RIÑONERA=12, CORTINA DE BAÑO=20).
+- **Celdas de texto de facturas de proveedor pueden traer `\r\n` INTERNOS**
+  ("BOTELLA\nPLASTICA") y también `;` — todo export a CSV los aplana (v5_103).
+- Las fotos de las facturas reales vienen en **~203px nativos** (~5KB): la bóveda
+  ya conserva todo lo que llega; los exports de proveedor la llevan tal cual.
 - Mejor aún: usar los archivos REALES de `muestras/` (factura PRAGA145 con fotos,
   macro 03/08/2026) pasándolos por los parsers reales.
 
@@ -96,6 +111,13 @@ Todos reciben el HTML o el dir de bloques por argumento (`node <script> <ruta>`)
 - `prueba_browser_v5_95.js` segunda oportunidad 🔄 punta a punta (12)
 - `prueba_browser_v5_96.js` faltantes incluyen lo fabricándose (7)
 - `prueba_browser_v5_98.js` cajas editables + guardar al cerrar (10)
+- `prueba_browser_v5_100.js` recuadrito ×N de proveedor en la Orden (17)
+- `prueba_browser_so_faltantes.js` refs 🔄 entran a Faltantes punta a punta (14)
+- `prueba_browser_v5_101.js` foto nítida en Excel de proveedor, ANTES/DESPUÉS con resolución medida en píxeles (12)
+- `prueba_browser_v5_102.js` devolver al instante + puente PI2 solo-deltas + Backup completo en segundos (13)
+- `prueba_browser_v5_103.js` CSV sin cortes con las filas rotas reales de PRAGA-138 (15)
+- `perfil_devolver_backup.js` perfilador del reporte 2026-08-13: escala real + espías de puts IDB por store, longtasks, escrituras OPFS y fases del backup — LA herramienta para "se queda cargando"
+- `perfil_fases_backup.js` fases del backup aisladas (build/put/stringify/blob)
 - Baterías Node (entorno_tori de tori-engineering): `prueba_filtros_masivo.js` (27),
   `prueba_caso_147.js` (16), `prueba_proveedor.js` (14), `prueba_segunda_oport.js` (18),
   `prueba_cajas.js` (13), `prueba_backup_ext.js` (round-trip CON tori_segunda_oport_v1)

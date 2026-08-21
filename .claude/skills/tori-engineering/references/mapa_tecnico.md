@@ -74,6 +74,10 @@ hay **TRES listas lsKeys** que actualizar en el archivo: `_buildSnapshotData`
 
 12. **Los campos de dinero entero (TRM `pDolarPeso`, flete `pEnvio`) se leen con `_liqParseEntero`** (todo punto/coma = separador de miles). NUNCA volver a `parseFloat` desnudo ahí: "1.540.000" tecleado a la colombiana se convertía en 1,54 y los costos quedaban absurdos (incidente PRAGA-139, 2026-08-01).
 
+11. El guardado de facturas/macro es ATÓMICO (una sola transacción clear+puts; v5_73 — un cierre a mitad no vacía el cajón).
+12. **Los puentes/sincronizaciones masivas escriben SOLO deltas** (v5_102): `__pi2Bridge` compara cada ítem antes de escribir — un recálculo del Motor sin cambios de catálogo = 0 escrituras PI2. PROHIBIDO reescribir una base completa "por si acaso" en flujos repetibles: la fila de IndexedDB bloquea las lecturas (el Backup) por minutos.
+13. Todo texto que va a una línea de CSV se APLANA (v5_103): saltos de línea → espacio, `;` → `,` — las celdas de proveedor traen `\r\n` internos y partían filas.
+
 ## §6. Notas para los arneses de prueba (los scripts ya implementan esto)
 
 - Los scripts de la skill (`entorno_tori.js`, `prueba_backup.js`, `prueba_flujos.js`) implementan el entorno completo: IndexedDB en memoria (requests via queueMicrotask, tx.oncomplete diferido), DOM permisivo con caché, localStorage en objeto, `location.hostname='localhost'` (el FSA lo exige), `showSaveFilePicker` presente.
