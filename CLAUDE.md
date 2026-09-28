@@ -5,7 +5,7 @@
 > o se entrega una versión. Si algo aquí contradice el código de TORI, el código
 > manda — y este archivo se corrige.
 >
-> **Última actualización:** 2026-08-23 · **Versión vigente de TORI: v5_104**
+> **Última actualización:** 2026-09-28 · **Versión vigente de TORI: v5_105**
 
 ---
 
@@ -233,6 +233,7 @@ El mapa técnico detallado (bloques, persistencia, los 10 invariantes) vive en
 | v5_102 | 2026-08-13 | 🚨 Reporte de Andrés: "↩ devolver una ref tarda mucho y el Backup ⬇ se queda cargando y nunca sale". Causa MEDIDA en Chromium a escala real (64 facturas con fotos + PI2 6.000+ + pedido de 251 refs): cada ↩/🚫/editar cajas corría el recálculo completo del Motor Y ADEMÁS `__pi2Bridge` reescribía el catálogo PI2 ENTERO en la bóveda (~6.400 escrituras con foto POR CLIC) — el Backup, que lee esa base, quedaba haciendo fila detrás (86–221 s medidos; se sentía "nunca sale"). Ahora: (1) `__pi2Bridge` escribe SOLO lo que cambió (una devolución = 0 escrituras; una ref nueva de factura = 1); (2) ↩ devolver, 🚫 vetar y editar unidades/cajas agrupan el recálculo (350 ms tras el último clic, patrón v5_92) con el detalle repintado AL INSTANTE. Medido después: ↩ 18–90 ms por clic (antes 660–1.440 congelados), 0 escrituras PI2, Backup ⬇ 8–26 s COMPLETO (pedido con sus refs exactas, 64 facturas, macro, PI2), cerrar/reabrir conserva todo. Browser 13/13 + cajas 10/10 y 13/13 + masivo 29/29 + caso 147 12/12 + backup ext + regresión completa en verde. | 🆕 Entregada |
 | v5_103 | 2026-08-21 | 🚨 Reporte de Andrés (PRAGA-138): el "⬇ CSV Precios" del Liquidador **corta palabras y referencias** — las celdas de los Excel de proveedor traen SALTOS DE LÍNEA dentro ("BOTELLA\nPLASTICA") y la fila del CSV quedaba partida en dos, con el precio suelto en la línea siguiente (las empleadas se confundían). Ahora todo texto que va a CSV se aplana (saltos de línea → espacio, espacios repetidos → uno, `;` → `,`) en CSV Precios y CSV Completo (`exportCSVFac`, bloque 0, +9/−2 líneas); los números no se tocan. Reproducido con las filas exactas del archivo roto de Andrés (9 líneas para 5 productos, " PLASTICA;" cortada) y verificado: 1 fila por producto, 3/16 columnas exactas, precio siempre en su columna. Browser real 15/15 + regresión completa en verde. | 🆕 Entregada |
 | v5_104 | 2026-08-23 | 🇨🇳 Reporte de Andrés: "cuando descargo el archivo praga china no puedo buscar fácil por proveedor los ítems". Reproducido con el macro real: teclear "yugin" en el buscador de la **Guía de viaje China** daba **0 tarjetas** — el 🔍 solo miraba referencia y nombre (el arreglo de v5_93 en la Orden de Compra nunca llegó a la guía). Ahora: (1) el buscador encuentra también por **proveedor** y por descripción china; (2) el proveedor de cada tarjeta es un **chip morado tocable** — un toque deja solo lo de ese proveedor y sincroniza el desplegable; (3) el desplegable muestra el **conteo por proveedor**, los que más referencias tienen primero y "SIN PROVEEDOR" de último; (4) contador **"Mostrando X de Y referencias · proveedor …"**; (5) **cascada de fuentes** para el proveedor (regla v5_87): Datos para China → filas guardadas de los pedidos de Producción China, así una ref que ya salió en un pedido llega con su proveedor aunque Datos China aún no lo tenga. Browser real 22/22 con el macro real (3.643 refs: "yugin" 0 → 75, cascada 12/12, chip visible y clicable, combina con ⭐ Ganadores, guía sin internet, diagnóstico en 0) + baterías 14+18+13+27+16 + backup ext + browser 13/13 y 17/17 + regresión completa en verde. | 🆕 Entregada |
+| v5_105 | 2026-09-28 | 📗 Pedido de Andrés: "que el CSV Completo agregue la foto en el archivo que descargo". **Un .csv es texto plano: no puede llevar imágenes dentro** (verificado sobre el archivo real — cero bytes de imagen), así que el CSV Completo se deja INTACTO (las empleadas lo usan y v5_103 lo acaba de arreglar) y se añade junto a él el botón **📗 Excel Completo (FOTOS)** → `<factura>_completo_CON_FOTOS.xlsx`: las **mismas 16 columnas** del CSV con los mismos nombres y los mismos números, más una columna **FOTO** al frente con la imagen incrustada en cada fila (tal cual la bóveda hasta 1200px, celda 96px / fila 76 — invariante 10), PVP en $ y precio China en ¥ (solo formato de lectura, ningún valor cambia), títulos y referencia congelados, y progreso en el botón. Como los parsers de PI2/Motor buscan las columnas **por nombre**, el archivo nuevo se puede volver a subir igual que el CSV (verificado). Browser real 26/26 con la factura REAL PRAGA145 (141 artículos, **140 fotos incrustadas y releídas** con ExcelJS, números idénticos al CSV fila por fila, 0,7 MB en 0,8 s, ExcelJS desde vendor/ con el CDN BLOQUEADO, diagnóstico en 0) + baterías 14+18+13+27+16 + backup ext + browser 13/13, 22/22 y 17/17 + regresión completa en verde. | 🆕 Entregada |
 
 ---
 
@@ -357,6 +358,16 @@ importantes en cristiano:
   un bug meses después. Los artefactos que salen de TORI (HTML/Excel que Andrés usa
   fuera de la app) se prueban ABRIÉNDOLOS y usándolos, no solo verificando que se
   descargan.
+
+- **2026-09-28 — "Que el CSV agregue la foto".** Un `.csv` es texto plano: no admite
+  imágenes, y prometerlo habría sido mentirle a Andrés. Pero el pedido detrás era
+  real y legítimo ("quiero VER el producto en el archivo que descargo"). Regla: cuando
+  el formato pedido no puede hacer lo que se pide, **no se dice que no y ya** — se dice
+  la verdad en una línea y se entrega el formato que sí lo hace (aquí, el mismo
+  contenido en .xlsx con la foto), sin quitarle el botón viejo a quien lo usa. Dos
+  cuidados que hicieron la diferencia: conservar los NOMBRES de las columnas (los
+  parsers de PI2/Motor buscan por nombre, así el archivo nuevo también sirve de
+  entrada) y dejar el CSV Completo intacto.
 
 Cuando aparezca un incidente nuevo: se documenta aquí, se convierte en invariante
 en el mapa técnico, y se le crea prueba que lo atrape para siempre.
