@@ -9,6 +9,7 @@ Eres el ingeniero de TORI, la herramienta de Andrés (dueño de Praga: importado
 
 ## Flujo de trabajo obligatorio (cada sesión)
 
+0. **Chat nuevo = contenedor limpio:** correr PRIMERO `bash /home/user/impraga-/.claude/skills/tori-revision-real/scripts/preparar_entorno.sh` (instala playwright/xlsx/exceljs y crea las rutas que buscan todos los arneses).
 1. **Identificar la versión de partida.** La del chat manda sobre la del proyecto. Copiarla a `/home/claude/work/`.
 2. **Crear la versión nueva** — nunca editar el original:
    ```bash
@@ -22,7 +23,7 @@ Eres el ingeniero de TORI, la herramienta de Andrés (dueño de Praga: importado
    ```
    Corre en orden: (a) extracción de los 5 bloques + `node --check` de cada uno, (b) prueba maestra del backup (round-trip de las 8 secciones con fotos), (c) flujos vivos (acciones reales → autosave → disco). **Si algo falla: corregir y re-correr TODO desde el principio.** Nunca entregar con la regresión en rojo, y nunca entregar sin haberla corrido en esta misma sesión sobre esta misma versión.
 5. **Pruebas del cambio específico.** Además de la regresión, demuestra que TU cambio funciona con datos reales (los archivos que suba Andrés si los hay). Si el cambio toca un export de Excel: generar con la librería real, RELEER el archivo y verificar encabezados, valores, colores e imágenes (`ws.getImages().length`).
-6. **Entregar**: copiar a `/mnt/user-data/outputs/`, presentar el archivo, y dar un resumen en español: directo, breve, qué se cambió, qué se probó y qué dio cada prueba. Recordarle a Andrés: (a) **arrastrar el HTML nuevo encima de `ACTUALIZAR_FACIL.bat`** en la carpeta TORI de su PC (TORI corre como app .exe; ese .bat copia el HTML a `app/` y a la copia interna del `.exe` sin npm ni internet), (b) cerrar y reabrir TORI.exe y verificar el pill de versión en la barra lateral, y (c) reemplazar la versión en el conocimiento del proyecto. `RECONSTRUIR_COMPLETO.bat` solo aplica si el cambio tocó la cáscara (`desktop/main.js`, `vendor/`) — avisarlo explícitamente. Detalle completo en §1 del CLAUDE.md del repo.
+6. **Entregar**: copiar a `/mnt/user-data/outputs/` (en Claude Code: a la raíz del repo `/home/user/impraga-/`, quitando la versión vieja, enviarlo con SendUserFile, commit y push a la rama del chat Y a la principal — CLAUDE.md §5.6), presentar el archivo, y dar un resumen en español: directo, breve, qué se cambió, qué se probó y qué dio cada prueba. Recordarle a Andrés: (a) **arrastrar el HTML nuevo encima de `ACTUALIZAR_FACIL.bat`** en la carpeta TORI de su PC (TORI corre como app .exe; ese .bat copia el HTML a `app/` y a la copia interna del `.exe` sin npm ni internet), (b) cerrar y reabrir TORI.exe y verificar el pill de versión en la barra lateral, y (c) reemplazar la versión en el conocimiento del proyecto. `RECONSTRUIR_COMPLETO.bat` solo aplica si el cambio tocó la cáscara (`desktop/main.js`, `vendor/`) — avisarlo explícitamente. Detalle completo en §1 del CLAUDE.md del repo.
 
 ## Ante un reporte de "no funciona X"
 

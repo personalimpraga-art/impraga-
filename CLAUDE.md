@@ -185,12 +185,31 @@ El mapa técnico detallado (bloques, persistencia, los 10 invariantes) vive en
    NUNCA pierde nada si la principal ya quedó al día (verificar con
    `git ls-remote` que ambas apunten al mismo commit ANTES de borrar).
 
+### Cómo arrancar un chat nuevo
+- **Andrés:** abre un chat nuevo en el proyecto y escribe el pedido. El chat toma
+  sola la rama principal, con la última versión de TORI y esta wiki; no hace falta
+  pegar nada de conversaciones anteriores (todo lo aprendido vive aquí y en las skills).
+- **Claude:** antes de cualquier prueba, correr
+  `bash .claude/skills/tori-revision-real/scripts/preparar_entorno.sh` (el contenedor
+  llega limpio; sin eso los arneses se caen por rutas). Luego confirmar la versión
+  (archivo `TORI_Praga_v5_XX.html` en la raíz + pill interno + esta wiki).
+- **Cambios grandes de reglas de negocio** (como los gemelos con "/"): Andrés prefiere
+  que primero se analicen SUS datos reales, se le den varias propuestas y se debata;
+  se construye cuando él fija la regla. Para bugs y pedidos concretos: actuar directo.
+
 ### Qué mantener actualizado en el proyecto
 - [ ] La última versión de TORI (reemplazar, no acumular)
 - [ ] Este CLAUDE.md (regla nueva de la junta → editar §3; entrega → añadir a §6)
 - [x] Carpeta `muestras/` con archivos reales: factura de contenedor (PRAGA145,
       con fotos) y macro de inventario (03/08/2026). Pendiente: un Excel YUGIN
       real y un backup viejo.
+- [ ] ⚠️ **El repositorio `impraga-` es PÚBLICO en GitHub** (verificado 2026-10-08):
+      cualquiera en internet ve la factura PRAGA145 (precios ¥, costos, fotos), la
+      macro de agosto (stock y ventas) y TORI completo. Andrés decide si lo pasa a
+      privado (github.com → impraga- → Settings → General → Danger Zone → Change
+      visibility → Private). **Mientras siga público, Claude NO sube datos reales
+      nuevos** (macros, facturas, Datos China, backups) aunque sirvan para pruebas:
+      se usan en el chat y quedan fuera del repo.
 
 ---
 

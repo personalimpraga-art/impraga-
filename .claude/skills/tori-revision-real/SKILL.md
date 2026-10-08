@@ -9,6 +9,33 @@ En una sola sesión se escaparon 4 bugs que TODAS las pruebas de lógica pasaban
 en verde. Los 4 tenían la misma raíz: **probar en un entorno o con datos que no
 eran los de Andrés**. Esta skill existe para no repetirlos.
 
+## 0. PRIMER PASO EN UN CHAT NUEVO (antes de cualquier prueba)
+
+Cada chat arranca en un contenedor LIMPIO: sin playwright, sin exceljs/xlsx, sin
+openpyxl, y los arneses buscan rutas fijas de entornos anteriores. Un solo comando
+lo deja todo listo (idempotente) — sin él, la mitad de los arneses se caen con
+`Cannot find module` y se pierde tiempo arreglándolos uno por uno:
+
+```bash
+bash /home/user/impraga-/.claude/skills/tori-revision-real/scripts/preparar_entorno.sh
+```
+
+**Chuleta de la interfaz real** (verificada en v5_106 — usar estos, no adivinar):
+- Subir archivos: macro `#fileMacro` · facturas del Liquidador `#fileFacturas` ·
+  San Benito `#fileSanBenito` · Producción China `#fileProdChina`
+- Pantallas (barra lateral): `.nav-item[data-screen="hub|liq|motor|pi2|diff|import"]`
+  (el Liquidador es **`liq`**, no "liquidador")
+- Pestañas del Motor: `.motor-tab-btn[data-tab="tabOrden"]` (tabDashboard, tabLiq,
+  tabChina, tabDistribuidor, tabFaltantes, tabProdChina, tabParams…)
+- Orden de Compra: buscador `#searchInput`, cuerpo `#ordenTableBody`
+- Datos vivos: `STATE.rows` (macro del Motor, YA unido por gemelos), `STATE.classified`,
+  `STATE.ordenar` (Orden Sugerida), `STATE.repetidosCadena` (vista oficial de Repetidos);
+  `TORI.macroRows` (macro CRUDO, lo que guarda el backup), `TORI.classified` (Hub, unido)
+- Claves reales de localStorage: vetos **`praga_no_traer_v1`** · 2ª oportunidad
+  `tori_segunda_oport_v1` · Datos China `praga_china_db_v1` · costos `praga_cost_db_v1`
+  · cubicaje `praga_cubicaje_db_v1`. **Leer el nombre de la clave EN EL ARCHIVO**
+  (`grep -n "_KEY *="`) antes de sembrarla: un nombre inventado da un falso fallo.
+
 ## 1. Los 4 bugs y su lección
 
 | Bug | Causa raíz | Lección/regla |
@@ -38,6 +65,19 @@ eran los de Andrés**. Esta skill existe para no repetirlos.
 | "Necesito que Faltantes también incluya las refs 🔄" — y YA funcionaba desde v5_95/96 | El pedido sonaba a feature faltante, pero la lógica existía | REPRODUCIR antes de implementar: si el flujo ya hace lo pedido, la entrega es la DEMOSTRACIÓN con números + la prueba permanente (`prueba_browser_so_faltantes.js`), no una versión nueva. Nunca implementar por encima de algo que ya está |
 | Falsos fallos del arnés v5_91 tras el recuadrito ×N (v5_100) | El lector de celdas usaba `textContent` completo y el badge nuevo lo ensuciaba ("YUGIN ×2") | Los arneses leen el PRIMER NODO DE TEXTO de la celda (`td.childNodes[0].textContent`), no el textContent completo — así los badges/pills futuros no rompen pruebas viejas |
 | Arneses muertos por rutas (`Cannot find module`) | Los require apuntaban a `/root/.claude/skills/...`, que cambia de carpeta entre entornos | Los arneses requieren `entorno_tori` y scripts hermanos con la ruta DEL REPO (`/home/user/impraga-/.claude/skills/...`) — lo que viaja con el proyecto no se pierde |
+
+## 1d. Lecciones 2026-08-23 → 2026-10-08 (sesión v5_104 → v5_106)
+
+| Caso | Qué pasó | Lección/regla |
+|---|---|---|
+| "No puedo buscar por proveedor en el archivo praga china" (v5_104) | El buscador de la **Guía de viaje** (un HTML que TORI descarga) no miraba el proveedor: la mejora de v5_93 nunca llegó ahí | Los artefactos que salen de TORI (HTML/Excel para usar FUERA) se prueban **abriéndolos y usándolos** en Chromium (descarga real → abrir → teclear/clic), no solo verificando que se descargan. Al mejorar un buscador/filtro, revisar las OTRAS pantallas con el mismo dato |
+| Andrés respondió "CN VIAJE CHINA" a una pregunta de opción múltiple que no lo incluía | El nombre que usa Andrés ("archivo praga china") no era el que uno suponía | Antes de preguntar con opciones, `grep` los NOMBRES DE ARCHIVO que TORI descarga (`a.download`, `writeFile`) — el nombre del archivo es como Andrés lo llama |
+| "Que el CSV agregue la foto" (v5_105) | Un .csv es texto plano: imposible | Decir la verdad en una línea y entregar el formato que SÍ lo hace, sin quitar el botón viejo. Conservar los NOMBRES de columna (los parsers buscan por nombre) |
+| Gemelos `225-96` / `225-96/Q168` (v5_106) | TORI comparaba códigos letra por letra: pedía dos veces el mismo producto | Para reglas de negocio grandes: **analizar con los datos reales de Andrés → propuestas → debate → construir**. Probar ANTES (versión vieja, `--antes`) y DESPUÉS con la MISMA batería: la diferencia es la demostración |
+| Falso fallo del veto en la prueba v5_106 | La prueba sembró `tori_no_traer_v1`; la clave real es `praga_no_traer_v1` | Leer el nombre de la clave en el archivo, nunca de memoria (§0) |
+| Verificación de Repetidos que "pasaba" sin probar nada | Aceptaba con que "210-57" apareciera en la tabla | Verificar sobre la **estructura oficial** (`STATE.repetidosCadena`: combo, unidades por eslabón) y ADEMÁS lo visible. Un assert que no puede fallar no prueba nada |
+| El arnés de Motor/Distribuidor (función extraída suelta) reveló una trampa | Si `getSanBenitoMap` no existiera, Repetidos quedaba con San Benito VACÍO en silencio | Toda llamada a una global de otro bloque lleva guarda `typeof window.X === 'function'` con un **respaldo que conserva el comportamiento viejo** — nunca un vacío silencioso |
+| Medio día perdido en rutas de arneses | 15 arneses buscan `/opt/node22/…/playwright`, 6 buscan `./lib/node_modules/exceljs` | `preparar_entorno.sh` (§0) crea esas rutas como enlaces: los arneses viejos corren SIN editarlos |
 
 ## 2. El ritual de revisión ANTES de entregar (además de validar_todo.sh)
 
@@ -134,12 +174,22 @@ Todos reciben el HTML o el dir de bloques por argumento (`node <script> <ruta>`)
   boot), latido anti-congelamiento y contador de escrituras (PAUSA/COLA por env)
 - En este entorno: playwright en `/opt/node22/lib/node_modules/playwright`,
   Chromium en `/opt/pw-browsers/chromium-1194/chrome-linux/chrome`, exceljs local
-  con `npm install exceljs --prefix ./lib`
+  con `npm install exceljs --prefix ./lib` — **desde 2026-10-08 todo eso lo deja
+  listo `preparar_entorno.sh` (§0)**
+- Sesión v5_104 → v5_106: `prueba_browser_v5_104.js` (guía de viaje: descarga REAL,
+  la abre y busca por proveedor, 22), `prueba_browser_v5_105.js` (Excel Completo con
+  fotos: factura REAL PRAGA145, relee el .xlsx, compara contra el CSV fila por fila, 26),
+  `prueba_browser_v5_106.js MACRO.xlsx [--antes]` (gemelos con "/": macro real,
+  toda la cadena, veto, Datos China, buscador, cerrar/reabrir, 29 — con `--antes`
+  corre contra la versión vieja para demostrar el bug). La macro real del 07/10/2026
+  NO está en `muestras/` A PROPÓSITO: **el repo es PÚBLICO** (CLAUDE.md §5) y no se
+  suben datos reales nuevos mientras lo sea. Pedírsela a Andrés en el chat; sus
+  números fijos (4.212 filas, 117 con "/") son de ESA macro
 
 ## 6. Infraestructura ya montada (no reconstruir de cero)
 
 - Chromium: `/opt/pw-browsers/chromium-1194/chrome-linux/chrome` + `playwright-core`
-  (instalar en `/home/claude/lib` si falta, igual que `exceljs`).
+  → **`bash scripts/preparar_entorno.sh`** lo instala y enlaza todo (§0).
 - Vendor offline para servir como el .exe: `desktop/vendor/` del repo.
 - `scripts/plantilla_browser.js` (esta skill): arneses de servidor+Chromium listos.
 - `scripts/prueba_electron_reabrir.js` (esta skill): patrón "prompt roto + cerrar
