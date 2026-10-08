@@ -57,6 +57,14 @@ eran los de Andrés**. Esta skill existe para no repetirlos.
 
 ## 3. FORMAS REALES de los datos (sembrar pruebas con ESTO, no con lo bonito)
 
+- **Códigos con "/" (gemelos, v5_106)**: el macro real trae `225-96` Y `225-96/Q168`
+  (117 de 4.212 en la macro 07/10/2026; crecía: 84 en agosto). También hay
+  gemelos SIN base (`261-16/XY890` + `261-16/XY-890`), varios por base
+  (`210-57/P-06`, `210-57/TE-06`), códigos de fábrica compartidos entre productos
+  distintos (`PG0024/YM88153` y `PG0025/YM88153`) y sets con 2+ barras
+  (`8814/8813/8811/301`). Toda prueba nueva que cruce códigos debe sembrar al menos
+  un gemelo en OTRA fuente (San Benito, factura, pedido, Datos China, veto).
+
 - **`TORI.classified`** (macro clasificado por el bloque 0): `{ codigo, nombre,
   grupo, categoria, saldo, ocPend, `**`diasRaw`**` (NO dias), tier, status, cajas,
   unidPedir, cubPedir, unidEmpaque, cubicaje, `**`contenedor`**` (origen, ej. "0165"),

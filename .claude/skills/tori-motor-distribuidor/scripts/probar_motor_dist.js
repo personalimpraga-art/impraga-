@@ -70,6 +70,45 @@ function parteRepetidos(dirBloques) {
 }
 
 /* ═══ PARTE 2: Distribuidor de verdad (bloques 0 + 4 en el entorno) ═══ */
+/* ═══ PARTE 1b: GEMELOS CON "/" (v5.106, regla de Andrés 2026-10-08) ═══
+   225-96 y 225-96/Q168 son el MISMO producto: lo de antes de la "/" manda.
+   Usa las funciones REALES del bloque 0 (toriRefBase/toriRefKey). Prueba los
+   dos caminos de San Benito: con getSanBenitoMap y leyendo la bodega directo. */
+function parteGemelos(dirBloques) {
+  console.log('\n── PARTE 1b · Gemelos con "/" en Repetidos (bloques 0+1) ──');
+  const ayudas = execSync(
+    `python3 ${path.join(__dirname, 'extraer_funcion.py')} ${path.join(dirBloques, 'bloque_0.js')} norm toriRefBase toriRefKey`,
+    { encoding: 'utf-8' });
+  const codigo = execSync(
+    `python3 ${path.join(__dirname, 'extraer_funcion.py')} ${path.join(dirBloques, 'bloque_1.js')} computeRepetidosCadena`,
+    { encoding: 'utf-8' });
+  const { norm, toriRefKey } = eval(ayudas + '\n({ norm, toriRefKey });');
+  check(toriRefKey('225-96/Q168') === '225-96' && toriRefKey('225-96') === '225-96', 'toriRefKey: 225-96/Q168 → 225-96');
+  check(toriRefKey('8814/8813/8811/301') === '8814/8813/8811/301', 'toriRefKey: códigos de 2+ barras (sets) NO se tocan');
+  check(toriRefKey('PG0024/YM88153') !== toriRefKey('PG0025/YM88153'), 'toriRefKey: agrupa por lo de ANTES de la barra (PG0024 ≠ PG0025)');
+  for (const conMapa of [true, false]) {
+    const items = { '210-57/te-06': 20, '225-96/q168': 50 };
+    const window = {
+      toriRefKey,
+      TORI: { classified: [
+        { codigo: '210-57', nombre: 'MANTEL', grupo: 'Hogar', saldo: 150 },   // stock + gemelo en SB → REPETIDA
+        { codigo: '225-96', nombre: 'VENTILADOR', grupo: 'Hogar', saldo: 0 }, // 0 stock + gemelo en SB → sana
+      ], sanBenito: { items } },
+      getEnCaminoMap: () => new Map(),
+      getProdChinaMap: () => new Map([['210-148', { unidades: 100, docs: ['PEDIDO'] }]]),
+    };
+    if (conMapa) window.getSanBenitoMap = () => {
+      const m = new Map(); Object.keys(items).forEach(k => { const kc = toriRefKey(k); m.set(kc, (m.get(kc) || 0) + items[k]); }); return m; };
+    const computeRepetidosCadena = eval(codigo + '\ncomputeRepetidosCadena;');
+    const rep = computeRepetidosCadena();
+    const r = rep.find(x => toriRefKey(x.codigo) === '210-57');
+    const etq = conMapa ? '(con getSanBenitoMap)' : '(leyendo la bodega directo)';
+    check(r && r.combo === 'STOCK + SAN BENITO' && r.stock === 150 && r.sanBenito === 20,
+      '210-57 en stock + 210-57/TE-06 en San Benito = MISMO producto en 2 eslabones ' + etq);
+    check(!rep.some(x => toriRefKey(x.codigo) === '225-96'), '225-96 (0 en stock, gemelo solo en SB) NO es falso repetido ' + etq);
+  }
+}
+
 async function parteDistribuidor(dirBloques) {
   console.log('\n── PARTE 2 · Distribuidor (bloque 4, API window.DIST) ──');
   const env = crearEntorno();
@@ -126,6 +165,7 @@ async function parteDistribuidor(dirBloques) {
 async function main() {
   const dirBloques = process.argv[2] || '/tmp/tori_bloques';
   parteRepetidos(dirBloques);
+  parteGemelos(dirBloques);
   await parteDistribuidor(dirBloques);
   console.log(ok ? '\n★ MOTOR + DISTRIBUIDOR: PASÓ' : '\n★ MOTOR + DISTRIBUIDOR: FALLÓ');
   process.exit(ok ? 0 : 1);
