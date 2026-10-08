@@ -185,6 +185,11 @@ Todos reciben el HTML o el dir de bloques por argumento (`node <script> <ruta>`)
   NO está en `muestras/` A PROPÓSITO: **el repo es PÚBLICO** (CLAUDE.md §5) y no se
   suben datos reales nuevos mientras lo sea. Pedírsela a Andrés en el chat; sus
   números fijos (4.212 filas, 117 con "/") son de ESA macro
+  — con la macro de agosto de `muestras/` da 11/29 fallos ESPERADOS (números de
+  octubre); sin la de octubre, comparar la salida vieja vs nueva con `diff` (deben ser idénticas)
+- v5_107: `prueba_browser_v5_107.js TORI.html` (guía de viaje: Datos China de gemelos
+  campo por campo — siembra datos repartidos entre `225-97` y `225-97/L2024`, descarga la
+  guía, la abre y revisa tarjetas, 10; en v5_106 da 2 fallos)
 
 ## 6. Infraestructura ya montada (no reconstruir de cero)
 
